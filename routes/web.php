@@ -17,7 +17,9 @@
  * Routes for resource user
  */
 
-//$router->post('user', 'UsersController@login');
+$router->get('/', function (){
+    return 'Welcome To Api';
+});
 $router->group(['prefix'=>'v1/api'],function () use ($router){
     $router->post('login','UsersController@login');
     $router->post('register','UsersController@register');
