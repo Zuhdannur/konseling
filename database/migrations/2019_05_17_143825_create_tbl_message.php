@@ -15,8 +15,8 @@ class CreateTblMessage extends Migration
     {
         Schema::create('tbl_message', function (Blueprint $table) {
             $table->bigIncrements('id_message');
-            $table->integer('id_room')->lenght(10)->unsigned();
-            $table->integer('user_id')->lenght(10)->unsigned();
+            $table->integer('sender_id')->lenght(10)->unsigned();
+            $table->integer('reciever_id')->lenght(10)->unsigned();
             $table->text('body');
             $table->timestamps();
         });

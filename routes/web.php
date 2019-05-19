@@ -24,9 +24,8 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
     $router->post('login','UsersController@login');
     $router->post('register','UsersController@register');
     $router->group(['middleware' => 'auth'],function () use ($router){
-       $router->get('list',function (){
-           return 'LIST';
-       });
+       $router->get('index','MessagesController@index');
+       $router->post('send','MessagesController@store');
     });
 });
 
