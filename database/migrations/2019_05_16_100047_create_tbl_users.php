@@ -15,6 +15,7 @@ class CreateTblUsers extends Migration
     {
         Schema::create('tbl_users', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('avatar');
             $table->string('name',255);
             $table->string('username',255)->unique();
             $table->string('password',255);

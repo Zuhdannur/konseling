@@ -26,6 +26,7 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
     $router->group(['middleware' => 'auth'],function () use ($router){
        $router->get('index','MessagesController@index');
        $router->post('send','MessagesController@store');
+       $router->get('profile','UsersController@getMyProfile');
     });
 });
 

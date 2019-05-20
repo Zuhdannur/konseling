@@ -45,8 +45,6 @@ class MessagesController extends Controller {
                     "message" => "failed"
                 ];
             }
-
-
         } else {
             return [
                 "message" => $validation->errors()
