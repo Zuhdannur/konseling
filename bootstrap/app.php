@@ -77,10 +77,12 @@ $app->singleton(
 
  $app->register(App\Providers\AppServiceProvider::class);
  $app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
-
-/*
-|--------------------------------------------------------------------------
+ $app->register(App\Providers\EventServiceProvider::class);
+//App\Providers\BroadcastServiceProvider::class,
+ $app->register(\Illuminate\Broadcasting\BroadcastServiceProvider::class);
+ $app->configure('broadcasting');
+// $app->register('broadcasting');
+/*|--------------------------------------------------------------------------
 | Load The Application Routes
 |--------------------------------------------------------------------------
 |

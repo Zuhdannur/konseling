@@ -20,6 +20,12 @@
 $router->get('/', function (){
     return 'Welcome To Api';
 });
+
+$router->get('/push',function (){
+    event(new App\Events\ExampleEvent('Hi PUSH'));
+    return 'Send';
+});
+
 $router->group(['prefix'=>'v1/api'],function () use ($router){
     $router->post('login','UsersController@login');
     $router->post('register','UsersController@register');

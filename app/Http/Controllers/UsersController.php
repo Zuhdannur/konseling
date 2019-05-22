@@ -88,6 +88,7 @@ class UsersController extends Controller {
     public function getMyProfile()
     {
         $data = \App\User::where('id',Auth::user()->id)->with('detail')->first();
+        $data['avatar'] = base_path() . '\\public\\image\\'.$data->avatar;
         return [
             "message" => "success",
             "result" => $data
