@@ -33,7 +33,7 @@ class UsersController extends Controller {
 
         if(!$this->checking($request->username)){
             $insert = new \App\User;
-            if($request->file('photo')->getClientOriginalName() != null){
+            if($request->file('photo') != null){
                 $image = $request->file('photo');
                 $filename = time() .'.'. $image->getClientOriginalExtension();
                 $path = base_path().'\\public\\image\\';
