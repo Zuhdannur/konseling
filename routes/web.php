@@ -36,3 +36,12 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
     });
 });
 
+
+/**
+ * Routes for resource master
+ */
+//$app->get('master', 'MastersController@all');
+//$app->get('master/{id}', 'MastersController@get');
+//$app->post('master', 'MastersController@add');
+//$app->put('master/{id}', 'MastersController@put');
+//$app->delete('master/{id}', 'MastersController@remove');

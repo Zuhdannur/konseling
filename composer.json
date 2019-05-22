@@ -8,6 +8,7 @@
         "php": ">=7.1.3",
         "laravel/lumen-framework": "5.8.*",
         "pusher/pusher-php-server": "^3.4",
+        "thedevsaddam/lumen-route-list": "^2.0",
         "vlucas/phpdotenv": "^3.3",
         "wn/lumen-generators": "^1.3"
     },

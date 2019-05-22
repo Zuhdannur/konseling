@@ -78,6 +78,7 @@ $app->singleton(
  $app->register(App\Providers\AppServiceProvider::class);
  $app->register(App\Providers\AuthServiceProvider::class);
  $app->register(App\Providers\EventServiceProvider::class);
+$app->register(\Thedevsaddam\LumenRouteList\LumenRouteListServiceProvider::class);
 //App\Providers\BroadcastServiceProvider::class,
  $app->register(\Illuminate\Broadcasting\BroadcastServiceProvider::class);
  $app->configure('broadcasting');

@@ -47,9 +47,11 @@ class MessagesController extends Controller {
                         'useTLS' => true
                     ]
                 );
+
                 $data['message'] = $request->body;
                 $data['sender_id'] = $request->sender_id;
                 $data['receiver_id'] = $request->reciever_id;
+
                 $pusher->trigger('my-channel','my-event',$data);
                 return [
                     "message" => "success",
