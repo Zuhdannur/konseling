@@ -25,6 +25,8 @@ $app = new Laravel\Lumen\Application(
 
  $app->withEloquent();
 
+
+ $app->configure('cors');
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -52,13 +54,14 @@ $app->singleton(
 |--------------------------------------------------------------------------
 |
 | Next, we will register the middleware with the application. These can
-| be global middleware that run before and after each request into a
+| be global middleware that run before an   d after each request into a
 | route or middleware that'll be assigned to some specific routes.
 |
 */
-// $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-// ]);
+ $app->middleware([
+     App\Http\Middleware\ExampleMiddleware::class,
+     \Barryvdh\Cors\HandleCors::class,
+ ]);
 
  $app->routeMiddleware([
      'auth' => App\Http\Middleware\Authenticate::class,
@@ -79,6 +82,7 @@ $app->singleton(
  $app->register(App\Providers\AuthServiceProvider::class);
  $app->register(App\Providers\EventServiceProvider::class);
 $app->register(\Thedevsaddam\LumenRouteList\LumenRouteListServiceProvider::class);
+$app->register(Barryvdh\Cors\ServiceProvider::class);
 //App\Providers\BroadcastServiceProvider::class,
  $app->register(\Illuminate\Broadcasting\BroadcastServiceProvider::class);
  $app->configure('broadcasting');
