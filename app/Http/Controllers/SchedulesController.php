@@ -15,6 +15,7 @@ class SchedulesController extends Controller
             $insert->requester_id = Auth::user()->id;
             $insert->tgl_pengajuan = $request->date;
             $consultant = $this->getConsultan()->id;
+            $insert->type_schedule = $request->type_schedule;
             $insert->consultant_id = $consultant;
             $insert->save();
             if($insert){
