@@ -7,41 +7,44 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class UsersController extends Controller {
+class UsersController extends Controller
+{
 
-    public function login(Request $request){
-       $user = $this->checking($request->username);
-       if($user){
-           if(Hash::check($request->password,$user->password)){
-               $apiKey = base64_encode(str_random(40));
-               \App\User::where('username',$request->username)->update([
-                   'api_token' => $apiKey
-               ]);
-               return [
-                 "message" => 'success',
-                 "api_token" => $apiKey
-               ];
-           }
-       } else {
-           return [
-               'message'=>'Username Not Found'
-           ];
-       }
+    public function login(Request $request)
+    {
+        $user = $this->checking($request->username);
+        if ($user) {
+            if (Hash::check($request->password, $user->password)) {
+                $apiKey = base64_encode(str_random(40));
+                \App\User::where('username', $request->username)->update([
+                    'api_token' => $apiKey
+                ]);
+                return [
+                    "message" => 'success',
+                    "api_token" => $apiKey
+                ];
+            }
+        } else {
+            return [
+                'message' => 'Username Not Found'
+            ];
+        }
     }
 
-    public function register(Request $request){
+    public function register(Request $request)
+    {
 
-        if(!$this->checking($request->username)){
+        if (!$this->checking($request->username)) {
             $insert = new \App\User;
-            if($request->file('photo') != null){
+            if ($request->file('photo') != null) {
                 $image = $request->file('photo');
-                $filename = time() .'.'. $image->getClientOriginalExtension();
-                $path = base_path().'\\public\\image\\';
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                $path = base_path() . '\\public\\image\\';
 //                $path = public_path('images/'.$filename);
-                $image->move($path,$filename);
-                $insert->avatar =$filename;
+                $image->move($path, $filename);
+                $insert->avatar = $filename;
             } else {
-                $insert->avatar ='default.png';
+                $insert->avatar = 'default.png';
             }
 
             $insert->name = $request->name;
@@ -59,7 +62,7 @@ class UsersController extends Controller {
             $insertDetail->school = $request->school;
             $insertDetail->save();
 
-            if($insertDetail){
+            if ($insertDetail) {
                 return [
                     'message' => 'register successfully'
                 ];
@@ -75,23 +78,60 @@ class UsersController extends Controller {
         }
     }
 
-    public function getLastID(){
-        return \App\User::orderBy('id','desc')->first();
+    public function getLastID()
+    {
+        return \App\User::orderBy('id', 'desc')->first();
     }
 
-    public function checking($username){
-        $check = \App\User::where('username',$username)->first();
-        if($check){ return $check;}
-        else return null;
+    public function checking($username)
+    {
+        $check = \App\User::where('username', $username)->first();
+        if ($check) {
+            return $check;
+        } else return null;
     }
 
     public function getMyProfile()
     {
-        $data = \App\User::where('id',Auth::user()->id)->with('detail')->first();
-        $data['avatar'] = base_path() . '\\public\\image\\'.$data->avatar;
+        $data = \App\User::where('id', Auth::user()->id)->with('detail')->first();
+        $data['avatar'] = base_path() . '\\public\\image\\' . $data->avatar;
         return [
             "message" => "success",
             "result" => $data
         ];
     }
+
+    public function updateProfile(Request $request)
+    {
+        $update = \App\User::find(Auth::user()->id)->update([
+            'name' => $request->name
+        ]);
+        if ($update) {
+            if ($request->class == null || $request->school == null) {
+                $class = '';
+                $school = '';
+            } else {
+                $class = $request->class;
+                $school = $request->school;
+            }
+            $update_detail = \App\DetailUser::where('id_user', Auth::user()->id)->update([
+                'address' => $request->address,
+                'phone_number' => $request->phone_number,
+                'class' => $class,
+                'school' => $school
+            ]);
+
+            if($update_detail){
+                return [
+                    "message" => 'profile Updated'
+                ];
+            } else {
+                return [
+                    "message" => 'failed to Updated'
+                ];
+            }
+        }
+        return $request;
+    }
+
 }

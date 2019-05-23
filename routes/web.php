@@ -30,9 +30,15 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
     $router->post('login','UsersController@login');
     $router->post('register','UsersController@register');
     $router->group(['middleware' => 'auth'],function () use ($router){
+        //Message
        $router->get('index','MessagesController@index');
        $router->post('send','MessagesController@store');
+
+       //profile
        $router->get('profile','UsersController@getMyProfile');
+       $router->post('profile','UsersController@updateProfile');
+
+       //schedule
        $router->post('schedule','SchedulesController@send');
        $router->get('mySchedule','SchedulesController@viewMySchedule');
     });
