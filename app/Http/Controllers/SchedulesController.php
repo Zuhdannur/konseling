@@ -30,7 +30,7 @@ class SchedulesController extends Controller
                 );
 
                 $data['message'] = "Success create schedule";
-                $data['receiver_id'] = $consultant;
+                $data['consultant_id'] = $consultant;
 
                 $pusher->trigger('notif-schedule','my-event',$data);
                 return [
@@ -46,7 +46,7 @@ class SchedulesController extends Controller
 
             $update = \App\Schedule::where('id', $request->schedule_id)->update([
                 'status' => 1,
-                'date' => $request->date
+                'tgl_pengajuan' => $request->date
             ]);
             if ($update) {
                 $pusher = new Pusher(
