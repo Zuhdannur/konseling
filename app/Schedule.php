@@ -8,7 +8,7 @@ class Schedule extends Model {
         'requester_id','tgl_pengajuan','status','consultant_id'
     ];
 
-    public $primaryKey = "id";
+    protected $primaryKey = "id";
 
     protected $dates = [];
 
@@ -19,12 +19,12 @@ class Schedule extends Model {
     ];
 
     // Relationships
-//    public function request(){
-//        return $this->hasOne('\App\User','id','requester_id');
-//    }
-//
-//    public function consultant(){
-//        return $this->hasOne('\App\User','id','consultant_id');
-//    }
+    public function request(){
+        return $this->belongsTo('\App\User','requester_id','id');
+    }
+
+    public function consultant(){
+        return $this->belongsTo('\App\User','consultant_id','id');
+    }
 
 }

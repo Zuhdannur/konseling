@@ -21,7 +21,7 @@ class MessagesController extends Controller {
         $myMessage = \App\Message::where('sender_id',Auth::user()->id)->orWhere('reciever_id',Auth::user()->id)->get();
         return [
             "message"=> "success",
-            "result" => $myMessagew
+            "result" => $myMessage
         ];
     }
 

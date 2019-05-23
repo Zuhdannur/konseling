@@ -17,6 +17,7 @@ class CreateTblSchedule extends Migration
             $table->bigIncrements('id');
             $table->integer('requester_id')->unsigned();
             $table->date('tgl_pengajuan');
+            $table->string('type_schedule');
             $table->integer('status')->default(0);
             $table->integer('consultant_id')->unsigned();
             $table->timestamps();

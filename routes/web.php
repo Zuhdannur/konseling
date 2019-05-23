@@ -34,6 +34,7 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
        $router->post('send','MessagesController@store');
        $router->get('profile','UsersController@getMyProfile');
        $router->post('schedule','SchedulesController@send');
+       $router->get('mySchedule','SchedulesController@viewMySchedule');
     });
 });
 

@@ -19,7 +19,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $table= "tbl_users";
 
-    public $primaryKey = "id";
+    protected $primaryKey = "id";
 
     protected $fillable = [
         'name', 'username',
