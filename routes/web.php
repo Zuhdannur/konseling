@@ -33,6 +33,7 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
        $router->get('index','MessagesController@index');
        $router->post('send','MessagesController@store');
        $router->get('profile','UsersController@getMyProfile');
+       $router->post('schedule','SchedulesController@send');
     });
 });
 
@@ -45,3 +46,12 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
 //$app->post('master', 'MastersController@add');
 //$app->put('master/{id}', 'MastersController@put');
 //$app->delete('master/{id}', 'MastersController@remove');
+
+/**
+ * Routes for resource schedule
+ */
+//$app->get('schedule', 'SchedulesController@all');
+//$app->get('schedule/{id}', 'SchedulesController@get');
+//$app->post('schedule', 'SchedulesController@add');
+//$app->put('schedule/{id}', 'SchedulesController@put');
+//$app->delete('schedule/{id}', 'SchedulesController@remove');
