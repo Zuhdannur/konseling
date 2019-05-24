@@ -41,6 +41,19 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
        //schedule
        $router->post('schedule','SchedulesController@send');
        $router->get('mySchedule','SchedulesController@viewMySchedule');
+
+       //master
+
+            //School
+            $router->get('allSchool','MastersController@getListSchool');
+            $router->post('storeSchool','MastersController@storeSchool');
+            $router->get('deleteSchool/{id}','MastersController@destroySchool');
+
+
+            //Class
+            $router->get('allClass/{id}','MastersController@getListClass');
+            $router->post('storeClass','MastersController@storeClass');
+
     });
 });
 
@@ -62,3 +75,12 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
 //$app->post('schedule', 'SchedulesController@add');
 //$app->put('schedule/{id}', 'SchedulesController@put');
 //$app->delete('schedule/{id}', 'SchedulesController@remove');
+
+/**
+ * Routes for resource master
+ */
+//$app->get('master', 'MastersController@all');
+//$app->get('master/{id}', 'MastersController@get');
+//$app->post('master', 'MastersController@add');
+//$app->put('master/{id}', 'MastersController@put');
+//$app->delete('master/{id}', 'MastersController@remove');
