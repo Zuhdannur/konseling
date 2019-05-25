@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class MastersController extends Controller
@@ -9,19 +10,19 @@ class MastersController extends Controller
     public function getListSchool()
     {
         $data = \App\School::all();
-        return [
+        return Response::json([
             "message" => "success",
             "result" => $data
-        ];
+        ],400);
     }
 
     public function getListClass($id)
     {
         $data = \App\Kelas::where('id_school', $id)->get();
-        return [
+        return Response::json([
             "message" => 'success',
             "result" => $data
-        ];
+        ],400);
     }
 
     public function storeSchool(Request $request)
@@ -37,13 +38,13 @@ class MastersController extends Controller
             $insert->address = $request->address;
             $insert->save();
             if ($insert) {
-                return [
+                return Response::json([
                     "message" => "success"
-                ];
+                ],400);
             } else {
-                return [
+                return Response::json([
                     "message" => "failed"
-                ];
+                ],402);
             }
         } else {
             return [

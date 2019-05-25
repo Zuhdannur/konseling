@@ -5,6 +5,7 @@ use http\Client\Curl\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
@@ -19,15 +20,15 @@ class UsersController extends Controller
                 \App\User::where('username', $request->username)->update([
                     'api_token' => $apiKey
                 ]);
-                return [
+                return Response::json([
                     "message" => 'success',
                     "api_token" => $apiKey
-                ];
+                ],400);
             }
         } else {
-            return [
+            return Response::json([
                 'message' => 'Username Not Found'
-            ];
+            ],402);
         }
     }
 
@@ -63,18 +64,18 @@ class UsersController extends Controller
             $insertDetail->save();
 
             if ($insertDetail) {
-                return [
+                return Response::json([
                     'message' => 'register successfully'
-                ];
+                ],400);
             } else {
-                return [
+                return Response::json([
                     'message' => 'register failed'
-                ];
+                ],402);
             }
         } else {
-            return [
+            return Response::json([
                 'message' => 'Duplicate Username'
-            ];
+            ],401);
         }
     }
 
@@ -95,10 +96,10 @@ class UsersController extends Controller
     {
         $data = \App\User::where('id', Auth::user()->id)->with('detail')->first();
         $data['avatar'] = base_path() . '\\public\\image\\' . $data->avatar;
-        return [
+        return Response::json([
             "message" => "success",
             "result" => $data
-        ];
+        ],400);
     }
 
     public function updateProfile(Request $request)
@@ -122,13 +123,13 @@ class UsersController extends Controller
             ]);
 
             if($update_detail){
-                return [
+                return Response::json([
                     "message" => 'profile Updated'
-                ];
+                ],400);
             } else {
-                return [
+                return Response::json([
                     "message" => 'failed to Updated'
-                ];
+                ],402);
             }
         }
         return $request;

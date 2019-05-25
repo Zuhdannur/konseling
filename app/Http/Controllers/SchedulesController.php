@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Pusher\Pusher;
 
@@ -33,13 +34,13 @@ class SchedulesController extends Controller
                 $data['consultant_id'] = $consultant;
 
                 $pusher->trigger('notif-schedule','my-event',$data);
-                return [
+                return \Illuminate\Support\Facades\Response::json([
                     "message" => 'success create schedule'
-                ];
+                ],400);
             } else {
-                return [
+                return Response::json([
                     "message" => 'failed create schedule'
-                ];
+                ],400);
             }
 
         } else {
