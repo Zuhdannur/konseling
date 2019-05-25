@@ -23,12 +23,12 @@ class UsersController extends Controller
                 return Response::json([
                     "message" => 'success',
                     "api_token" => $apiKey
-                ],400);
+                ],200);
             }
         } else {
             return Response::json([
                 'message' => 'Username Not Found'
-            ],402);
+            ],201);
         }
     }
 
@@ -66,16 +66,16 @@ class UsersController extends Controller
             if ($insertDetail) {
                 return Response::json([
                     'message' => 'register successfully'
-                ],400);
+                ],200);
             } else {
                 return Response::json([
                     'message' => 'register failed'
-                ],402);
+                ],400);
             }
         } else {
             return Response::json([
                 'message' => 'Duplicate Username'
-            ],401);
+            ],201);
         }
     }
 
@@ -99,7 +99,7 @@ class UsersController extends Controller
         return Response::json([
             "message" => "success",
             "result" => $data
-        ],400);
+        ],200);
     }
 
     public function updateProfile(Request $request)
@@ -125,11 +125,11 @@ class UsersController extends Controller
             if($update_detail){
                 return Response::json([
                     "message" => 'profile Updated'
-                ],400);
+                ],200);
             } else {
                 return Response::json([
                     "message" => 'failed to Updated'
-                ],402);
+                ],201);
             }
         }
         return $request;
