@@ -25,7 +25,11 @@ class UsersController extends Controller
                     "api_token" => $apiKey,
                     "role"=>$user->role,
                 ],200);
-            }
+            } else {
+				return Response::json([
+                    "message" => 'wrong password',
+                ],201);
+			}
         } else {
             return Response::json([
                 'message' => 'Username Not Found'
