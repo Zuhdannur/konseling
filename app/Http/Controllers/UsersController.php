@@ -22,7 +22,8 @@ class UsersController extends Controller
                 ]);
                 return Response::json([
                     "message" => 'success',
-                    "api_token" => $apiKey
+                    "api_token" => $apiKey,
+                    "role"=>$user->role,
                 ],200);
             }
         } else {

@@ -20,10 +20,10 @@ class MessagesController extends Controller {
 
     public function index(){
         $myMessage = \App\Message::where('sender_id',Auth::user()->id)->orWhere('reciever_id',Auth::user()->id)->get();
-        return [
+        return Response::json([
             "message"=> "success",
             "result" => $myMessage
-        ];
+        ],200);
     }
 
     public function store(Request $request){
@@ -54,13 +54,13 @@ class MessagesController extends Controller {
                 $data['receiver_id'] = $request->reciever_id;
 
                 $pusher->trigger('my-channel','my-event',$data);
-                return [
+                return Response::json([
                     "message" => "success",
-                ];
+                ],200);
             } else {
-                return [
+                return Response::json([
                     "message" => "failed"
-                ];
+                ],400);
             }
         } else {
             return [

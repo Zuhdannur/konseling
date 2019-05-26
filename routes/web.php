@@ -18,12 +18,7 @@
  */
 
 $router->get('/', function (){
-    return 'Welcome To Api';
-});
-
-$router->get('/push',function (){
-    event(new App\Events\ExampleEvent('Hi PUSH'));
-    return 'Send';
+    return 'Welcome To Api visit https://master-konseling.herokuapp.com for more information';
 });
 
 $router->group(['prefix'=>'v1/api'],function () use ($router){
@@ -42,6 +37,9 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
        $router->post('schedule','SchedulesController@send');
        $router->get('mySchedule','SchedulesController@viewMySchedule');
 
+       //Diary
+        $router->post('diary','DiariesController@store');
+
        //master
 
             //School
@@ -56,31 +54,3 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
 
     });
 });
-
-
-/**
- * Routes for resource master
- */
-//$app->get('master', 'MastersController@all');
-//$app->get('master/{id}', 'MastersController@get');
-//$app->post('master', 'MastersController@add');
-//$app->put('master/{id}', 'MastersController@put');
-//$app->delete('master/{id}', 'MastersController@remove');
-
-/**
- * Routes for resource schedule
- */
-//$app->get('schedule', 'SchedulesController@all');
-//$app->get('schedule/{id}', 'SchedulesController@get');
-//$app->post('schedule', 'SchedulesController@add');
-//$app->put('schedule/{id}', 'SchedulesController@put');
-//$app->delete('schedule/{id}', 'SchedulesController@remove');
-
-/**
- * Routes for resource master
- */
-//$app->get('master', 'MastersController@all');
-//$app->get('master/{id}', 'MastersController@get');
-//$app->post('master', 'MastersController@add');
-//$app->put('master/{id}', 'MastersController@put');
-//$app->delete('master/{id}', 'MastersController@remove');
