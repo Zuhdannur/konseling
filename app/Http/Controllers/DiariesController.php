@@ -16,7 +16,7 @@ class DiariesController extends Controller
         $insert->body = $request->body;
         $insert->title = $request->title;
         $insert->save();
-        if($insert){
+        if ($insert) {
 
             $push = new Pusher(
                 'e06a6bacb2b9f8503317',
@@ -30,18 +30,42 @@ class DiariesController extends Controller
 
             $data['message'] = "Created Diary";
             $data['sender_id'] = Auth::user()->id;
-            $push->trigger('diary','my-event',$data);
+            $push->trigger('diary', 'my-event', $data);
 
             return \Illuminate\Support\Facades\Response::json([
                 'message' => 'success',
-            ],200);
+            ], 200);
         }
         return $request;
     }
 
     public function showMyDiary()
     {
+        $data = \App\Diary::where('id_user', Auth::user()->id)->get();
+        return \Illuminate\Support\Facades\Response::json([
+            "message" => "success",
+            "result" => $data
+        ], 200);
+    }
 
+    public function showMyDiaryToOthers($id)
+    {
+        $find = \App\User::with('detail')->where('id',$id)->first();
+        $myData = \App\User::with('detail')->where('id',Auth::user()->id)->first();
+        if($find->school == $myData->school){
+
+            $data = \App\Diary::where('id_user', $id)->get();
+
+            return \Illuminate\Support\Facades\Response::json([
+                "message" => "success",
+                "result" => $data
+            ], 200);
+
+        }
+
+        return \Illuminate\Support\Facades\Response::json([
+            "message" => 'Failed',
+        ],201);
     }
 
 }

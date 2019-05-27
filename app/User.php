@@ -35,6 +35,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
 
     public function detail(){
-        return $this->hasOne('\App\DetailUser','id_user','id');
+        return $this->hasMany('\App\DetailUser','id_user','id');
     }
 }
