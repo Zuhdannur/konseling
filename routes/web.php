@@ -52,6 +52,8 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
             //Class
             $router->get('allClass/{id}','MastersController@getListClass');
             $router->post('storeClass','MastersController@storeClass');
-
+			
+			//User
+			$router->get('user/{id}','UsersController@destroy');
     });
 });

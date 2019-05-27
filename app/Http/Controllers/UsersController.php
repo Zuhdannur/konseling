@@ -106,6 +106,15 @@ class UsersController extends Controller
             "result" => $data
         ],200);
     }
+	
+	 public function destroy($id)
+    {
+        $data = \App\User::where('id', $id)->delete();
+		$detail = \App\DetailUser::where('id_user', $id)->delete();
+        return Response::json([
+            "message" => "success",
+        ],200);
+    }
 
     public function updateProfile(Request $request)
     {
