@@ -107,6 +107,15 @@ class UsersController extends Controller
         ],200);
     }
 	
+	public function getAllUser()
+	{
+		$data = \App\User::all();
+        return Response::json([
+            "message" => "success",
+            "result" => $data
+        ],200);
+	}
+	
 	 public function destroy($id)
     {
         $data = \App\User::where('id', $id)->delete();

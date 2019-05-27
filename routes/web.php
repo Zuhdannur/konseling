@@ -55,5 +55,6 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
 			
 			//User
 			$router->get('user/{id}','UsersController@destroy');
+			$router->get('user','UsersController@getAllUser');
     });
 });
