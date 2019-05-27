@@ -13,7 +13,7 @@ class MastersController extends Controller
         return Response::json([
             "message" => "success",
             "result" => $data
-        ],400);
+        ],200);
     }
 
     public function getListClass($id)
@@ -22,7 +22,7 @@ class MastersController extends Controller
         return Response::json([
             "message" => 'success',
             "result" => $data
-        ],400);
+        ],200);
     }
 
     public function storeSchool(Request $request)
@@ -40,11 +40,11 @@ class MastersController extends Controller
             if ($insert) {
                 return Response::json([
                     "message" => "success"
-                ],400);
+                ],200);
             } else {
                 return Response::json([
                     "message" => "failed"
-                ],402);
+                ],201);
             }
         } else {
             return [
@@ -57,13 +57,13 @@ class MastersController extends Controller
     {
         $delete = \App\School::find($id)->delete();
         if($delete){
-            return [
+            return Response::json([
                 "message" => 'success'
-            ];
+            ],200);
         } else {
-            return [
+            return Response::json([
                 "message" => 'failed'
-            ];
+            ],201);
         }
     }
 
@@ -80,13 +80,13 @@ class MastersController extends Controller
             $insert->class_name = $request->class_name;
             $insert->save();
             if ($insert) {
-                return [
+                return Response::json([
                     "message" => "success"
-                ];
+                ],200);
             } else {
-                return [
+                return Response::json([
                     "message" => "failed"
-                ];
+                ],201);
             }
         } else {
             return [
