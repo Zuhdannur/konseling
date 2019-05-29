@@ -24,6 +24,10 @@ $router->get('/', function (){
 $router->group(['prefix'=>'v1/api'],function () use ($router){
     $router->post('login','UsersController@login');
     $router->post('register','UsersController@register');
+
+    $router->get('allSchool','MastersController@getListSchool');
+    $router->get('allClass/{id}','MastersController@getListClass');
+
     $router->group(['middleware' => 'auth'],function () use ($router){
         //Message
        $router->get('index','MessagesController@index');
@@ -44,13 +48,11 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
        //master
 
             //School
-            $router->get('allSchool','MastersController@getListSchool');
             $router->post('storeSchool','MastersController@storeSchool');
             $router->get('deleteSchool/{id}','MastersController@destroySchool');
 
 
             //Class
-            $router->get('allClass/{id}','MastersController@getListClass');
             $router->post('storeClass','MastersController@storeClass');
 			
 			//User
