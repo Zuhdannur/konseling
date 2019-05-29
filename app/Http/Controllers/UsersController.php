@@ -1,7 +1,7 @@
 <?php namespace App\Http\Controllers;
 
+use App\Classes\Kraken;
 use Faker\Provider\Image;
-use http\Client\Curl\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -21,9 +21,9 @@ class UsersController extends Controller
                     'api_token' => $apiKey
                 ]);
                 return Response::json([
-                    "message" => 'success',
+                    "message"   => 'success',
                     "api_token" => $apiKey,
-                    "role"=>$user->role,
+                    "role"      => $user->role,
                 ],200);
             } else {
 				return Response::json([
@@ -44,14 +44,24 @@ class UsersController extends Controller
             $insert = new \App\User;
             if ($request->file('photo') != null) {
                 $image = $request->file('photo');
+                $realpath = $request->file('photo')->getRealPath();
                 $filename = time() . '.' . $image->getClientOriginalExtension();
                 $path = base_path() . '\\public\\image\\';
 //                $path = public_path('images/'.$filename);
                 $image->move($path, $filename);
                 $insert->avatar = $filename;
             } else {
-                $insert->avatar = 'default.png';
+                $filename = 'default.png';
+                $insert->avatar = $filename;
             }
+
+            $kraken = new Kraken("612e57b58501cfdfcaa2493248e99f6d","1c58fdd9be2d5f87f0896197749989883d3ed324");
+
+            $params = array(
+                "file" => "C:\Users\Zuhdan Nur\Pictures\download.png",
+                "wait" => true
+            );
+            $data = $kraken->upload($params);
 
             $insert->name = $request->name;
             $insert->username = $request->username;
@@ -70,7 +80,8 @@ class UsersController extends Controller
 
             if ($insertDetail) {
                 return Response::json([
-                    'message' => 'register successfully'
+                    'message' => 'register successfully',
+                    'avatar'  => $data
                 ],200);
             } else {
                 return Response::json([
