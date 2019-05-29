@@ -18,6 +18,7 @@ class CreateTblDiary extends Migration
             $table->integer('id_user')->unsigned();
             $table->string('title',200);
             $table->text('body');
+            $table->date('tgl');
             $table->timestamps();
         });
     }
