@@ -55,13 +55,13 @@ class UsersController extends Controller
                 $insert->avatar = $filename;
             }
 
-            $kraken = new Kraken("612e57b58501cfdfcaa2493248e99f6d","1c58fdd9be2d5f87f0896197749989883d3ed324");
-
-            $params = array(
-                "file" => "C:\Users\Zuhdan Nur\Pictures\download.png",
-                "wait" => true
-            );
-            $data = $kraken->upload($params);
+//            $kraken = new Kraken("612e57b58501cfdfcaa2493248e99f6d","1c58fdd9be2d5f87f0896197749989883d3ed324");
+//
+//            $params = array(
+//                "file" => "C:\Users\Zuhdan Nur\Pictures\download.png",
+//                "wait" => true
+//            );
+//            $data = $kraken->upload($params);
 
             $insert->name = $request->name;
             $insert->username = $request->username;
@@ -74,14 +74,13 @@ class UsersController extends Controller
             $insertDetail->gender = $request->gender;
             $insertDetail->address = $request->address;
             $insertDetail->phone_number = $request->phone;
-            $insertDetail->class = $request->class;
+            $insertDetail->kelas = $request->kelas;
             $insertDetail->school = $request->school;
             $insertDetail->save();
 
             if ($insertDetail) {
                 return Response::json([
                     'message' => 'register successfully',
-                    'avatar'  => $data
                 ],200);
             } else {
                 return Response::json([
