@@ -74,7 +74,7 @@ class UsersController extends Controller
             $insertDetail->gender = $request->gender;
             $insertDetail->address = $request->address;
             $insertDetail->phone_number = $request->phone;
-            $insertDetail->kelas = $request->kelas;
+            $insertDetail->class = $request->class;
             $insertDetail->school = $request->school;
             $insertDetail->save();
 
@@ -142,17 +142,17 @@ class UsersController extends Controller
             'name' => $request->name
         ]);
         if ($update) {
-            if ($request->kelas == null || $request->school == null) {
-                $kelas = '';
+            if ($request->class == null || $request->school == null) {
+                $class = '';
                 $school = '';
             } else {
-                $kelas = $request->kelas;
+                $class = $request->class;
                 $school = $request->school;
             }
             $update_detail = \App\DetailUser::where('id_user', Auth::user()->id)->update([
                 'address' => $request->address,
                 'phone_number' => $request->phone_number,
-                'kelas' => $kelas,
+                'class' => $class,
                 'school' => $school
             ]);
 
