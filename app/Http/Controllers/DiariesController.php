@@ -15,6 +15,7 @@ class DiariesController extends Controller
         $insert->id_user = Auth::user()->id;
         $insert->body = $request->body;
         $insert->title = $request->title;
+        $insert->tgl = $request->tgl;
         $insert->save();
         if ($insert) {
 

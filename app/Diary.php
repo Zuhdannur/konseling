@@ -6,7 +6,7 @@ class Diary extends Model
 {
 
     protected $fillable = [
-        'id_user','body'
+        'id_user','body','title','tgl'
     ];
 
     protected $dates = [];
