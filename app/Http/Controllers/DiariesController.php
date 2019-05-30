@@ -42,7 +42,7 @@ class DiariesController extends Controller
 
     public function showMyDiary()
     {
-        $data = \App\Diary::where('id_user', Auth::user()->id)->orderBy('tgl','desc')->get();
+        $data = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','asc')->get();
         return \Illuminate\Support\Facades\Response::json([
             "message" => "success",
             "result" => $data
