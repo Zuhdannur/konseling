@@ -43,7 +43,7 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
 
        //Diary
         $router->post('diary','DiariesController@store');
-
+        $router->get('diary', 'DiariesController@showMyDiary');
         $router->get('/shareDiary/{id}','DiariesController@showMyDiaryToOthers');
        //master
 
