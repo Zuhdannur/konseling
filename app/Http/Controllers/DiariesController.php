@@ -15,6 +15,7 @@ class DiariesController extends Controller
         $insert->id_user = Auth::user()->id;
         $insert->body = $request->body;
         $insert->title = $request->title;
+        $insert->tgl = $request->tgl;
         $insert->save();
         if ($insert) {
 
@@ -41,7 +42,7 @@ class DiariesController extends Controller
 
     public function showMyDiary()
     {
-        $data = \App\Diary::where('id_user', Auth::user()->id)->get();
+        $data = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc')->get();
         return \Illuminate\Support\Facades\Response::json([
             "message" => "success",
             "result" => $data
