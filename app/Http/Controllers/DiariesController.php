@@ -48,24 +48,20 @@ class DiariesController extends Controller
         ], 200);
     }
 
-    public function showMyDiaryToOthers($id)
+    public function showMyDiaryToOthers()
     {
-        $find = \App\User::with('detail')->where('id',$id)->first();
-        $myData = \App\User::with('detail')->where('id',Auth::user()->id)->first();
-        if($find->school == $myData->school){
 
-            $data = \App\Diary::where('id_user', $id)->get();
-
-            return \Illuminate\Support\Facades\Response::json([
-                "message" => "success",
-                "result" => $data
-            ], 200);
-
-        }
+        $mySchool = \App\User::with('detail')->where('id',Auth::user()->id)->first()->detail;
+        $diaries = \App\Diary::whereHas('user',function ($q) use ($mySchool){
+            $q->whereHas('detail',function ($query) use ($mySchool){
+                $query->where('school',$mySchool[0]->school);
+            });
+        })->get();
 
         return \Illuminate\Support\Facades\Response::json([
-            "message" => 'Failed',
-        ],201);
+            "message" => "success",
+            "result" => $diaries
+        ], 200);
     }
 
 }

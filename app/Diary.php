@@ -20,6 +20,6 @@ class Diary extends Model
     // Relationships
     public function user()
     {
-        $this->hasOne('\App\User','id_user','id');
+       return $this->belongsTo('\App\User','id_user','id');
     }
 }
