@@ -57,7 +57,7 @@ class DiariesController extends Controller
             $q->whereHas('detail',function ($query) use ($mySchool){
                 $query->where('school',$mySchool[0]->school);
             });
-        })->get();
+        })->with('user')->get();
 
         return \Illuminate\Support\Facades\Response::json([
             "message" => "success",
