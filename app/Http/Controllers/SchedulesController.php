@@ -49,6 +49,13 @@ class SchedulesController extends Controller
                 'status' => 1,
                 'tgl_pengajuan' => $request->date
             ]);
+            $checkType = \App\Schedule::where('id',$request->schedule_id)->first();
+
+            if($checkType->type_schedule == "online"){
+                $createRoom = \App\Schedule::where('id', $request->schedule_id)->update([
+                    'room_id' => base64_encode(str_random(5))
+                ]);
+            }
             if ($update) {
                 $pusher = new Pusher(
                     'e06a6bacb2b9f8503317',
@@ -103,6 +110,5 @@ class SchedulesController extends Controller
             ];
         }
     }
-
 
 }
