@@ -109,7 +109,7 @@ class UsersController extends Controller
 
     public function getMyProfile()
     {
-        $data = \App\User::where('id', Auth::user()->id)->with('detail')->first();
+        $data = \App\User::where('id', Auth::user()->id)->with('detail');
         $data['avatar'] = base_path() . '\\public\\image\\' . $data->avatar;
         return Response::json([
             "message" => "success",
