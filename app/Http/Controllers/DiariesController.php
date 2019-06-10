@@ -46,11 +46,11 @@ class DiariesController extends Controller
     {
         $data = \App\Diary::where('id', $id)->where('id_user', Auth::user()->id)->delete();
         if($data) {
-            return Response::json([
+            return \Illuminate\Support\Facades\Response::json([
                 "message" => "success",
             ],200);
         } else {
-            return Response::json([
+            return \Illuminate\Support\Facades\Response::json([
                 "message" => 'failed'
             ],201);
         }
