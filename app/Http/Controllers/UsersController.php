@@ -111,7 +111,6 @@ class UsersController extends Controller
     {
         $data = \App\User::where('id', Auth::user()->id);
         $data['avatar'] = base_path() . '\\public\\image\\' . $data->avatar;
-        $data['detail'] = \App\DetailUser::where('id_user', Auth::user()->id);
         return Response::json([
             "message" => "success",
             "result" => $data
