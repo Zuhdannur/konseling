@@ -19,7 +19,9 @@ class CreateTblDiary extends Migration
             $table->string('title',200);
             $table->text('body');
             $table->date('tgl');
-            $table->timestamps();
+            $table->date('created_at');
+            $table->date('updated_at');
+            // $table->timestamps();
         });
     }
 

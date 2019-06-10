@@ -16,6 +16,8 @@ class DiariesController extends Controller
         $insert->body = $request->body;
         $insert->title = $request->title;
         $insert->tgl = $request->tgl;
+        $insert->created_at = $request->created_at;
+        $insert->updated_at = $request->updated_at;
         $insert->save();
         if ($insert) {
 
