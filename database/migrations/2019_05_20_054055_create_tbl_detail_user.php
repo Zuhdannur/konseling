@@ -19,8 +19,8 @@ class CreateTblDetailUser extends Migration
             $table->string('gender',25);
             $table->text('address');
             $table->string('phone_number');
-            $table->string('kelas');
-            $table->string('school');
+            $table->string('kelas')->nullable();
+            $table->string('school')->nullable();
             $table->timestamps();
         });
     }
