@@ -51,7 +51,7 @@ class DiariesController extends Controller
             ],200);
         } else {
             return \Illuminate\Support\Facades\Response::json([
-                "message" => 'faileds'
+                "message" => 'failed'
             ],201);
         }
     }
