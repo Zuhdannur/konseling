@@ -45,6 +45,7 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
         $router->post('diary','DiariesController@store');
 
         $router->get('diary', 'DiariesController@showMyDiary');
+        $router->get('deleteDiary/{id}', 'DiariesController@deleteDiary');
         $router->get('/shareDiary','DiariesController@showMyDiaryToOthers');
        //master
 

@@ -42,6 +42,20 @@ class DiariesController extends Controller
         return $request;
     }
 
+    public function deleteDiary($id)
+    {
+        $data = \App\Diary::where('id', $id)->where('id_user', Auth::user()->id)->delete();
+        if($data) {
+            return Response::json([
+                "message" => "success",
+            ],200);
+        } else {
+            return Response::json([
+                "message" => 'failed'
+            ],201);
+        }
+    }
+
     public function showMyDiary()
     {
         $data = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc')->get();
