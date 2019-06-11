@@ -31,9 +31,10 @@ class DiariesController extends Controller
                 ]
             );
 
-            $data['message'] = "Created Diary";
-            $data['sender_id'] = Auth::user()->id;
-            $push->trigger('diary', 'my-event', $data);
+            $data['message']    = "Created Diary";
+            $data['sender_id']  = \App\User::where('id',Auth::user()->id)->first()->name;
+            $data['to']         = \App\User::where('id',Auth::user()->id)->with('detail')->first()->detail->school;
+            $push->trigger('diary', 'notification', $data);
 
             return \Illuminate\Support\Facades\Response::json([
                 'message' => 'success',
