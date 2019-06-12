@@ -28,6 +28,10 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
     $router->get('allSchool','MastersController@getListSchool');
     $router->get('allClass/{id}','MastersController@getListClass');
 
+    $router->get('title','ArtikelsController@getTitle');
+    $router->post('artikel','ArtikelsController@create');
+    $router->post('related','ArtikelsController@getRelatedArtikel');
+
     $router->group(['middleware' => 'auth'],function () use ($router){
         //Message
        $router->get('index','MessagesController@index');
@@ -62,3 +66,8 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
 			$router->get('user','UsersController@getAllUser');
     });
 });
+
+/**
+ * Routes for resource artikel
+ */
+
