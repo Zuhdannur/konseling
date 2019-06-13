@@ -72,7 +72,7 @@ class DiariesController extends Controller
         $mySchool = \App\User::with('detail')->where('id',Auth::user()->id)->first()->detail;
         $diaries = \App\Diary::whereHas('user',function ($q) use ($mySchool){
             $q->whereHas('detail',function ($query) use ($mySchool){
-                $query->where('school',$mySchool[0]->school);
+                $query->where('school',$mySchool->school);
             });
         })->with('user')->get();
 
