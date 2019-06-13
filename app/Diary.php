@@ -4,11 +4,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Diary extends Model
 {
-    public $timestamps = true;
-
     protected $fillable = [
-        'id_user','body','title','tgl','created_at','updated_at'
+        'id_user','body','title','tgl'
     ];
+
+    public $timestamps = true;
 
     protected $dates = [];
 
