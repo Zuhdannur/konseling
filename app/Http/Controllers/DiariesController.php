@@ -75,12 +75,12 @@ class DiariesController extends Controller
         ]);
 
         if($update) {
-            return Response::json([
+            return \Illuminate\Support\Facades\Response::json([
                 "message" => 'diary updated'
             ],200);
         } else {
-            return Response::json([
-                "message" => 'failed to Updated'
+            return \Illuminate\Support\Facades\Response::json([
+                "message" => 'failed to updated'
             ],201);
         }
         return $request;
