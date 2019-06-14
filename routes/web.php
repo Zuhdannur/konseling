@@ -47,7 +47,7 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
 
        //Diary
        $router->post('diary','DiariesController@store');
-       $router->post('updateDiary/{id}','DiariesController@updateDiary');
+       $router->post('updateDiary','DiariesController@updateDiary');
 
         $router->get('diary', 'DiariesController@showMyDiary');
         $router->get('deleteDiary/{id}', 'DiariesController@deleteDiary');

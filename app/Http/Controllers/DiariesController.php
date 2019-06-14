@@ -64,9 +64,9 @@ class DiariesController extends Controller
         ], 200);
     }
 
-    public function updateDiary(Request $request, $id)
+    public function updateDiary(Request $request)
     {
-        $update = \App\Diary::where('id', $id)->where('id_user', Auth::user()->id)->update([
+        $update = \App\Diary::where('id', $request->id)->where('id_user', Auth::user()->id)->update([
             'title' => $request->title,
             'body' => $request->body,
             'tgl' => $request->tgl,
@@ -80,7 +80,7 @@ class DiariesController extends Controller
             ],200);
         } else {
             return \Illuminate\Support\Facades\Response::json([
-                "message" => 'failed to updated'
+                "message" => 'failed to update'
             ],201);
         }
         return $request;
