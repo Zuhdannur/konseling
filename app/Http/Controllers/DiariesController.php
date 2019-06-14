@@ -64,6 +64,28 @@ class DiariesController extends Controller
         ], 200);
     }
 
+    public function updateDiary(Request $request)
+    {
+        $update = \App\Diary::where('id', $request->id)->where('id_user', Auth::user()->id)->update([
+            'title' => $request->address,
+            'body' => $request->phone_number,
+            'tgl' => $request->tgl,
+            'created_at' => $request->created_at,
+            'updated_at' => $request->updated_at
+        ]);
+        
+        if($update) {
+            return Response::json([
+                "message" => 'diary updated'
+            ],200);
+        } else {
+            return Response::json([
+                "message" => 'failed to Updated'
+            ],201);
+        }
+        return $request;
+    }
+
     public function showMyDiaryToOthers()
     {
 
