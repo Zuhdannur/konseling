@@ -36,7 +36,10 @@ class ArtikelsController extends Controller
 
     public function getRelatedArtikel(Request $request)
     {
-        $data = \App\Artikel::where('title','LIKE','%'. $request->title .'%')->get();
+//        $data = \App\Artikel::where('LOWER(`title`)','LIKE','%'.strtolower($request->title).'%')->get();
+        $data = \App\Artikel::where(function ($q) use ($request){
+            $q->whereRaw('LOWER(title) LIKE ? ','%'.strtolower($request->title).'%');
+        })->get();
         return \Illuminate\Support\Facades\Response::json([
             "message" => 'success',
             "result"  => $data
