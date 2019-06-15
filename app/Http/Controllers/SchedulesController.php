@@ -101,9 +101,9 @@ class SchedulesController extends Controller
             ];
 
         } else {
-            $data['result'] = \App\Schedule::where('consultant_id', Auth::user()->id)->first();
-            if ($data['result']){
-            $data['result']['user'] = \App\User::where('id', $data['result']->requester_id)->first();
+            $data = \App\Schedule::where('consultant_id', Auth::user()->id)->first();
+            if ($data){
+            $data['user'] = \App\User::where('id', $data['result']->requester_id)->first();
             } else {
                 $data = null;
             }
