@@ -105,7 +105,7 @@ class SchedulesController extends Controller
             if ($data['result']){
             $data['result']['user'] = \App\User::where('id', $data['result']->requester_id)->first();
             } else {
-                $data['result'] = "there is no request";
+                $data = "there is no request";
             }
 
             return [
