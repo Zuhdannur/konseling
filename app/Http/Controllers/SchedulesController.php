@@ -19,7 +19,7 @@ class SchedulesController extends Controller
             $insert->type_schedule = $request->type_schedule;
             $insert->consultant_id = $consultant;
             $insert->save();
-            if($insert){
+            if ($insert) {
                 $pusher = new Pusher(
                     'e06a6bacb2b9f8503317',
                     '865963b7338a3b21359a',
@@ -33,14 +33,14 @@ class SchedulesController extends Controller
                 $data['message'] = "Success create schedule";
                 $data['consultant_id'] = $consultant;
 
-                $pusher->trigger('notif-schedule','my-event',$data);
+                $pusher->trigger('notif-schedule', 'my-event', $data);
                 return \Illuminate\Support\Facades\Response::json([
                     "message" => 'success create schedule'
-                ],400);
+                ], 400);
             } else {
                 return Response::json([
                     "message" => 'failed create schedule'
-                ],400);
+                ], 400);
             }
 
         } else {
@@ -49,9 +49,9 @@ class SchedulesController extends Controller
                 'status' => 1,
                 'tgl_pengajuan' => $request->date
             ]);
-            $checkType = \App\Schedule::where('id',$request->schedule_id)->first();
+            $checkType = \App\Schedule::where('id', $request->schedule_id)->first();
 
-            if($checkType->type_schedule == "online"){
+            if ($checkType->type_schedule == "online") {
                 $createRoom = \App\Schedule::where('id', $request->schedule_id)->update([
                     'room_id' => base64_encode(str_random(5))
                 ]);
@@ -68,9 +68,9 @@ class SchedulesController extends Controller
                 );
 
                 $data['message'] = "confirmation schedule";
-                $data['requester_id'] = \App\Schedule::where('id',$request->schedule_id)->first()->requester_id;
+                $data['requester_id'] = \App\Schedule::where('id', $request->schedule_id)->first()->requester_id;
 
-                $pusher->trigger('notif-schedule','my-event',$data);
+                $pusher->trigger('notif-schedule', 'my-event', $data);
 
                 return [
                     "message" => "accept"
@@ -92,8 +92,8 @@ class SchedulesController extends Controller
     public function viewMySchedule()
     {
         if (Auth::user()->role == "siswa") {
-            $data['result'] = \App\Schedule::where('requester_id',Auth::user()->id)->first();
-            $data['result']['user'] = \App\User::where('id',$data['result']->consultant_id)->first();
+            $data['result'] = \App\Schedule::where('requester_id', Auth::user()->id)->first();
+            $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->first();
 
             return [
                 "message" => "success",
@@ -101,8 +101,12 @@ class SchedulesController extends Controller
             ];
 
         } else {
-            $data['result'] = \App\Schedule::where('consultant_id',Auth::user()->id)->first();
-            $data['result']['user'] = \App\User::where('id',$data['result']->requester_id)->first();
+            $data['result'] = \App\Schedule::where('consultant_id', Auth::user()->id)->first();
+            if ($data['result']){
+            $data['result']['user'] = \App\User::where('id', $data['result']->requester_id)->first();
+            } else {
+                $data['result'] = "there is no request";
+            }
 
             return [
                 "message" => "success",
