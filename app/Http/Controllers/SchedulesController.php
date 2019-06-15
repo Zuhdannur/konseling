@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use function foo\func;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -15,9 +16,9 @@ class SchedulesController extends Controller
             $insert = new \App\Schedule;
             $insert->requester_id = Auth::user()->id;
             $insert->tgl_pengajuan = $request->date;
-            $consultant = $this->getConsultan()->id;
+//            $consultant = $this->getConsultan()->id;
             $insert->type_schedule = $request->type_schedule;
-            $insert->consultant_id = $consultant;
+//            $insert->consultant_id = $consultant;
             $insert->save();
             if ($insert) {
                 $pusher = new Pusher(
@@ -31,7 +32,7 @@ class SchedulesController extends Controller
                 );
 
                 $data['message'] = "Success create schedule";
-                $data['consultant_id'] = $consultant;
+//                $data['consultant_id'] = $consultant;
 
                 $pusher->trigger('notif-schedule', 'my-event', $data);
                 return \Illuminate\Support\Facades\Response::json([
@@ -47,8 +48,10 @@ class SchedulesController extends Controller
 
             $update = \App\Schedule::where('id', $request->schedule_id)->update([
                 'status' => 1,
-                'tgl_pengajuan' => $request->date
+                'tgl_pengajuan' => $request->date,
+                'consultant_id' => Auth::user()->id
             ]);
+
             $checkType = \App\Schedule::where('id', $request->schedule_id)->first();
 
             if ($checkType->type_schedule == "online") {
@@ -101,11 +104,13 @@ class SchedulesController extends Controller
             ];
 
         } else {
-            $data = \App\Schedule::where('consultant_id', Auth::user()->id)->first();
-            if ($data){
-            $data['user'] = \App\User::where('id', $data->requester_id)->first();
-            } else {
-                $data = null;
+            $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
+            $schedule = \App\Schedule::all();
+            $data = [];
+            foreach ($schedule as $key => $value) {
+                if($this->getSchoolName($value->requester_id)->detail->school == $user->detail->school){
+                    $data[$key] = $value;
+                }
             }
 
             return [
@@ -113,6 +118,12 @@ class SchedulesController extends Controller
                 "result" => $data
             ];
         }
+    }
+
+    private function getSchoolName($id)
+    {
+        $data = \App\User::where('id', $id)->with('detail')->first();
+        return $data;
     }
 
 }

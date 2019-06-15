@@ -20,11 +20,11 @@ class Schedule extends Model {
 
     // Relationships
     public function request(){
-        return $this->belongsTo('\App\User','requester_id','id');
+        return $this->hasOne('\App\User','id','requester_id');
     }
 
     public function consultant(){
-        return $this->belongsTo('\App\User','consultant_id','id');
+        return $this->hasOne('\App\User','id','consultant_id');
     }
 
 }
