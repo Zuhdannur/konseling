@@ -16,11 +16,15 @@ class CreateTblSchedule extends Migration
         Schema::create('tbl_schedule', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('requester_id')->unsigned();
+            $table->string('title');
             $table->date('tgl_pengajuan');
+            $table->text('desc');
             $table->string('type_schedule');
             $table->integer('status')->default(0);
             $table->integer('consultant_id')->unsigned()->default(0);
             $table->string('room_id')->nullable();
+            $table->string('time')->nullable();
+            $table->string('location')->nullable();
             $table->timestamps();
         });
     }
