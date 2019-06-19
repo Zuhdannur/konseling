@@ -59,8 +59,7 @@ class DiariesController extends Controller
     {
         $data = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc')->get();
         return \Illuminate\Support\Facades\Response::json([
-            "message" => "success",
-            "result" => $data
+            $data
         ], 200);
     }
 
