@@ -57,10 +57,10 @@ class DiariesController extends Controller
 
     public function showMyDiary()
     {
-        $data = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc')->get();
-        return \Illuminate\Support\Facades\Response::json([
-            $data
-        ], 200);
+        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc')->get();
+        return \Illuminate\Support\Facades\Response::json(
+            $datas
+        , 200);
     }
 
     public function updateDiary(Request $request)
