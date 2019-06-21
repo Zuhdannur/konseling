@@ -71,6 +71,7 @@ class ArtikelsController extends Controller
         foreach ($data as $key => $value) {
             $result[$key] = $value['artikel'];
             $result[$key]['id_favorit'] = $value->id_favorit;
+			$result[$key]['id_user] = Auth::user()->id;
         }
 //        $data['result'] =
         return \response()->json($result, 200);
