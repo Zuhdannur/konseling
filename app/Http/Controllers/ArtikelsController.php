@@ -37,13 +37,39 @@ class ArtikelsController extends Controller
     public function getRelatedArtikel(Request $request)
     {
 //        $data = \App\Artikel::where('LOWER(`title`)','LIKE','%'.strtolower($request->title).'%')->get();
-        $data = \App\Artikel::where(function ($q) use ($request){
-            $q->whereRaw('LOWER(title) LIKE ? ','%'.strtolower($request->title).'%');
+        $data = \App\Artikel::where(function ($q) use ($request) {
+            $q->whereRaw('LOWER(title) LIKE ? ', '%' . strtolower($request->title) . '%');
         })->get();
         return \Illuminate\Support\Facades\Response::json([
             "message" => 'success',
-            "result"  => $data
-        ],200);
+            "result" => $data
+        ], 200);
     }
 
+    public function storeFavorite(Request $request)
+    {
+        $insert             = new \App\Favorite;
+        $insert->id_artikel = $request->id_artikel;
+        $insert->id_user    = Auth::user()->id;
+        $insert->save();
+
+        if ($insert) {
+            return \response()->json([
+                "message" => "success"
+            ], 200);
+        } else {
+            return \response()->json([
+                "message" => "failed"
+            ], 200);
+        }
+    }
+
+    public function getMyFavorite()
+    {
+        $data = \App\Favorite::where('id_user',Auth::user()->id)->with('artikel')->get();
+        return \response()->json([
+            "message" => "success",
+            "result"  => $data,
+        ],200);
+    }
 }
