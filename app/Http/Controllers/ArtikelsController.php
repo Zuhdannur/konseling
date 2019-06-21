@@ -48,9 +48,9 @@ class ArtikelsController extends Controller
 
     public function storeFavorite(Request $request)
     {
-        $insert             = new \App\Favorite;
+        $insert = new \App\Favorite;
         $insert->id_artikel = $request->id_artikel;
-        $insert->id_user    = Auth::user()->id;
+        $insert->id_user = Auth::user()->id;
         $insert->save();
 
         if ($insert) {
@@ -66,12 +66,27 @@ class ArtikelsController extends Controller
 
     public function getMyFavorite()
     {
-        $data = \App\Favorite::where('id_user',Auth::user()->id)->with('artikel')->get();
+        $data = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel')->get();
         $result = [];
-        foreach ($data as $key => $value){
+        foreach ($data as $key => $value) {
             $result[$key] = $value['artikel'];
+            $result[$key]['id_favorit'] = $value->id_favorit;
         }
 //        $data['result'] =
-        return \response()->json($result,200);
+        return \response()->json($result, 200);
+    }
+
+    public function removeMyFavorit($id)
+    {
+        $delete = \App\Favorite::find($id)->delete();
+        if($delete){
+            return \response([
+                "message" => "succsess"
+            ],200);
+        } else {
+            return \response([
+                "message" => "failed"
+            ],201);
+        }
     }
 }

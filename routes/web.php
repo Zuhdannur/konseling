@@ -69,6 +69,7 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
 			//Favorite Artikel
             $router->post('favorit','ArtikelsController@storeFavorite');
             $router->get('favorit','ArtikelsController@getMyFavorite');
+            $router->get('favorit/{id}','ArtikelsController@removeMyFavorit');
     });
 });
 
