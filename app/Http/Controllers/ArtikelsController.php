@@ -67,6 +67,11 @@ class ArtikelsController extends Controller
     public function getMyFavorite()
     {
         $data = \App\Favorite::where('id_user',Auth::user()->id)->with('artikel')->get();
-        return \response()->json($data,200);
+        $result = [];
+        foreach ($data as $key => $value){
+            $result[$key] = $value['artikel'];
+        }
+//        $data['result'] =
+        return \response()->json($result,200);
     }
 }
