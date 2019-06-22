@@ -71,10 +71,10 @@ class ArtikelsController extends Controller
         foreach ($data as $key => $value) {
             $result[$key] = $value['artikel'];
             $result[$key]['id_favorit'] = $value->id_favorit;
-			$result[$key]['id_user] = Auth::user()->id;
+			$result[$key]['id_user'] = Auth::user()->id;
         }
-//        $data['result'] =
-        return \response()->json($result, 200);
+        $data['result'] = \response()->json($result, 200);
+        return $data['result'];
     }
 
     public function removeMyFavorit($id)
