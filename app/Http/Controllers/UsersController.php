@@ -143,9 +143,11 @@ class UsersController extends Controller
         if ($update) {
             if ($request->kelas == null) {
                 $kelas = '';
-            } else if($request->school == null){
+            }
+            if($request->school == null) {
                 $school = '';
-            } else {
+            }
+            else {
                 $kelas = $request->kelas;
                 $school = $request->school;
             }
