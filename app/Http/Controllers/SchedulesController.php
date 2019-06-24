@@ -39,11 +39,11 @@ class SchedulesController extends Controller
                 $pusher->trigger('notif-schedule', 'my-event', $data);
                 return \Illuminate\Support\Facades\Response::json([
                     "message" => 'success create schedule'
-                ], 400);
+                ], 200);
             } else {
                 return Response::json([
                     "message" => 'failed create schedule'
-                ], 400);
+                ], 201);
             }
 
         } else {
