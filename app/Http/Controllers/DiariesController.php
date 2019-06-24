@@ -95,6 +95,8 @@ class DiariesController extends Controller
             });
         })->with('user')->get();
 
+        var_dump();
+
         return \Illuminate\Support\Facades\Response::json($diaries, 200);
     }
 
