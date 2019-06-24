@@ -48,6 +48,11 @@ class ArtikelsController extends Controller
 
     public function storeFavorite(Request $request)
     {
+        if($this->checkingArtikel($request->id_artikel)){
+            return \response()->json([
+                "message" => "duplicate artikel"
+            ]);
+        }
         $insert = new \App\Favorite;
         $insert->id_artikel = $request->id_artikel;
         $insert->id_user = Auth::user()->id;
@@ -71,23 +76,29 @@ class ArtikelsController extends Controller
         foreach ($data as $key => $value) {
             $result[$key] = $value['artikel'];
             $result[$key]['id_favorit'] = $value->id_favorit;
-			$result[$key]['id_user] = Auth::user()->id;
+            $result[$key]['id_user'] = Auth::user()->id;
         }
-//        $data['result'] =
         return \response()->json($result, 200);
+    }
+
+    public function checkingArtikel($id)
+    {
+        $check = \App\Favorite::where([['id_user',Auth::user()->id],['id_favorit',$id]])->get();
+        if(count($check) > 0)return true;
+        else return false;
     }
 
     public function removeMyFavorit($id)
     {
         $delete = \App\Favorite::find($id)->delete();
-        if($delete){
+        if ($delete) {
             return \response([
                 "message" => "succsess"
-            ],200);
+            ], 200);
         } else {
             return \response([
                 "message" => "failed"
-            ],201);
+            ], 201);
         }
     }
 }
