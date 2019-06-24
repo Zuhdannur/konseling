@@ -43,7 +43,8 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
 
        //schedule
        $router->post('schedule','SchedulesController@send');
-       $router->get('mySchedule','SchedulesController@viewMySchedule');
+       $router->get('mySchedule/{id}','SchedulesController@viewMySchedule');
+       $router->get('mySchedule/','SchedulesController@viewMySchedule');
 
        //Diary
        $router->post('diary','DiariesController@store');
