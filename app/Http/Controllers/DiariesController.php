@@ -55,9 +55,9 @@ class DiariesController extends Controller
         }
     }
 
-    public function showMyDiary()
+    public function showMyDiary(Request $request)
     {
-        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc')->skip('offset')->take('limit')->get();
+        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc')->skip($request->offset)->take($request->limit)->get();
         return \Illuminate\Support\Facades\Response::json(
             $datas
         , 200);
