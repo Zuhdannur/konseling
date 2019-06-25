@@ -107,21 +107,14 @@ class SchedulesController extends Controller
 
         } else {
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
-//            $schedule = \App\Schedule::where('type_schedule',$id)->with('request')->with('consultant')->get();
-            $schedule = \App\Schedule::where(function ($query) use ($user,$id){
-                $query->whereHas('request',function ($q) use ($user){
-                    $q->whereHas('detail',function ($sql) use ($user){
-                        $sql->where('school',$user->detail->school);
+            $schedule = \App\Schedule::where(function ($query) use ($user, $id) {
+                $query->whereHas('request', function ($q) use ($user) {
+                    $q->whereHas('detail', function ($sql) use ($user) {
+                        $sql->where('school', $user->detail->school);
                     });
                 });
-                $query->where('type_schedule',$id);
-            })->with('consultant')->get();
-            // $data["result"] = $schedule;
-//            foreach ($schedule as $key => $value) {
-//                if ($this->getSchoolName($value->requester_id)['detail']['school']== $user['detail']['school']) {
-//                    $data["result"][$key] = $value;
-//                }
-//            }
+                $query->where('type_schedule', $id);
+            })->with('request')->with('consultant')->get();
             return Response::json($schedule, 200);
         }
     }
@@ -148,24 +141,24 @@ class SchedulesController extends Controller
 
     private function storeDaring($request)
     {
-        $insert                 = new \App\Schedule;
-        $insert->requester_id   = Auth::user()->id;
-        $insert->title          = $request->title;
-        $insert->desc           = $request->desc;
-        $insert->type_schedule  = $request->type_schedule;
+        $insert = new \App\Schedule;
+        $insert->requester_id = Auth::user()->id;
+        $insert->title = $request->title;
+        $insert->desc = $request->desc;
+        $insert->type_schedule = $request->type_schedule;
         $insert->save();
         return $insert;
     }
 
     private function storeDirect($request)
     {
-        $insert                 = new \App\Schedule;
-        $insert->requester_id   = Auth::user()->id;
-        $insert->title          = $request->title;
-        $insert->desc           = $request->desc;
-        $insert->type_schedule  = $request->type_schedule;
-        $insert->time           = $request->time;
-        $insert->location       = $request->location;
+        $insert = new \App\Schedule;
+        $insert->requester_id = Auth::user()->id;
+        $insert->title = $request->title;
+        $insert->desc = $request->desc;
+        $insert->type_schedule = $request->type_schedule;
+        $insert->time = $request->time;
+        $insert->location = $request->location;
         $insert->save();
         return $insert;
     }
