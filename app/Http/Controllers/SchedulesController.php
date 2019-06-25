@@ -114,10 +114,7 @@ class SchedulesController extends Controller
                     $data[$key] = $value;
                 }
             }
-            return [
-                "message" => "success",
-                "result" => $data
-            ];
+            return Response::json($data, 201);
         }
     }
 
