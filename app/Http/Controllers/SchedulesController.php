@@ -94,7 +94,7 @@ class SchedulesController extends Controller
         return $data[rand(0, count($data) - 1)];
     }
 
-    public function viewMySchedule($id = '')
+    public function viewMySchedule($id = '', Request $request)
     {
         if (Auth::user()->role == "siswa" && $id == '') {
             $data['result'] = \App\Schedule::where('requester_id', Auth::user()->id)->first();
@@ -107,14 +107,14 @@ class SchedulesController extends Controller
 
         } else {
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
-            $schedule = \App\Schedule::where('type_schedule',$id)->with('request')->with('consultant')->get();
+            $schedule = \App\Schedule::where('type_schedule',$id)->with('request')->with('consultant')->paginate($request->number);
             $data = [];
             foreach ($schedule as $key => $value) {
                 if ($this->getSchoolName($value->requester_id)->detail->school == $user->detail->school) {
                     $data[$key] = $value;
                 }
             }
-            return Response::json($data, 201);
+            return Response::json($data, 200);
         }
     }
 
