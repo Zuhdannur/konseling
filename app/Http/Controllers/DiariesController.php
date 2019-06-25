@@ -91,9 +91,9 @@ class DiariesController extends Controller
         $mySchool = \App\User::with('detail')->where('id',Auth::user()->id)->first()->detail;
         $diaries = \App\Diary::whereHas('user',function ($q) use ($mySchool){
             $q->whereHas('detail',function ($query) use ($mySchool){
-                $query->where('school',$mySchool->school);
+                $query->where('school',$mySchool->school)->orderBy('created_at','desc');
             });
-        })->with('user')->orderBy('created_at', 'DESC')->get();
+        })->with('user')->get();
 
         return \Illuminate\Support\Facades\Response::json($diaries, 200);
     }
