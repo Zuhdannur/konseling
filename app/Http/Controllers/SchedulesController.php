@@ -108,10 +108,10 @@ class SchedulesController extends Controller
         } else {
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
             $schedule = \App\Schedule::where('type_schedule',$id)->with('request')->with('consultant')->get();
-            $data = [];
+            $data["result"] = [];
             foreach ($schedule as $key => $value) {
                 if ($this->getSchoolName($value->requester_id)['detail']['school']== $user['detail']['school']) {
-                    $data[$key] = $value;
+                    $data["result"][$key] = $value;
                 }
             }
             return Response::json($data, 201);
