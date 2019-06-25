@@ -115,13 +115,13 @@ class SchedulesController extends Controller
                     });
                 });
             })->with('consultant')->get();
-            $data["result"] = $schedule;
+            // $data["result"] = $schedule;
 //            foreach ($schedule as $key => $value) {
 //                if ($this->getSchoolName($value->requester_id)['detail']['school']== $user['detail']['school']) {
 //                    $data["result"][$key] = $value;
 //                }
 //            }
-            return Response::json($data, 201);
+            return Response::json($schedule, 200);
         }
     }
 
