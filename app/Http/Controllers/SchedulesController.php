@@ -107,7 +107,7 @@ class SchedulesController extends Controller
 
         } else {
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
-            $schedule = \App\Schedule::where('type_schedule',$id)->with('request')->with('consultant')->paginate($request->number);
+            $schedule = \App\Schedule::where('type_schedule',$id)->with('request')->with('consultant')->paginate(2);
             $data = [];
             foreach ($schedule as $key => $value) {
                 if ($this->getSchoolName($value->requester_id)->detail->school == $user->detail->school) {
