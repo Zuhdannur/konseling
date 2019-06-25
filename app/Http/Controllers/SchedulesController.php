@@ -114,7 +114,7 @@ class SchedulesController extends Controller
                     $data[$key] = $value;
                 }
             }
-            return Response::json([$data], 201);
+            return Response::json($data, 201);
         }
     }
 
