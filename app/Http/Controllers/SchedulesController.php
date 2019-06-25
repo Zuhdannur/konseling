@@ -100,10 +100,14 @@ class SchedulesController extends Controller
             $data['result'] = \App\Schedule::where('requester_id', Auth::user()->id)->first();
             $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->first();
 
-            return [
-                "message" => "success",
-                "result" => $data
-            ];
+            // return [
+            //     "message" => "success",
+            //     "result" => $data
+            // ];
+
+            return Response::json([
+                'guru' => 'yes'
+            ], 200);
 
         } else {
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
@@ -114,7 +118,10 @@ class SchedulesController extends Controller
                     $data[$key] = $value;
                 }
             }
-            return Response::json($data, 200);
+            return Response::json([
+                'guru' => 'yes'
+            ], 200);
+            // return Response::json($data, 200);
         }
     }
 
