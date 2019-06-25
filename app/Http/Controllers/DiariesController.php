@@ -95,7 +95,10 @@ class DiariesController extends Controller
             });
         })->with('user')->get();
 
-        return \Illuminate\Support\Facades\Response::json($diaries, 200);
+        return \Illuminate\Support\Facades\Response::json([
+            'message' => $diaries->toSql(),
+            'result' => $diaries
+        ], 200);
     }
 
 }
