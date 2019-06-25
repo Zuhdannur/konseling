@@ -108,12 +108,13 @@ class SchedulesController extends Controller
         } else {
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
 //            $schedule = \App\Schedule::where('type_schedule',$id)->with('request')->with('consultant')->get();
-            $schedule = \App\Schedule::where(function ($query) use ($user){
+            $schedule = \App\Schedule::where(function ($query) use ($user,$id){
                 $query->whereHas('request',function ($q) use ($user){
                     $q->whereHas('detail',function ($sql) use ($user){
                         $sql->where('school',$user->detail->school);
                     });
                 });
+                $query->where('type_schedule',$id);
             })->with('consultant')->get();
             $data["result"] = $schedule;
 //            foreach ($schedule as $key => $value) {
