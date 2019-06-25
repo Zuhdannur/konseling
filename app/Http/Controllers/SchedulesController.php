@@ -110,7 +110,7 @@ class SchedulesController extends Controller
             $schedule = \App\Schedule::where('type_schedule',$id)->with('request')->with('consultant')->get();
             $data = [];
             foreach ($schedule as $key => $value) {
-                if ($this->getSchoolName($value->requester_id)['detail']->school == $user['detail']->school) {
+                if ($this->getSchoolName($value->requester_id)['detail']['school']== $user['detail']['school']) {
                     $data[$key] = $value;
                 }
             }
