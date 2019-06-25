@@ -36,6 +36,7 @@ class DiariesController extends Controller
 
             return \Illuminate\Support\Facades\Response::json([
                 'message' => 'success',
+                'data' => $insert
             ], 200);
         }
         return $request;

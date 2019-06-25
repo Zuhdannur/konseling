@@ -8,8 +8,6 @@ class Diary extends Model
         'id_user','body','title','tgl'
     ];
 
-    public $timestamps = true;
-
     protected $dates = [];
 
     protected $table = "tbl_diary";
