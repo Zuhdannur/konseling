@@ -114,6 +114,7 @@ class SchedulesController extends Controller
                     });
                 });
                 $query->where('type_schedule', $id);
+                $query->where('status',0);
             })->with('request')->with('consultant')->get();
             return Response::json($schedule, 200);
         }
