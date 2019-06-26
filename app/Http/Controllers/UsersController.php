@@ -107,7 +107,7 @@ class UsersController extends Controller
         } else return null;
     }
 
-    public function getMyProfile()
+    public function getMyProfile(Request $request)
     {
         $data = \App\User::where('id', Auth::user()->id)->with('detail')->first();
         $data['avatar'] = base_path() . '\\public\\image\\' . $data->avatar;
