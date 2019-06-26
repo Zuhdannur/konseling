@@ -32,13 +32,13 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
     $router->post('artikel','ArtikelsController@create');
     $router->post('related','ArtikelsController@getRelatedArtikel');
 
+    $router->get('profile/{id}','UsersController@getMyProfile');
     $router->group(['middleware' => 'auth'],function () use ($router){
         //Message
        $router->get('index','MessagesController@index');
        $router->post('send','MessagesController@store');
 
        //profile
-       $router->get('profile','UsersController@getMyProfile');
        $router->post('profile','UsersController@updateProfile');
 
        //schedule

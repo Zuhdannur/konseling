@@ -107,9 +107,9 @@ class UsersController extends Controller
         } else return null;
     }
 
-    public function getMyProfile(Request $request)
+    public function getMyProfile($id)
     {
-        $data = \App\User::where('id', Auth::user()->id)->with('detail')->first();
+        $data = \App\User::where('api_token', $id)->with('detail')->first();
         $data['avatar'] = base_path() . '\\public\\image\\' . $data->avatar;
         return Response::json([
             "message" => "success",
