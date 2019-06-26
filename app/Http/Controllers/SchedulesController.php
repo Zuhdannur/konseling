@@ -77,9 +77,7 @@ class SchedulesController extends Controller
 
                 $pusher->trigger('notif-schedule', 'my-event', $data);
 
-                return Response::json([
-                    'result' => $data
-                ], 200);
+                return Response::json($data, 200);
             } else {
                 return [
                     "message" => "failed accept"
