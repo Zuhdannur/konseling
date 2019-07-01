@@ -76,10 +76,14 @@ class SchedulesController extends Controller
                 $data['requester_id'] = \App\Schedule::where('id', $request->schedule_id)->first()->requester_id;
 
                 $pusher->trigger('notif-schedule', 'my-event', $data);
-
+                
                 $result['requester_id'] = \App\Schedule::where('id', $request->schedule_id)->first()->requester_id;
+                $result['title'] = $request->title;
+                $result['desc'] = $request->desc;
 
-                return Response::json($result, 200);
+                return Response::json([
+                    "result" => $result
+                ],200);
             } else {
                 return [
                     "message" => "failed accept"
