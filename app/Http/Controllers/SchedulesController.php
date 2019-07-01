@@ -76,10 +76,10 @@ class SchedulesController extends Controller
                 $data['requester_id'] = \App\Schedule::where('id', $request->schedule_id)->first()->requester_id;
 
                 $pusher->trigger('notif-schedule', 'my-event', $data);
-                
-                $result['requester_id'] = \App\Schedule::where('id', $request->schedule_id)->first()->requester_id;
-                $result["title"] = $request['title'];
-                $result['desc'] = $request['desc'];
+                $schedule = \App\Schedule::where('id', $request->schedule_id)->first();
+                $result['requester_id'] = $schedule['requester_id'];
+                $result["title"] = $schedule['title'];
+                $result['desc'] = $schedule['desc'];
                 return Response::json($result,200);
             } else {
                 return [
