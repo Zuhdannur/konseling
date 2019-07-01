@@ -79,11 +79,7 @@ class SchedulesController extends Controller
                 
                 $result['requester_id'] = \App\Schedule::where('id', $request->schedule_id)->first()->requester_id;
 
-                return Response::json([
-                    $result,
-                    "title" => $request->title,
-                    "desc" => $request->desc
-                ],200);
+                return Response::json($result,200);
             } else {
                 return [
                     "message" => "failed accept"
