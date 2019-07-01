@@ -81,9 +81,7 @@ class SchedulesController extends Controller
                 $result['title'] = $request->title;
                 $result['desc'] = $request->desc;
 
-                return Response::json([
-                    "result" => $result
-                ],200);
+                return Response::json($result,200);
             } else {
                 return [
                     "message" => "failed accept"
