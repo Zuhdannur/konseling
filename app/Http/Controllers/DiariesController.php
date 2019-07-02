@@ -19,20 +19,20 @@ class DiariesController extends Controller
         $insert->save();
         if ($insert) {
 
-            $push = new Pusher(
-                'e06a6bacb2b9f8503317',
-                '865963b7338a3b21359a',
-                '786060',
-                [
-                    'cluster' => 'ap1',
-                    'useTLS' => true
-                ]
-            );
-
-            $data['message']    = "Created Diary";
-            $data['sender_id']  = \App\User::where('id',Auth::user()->id)->first()->name;
-            $data['to']         = \App\User::where('id',Auth::user()->id)->with('detail')->first()->detail->school;
-            $push->trigger('diary', 'notification', $data);
+//            $push = new Pusher(
+//                'e06a6bacb2b9f8503317',
+//                '865963b7338a3b21359a',
+//                '786060',
+//                [
+//                    'cluster' => 'ap1',
+//                    'useTLS' => true
+//                ]
+//            );
+//
+//            $data['message']    = "Created Diary";
+//            $data['sender_id']  = \App\User::where('id',Auth::user()->id)->first()->name;
+//            $data['to']         = \App\User::where('id',Auth::user()->id)->with('detail')->first()->detail->school;
+//            $push->trigger('diary', 'notification', $data);
 
             return \Illuminate\Support\Facades\Response::json([
                 'message' => 'success',

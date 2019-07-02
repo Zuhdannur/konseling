@@ -23,20 +23,20 @@ class SchedulesController extends Controller
                 $insert = $this->storeDaring($request);
             }
             if ($insert) {
-                $pusher = new Pusher(
-                    'e06a6bacb2b9f8503317',
-                    '865963b7338a3b21359a',
-                    '786060',
-                    [
-                        'cluster' => 'ap1',
-                        'useTLS' => true
-                    ]
-                );
-
-                $data['message'] = "Success create schedule";
-//                $data['consultant_id'] = $consultant;
-
-                $pusher->trigger('notif-schedule', 'my-event', $data);
+//                $pusher = new Pusher(
+//                    'e06a6bacb2b9f8503317',
+//                    '865963b7338a3b21359a',
+//                    '786060',
+//                    [
+//                        'cluster' => 'ap1',
+//                        'useTLS' => true
+//                    ]
+//                );
+//
+//                $data['message'] = "Success create schedule";
+////                $data['consultant_id'] = $consultant;
+//
+//                $pusher->trigger('notif-schedule', 'my-event', $data);
                 return \Illuminate\Support\Facades\Response::json([
                     "message" => 'success create schedule'
                 ], 200);
@@ -62,20 +62,20 @@ class SchedulesController extends Controller
                 ]);
             }
             if ($update) {
-                $pusher = new Pusher(
-                    'e06a6bacb2b9f8503317',
-                    '865963b7338a3b21359a',
-                    '786060',
-                    [
-                        'cluster' => 'ap1',
-                        'useTLS' => true
-                    ]
-                );
-
-                $data['message'] = "confirmation schedule";
-                $data['requester_id'] = \App\Schedule::where('id', $request->schedule_id)->first()->requester_id;
-
-                $pusher->trigger('notif-schedule', 'my-event', $data);
+//                $pusher = new Pusher(
+//                    'e06a6bacb2b9f8503317',
+//                    '865963b7338a3b21359a',
+//                    '786060',
+//                    [
+//                        'cluster' => 'ap1',
+//                        'useTLS' => true
+//                    ]
+//                );
+//
+//                $data['message'] = "confirmation schedule";
+//                $data['requester_id'] = \App\Schedule::where('id', $request->schedule_id)->first()->requester_id;
+//
+//                $pusher->trigger('notif-schedule', 'my-event', $data);
                 $schedule = \App\Schedule::where('id', $request->schedule_id)->first();
                 $result['requester_id'] = $schedule['requester_id'];
                 $result["title"] = $schedule['title'];
