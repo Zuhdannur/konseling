@@ -174,13 +174,12 @@ class UsersController extends Controller
     }
 
     public function updateImageProfile(Request $request) {
-        $image = \App\User::find(Auth::user()->id);
+        $image = \App\User::find(Auth::user()->id)->update([
+            'avatar' => $request->avatar
+        ]);
 
         // Make sure you've got the Page model
         if($image) {
-            $image->avatar = $request->avatar;
-            $image->save();
-
             return Response::json([
                 "message" => "Success to update"
             ], 200);
