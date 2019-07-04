@@ -87,13 +87,13 @@ class DiariesController extends Controller
 
     public function showMyDiaryToOthers(Request $request)
     {
-        $perPage = $request->perpage;
+        $perPage = $request->pLimit;
 
-        if ($request->page == "") {
-            $skip = 0;
+        if ($request->pPage == "") {
+            $skip = 1;
         }
         else {
-            $skip = $perPage * $request->page;
+            $skip = $perPage * $request->pPage;
         }
 
         $mySchool = \App\User::with('detail')->where('id',Auth::user()->id)->first()->detail;
