@@ -93,7 +93,7 @@ class DiariesController extends Controller
             $q->whereHas('detail',function ($query) use ($mySchool){
                 $query->where('school',$mySchool->school);
             });
-        })->with('user')-paginate(15);
+        })->with('user')-paginate(15)->get();
 
         return \Illuminate\Support\Facades\Response::json($diaries, 200);
     }
