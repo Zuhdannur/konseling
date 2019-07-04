@@ -87,13 +87,13 @@ class DiariesController extends Controller
 
     public function showMyDiaryToOthers(Request $request)
     {
-        $perPage = 15;
+        $limit = 15;
 
         if ($request->pPage == "") {
             $skip = 0;
         }
         else {
-            $skip = $perPage * $request->pPage;
+            $skip = $limit * $request->pPage;
         }
 
         $mySchool = \App\User::with('detail')->where('id',Auth::user()->id)->first()->detail;
@@ -105,11 +105,11 @@ class DiariesController extends Controller
 
         $data = $diaries
         ->skip($skip)
-        ->take($perPage)
+        ->take($limit)
         ->get();
 
         $count = $diaries
-        ->paginate($perPage);
+        ->paginate($limit);
 
         return \Illuminate\Support\Facades\Response::json([
             "data" => $data,
