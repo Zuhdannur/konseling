@@ -112,7 +112,7 @@ class DiariesController extends Controller
         ->paginate($perPage);
 
         return \Illuminate\Support\Facades\Response::json([
-            "data" => $diaries,
+            "data" => $data,
             "total" => $count
         ], 200);
     }
