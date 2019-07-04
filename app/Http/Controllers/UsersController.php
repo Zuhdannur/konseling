@@ -82,6 +82,7 @@ class UsersController extends Controller
             if ($insertDetail) {
                 return Response::json([
                     'message' => 'register successfully',
+                    'user_id' => $insertDetail->id_user
                 ],200);
             } else {
                 return Response::json([
