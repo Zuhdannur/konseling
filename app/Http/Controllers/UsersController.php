@@ -112,7 +112,7 @@ class UsersController extends Controller
     public function getMyProfile($id)
     {
         $data = \App\User::where('api_token', $id)->with('detail')->first();
-        $data['avatar'] = base_path() . '\\public\\image\\' . $data->avatar;
+        $data['avatar'] = $data->avatar;
         return Response::json([
             "message" => "success",
             "result" => $data
