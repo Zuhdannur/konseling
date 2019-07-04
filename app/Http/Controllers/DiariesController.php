@@ -113,7 +113,33 @@ class DiariesController extends Controller
         ->lastPage();
 
         return \Illuminate\Support\Facades\Response::json([
-            "data" => $data,
+            "data" => $data
+        ], 200);
+    }
+
+    public function showMyDiaryToOthersPageCount(Request $request)
+    {
+        $limit = $request->limit;
+
+        if ($request->pPage == "") {
+            $skip = 0;
+        }
+        else {
+            $skip = $limit * $request->pPage;
+        }
+
+        $mySchool = \App\User::with('detail')->where('id',Auth::user()->id)->first()->detail;
+        $diaries = \App\Diary::whereHas('user',function ($q) use ($mySchool){
+            $q->whereHas('detail',function ($query) use ($mySchool){
+                $query->where('school',$mySchool->school);
+            });
+        })->with('user');
+
+        $count = $diaries
+        ->paginate($limit)
+        ->lastPage();
+
+        return \Illuminate\Support\Facades\Response::json([
             "total_page" => $count
         ], 200);
     }
