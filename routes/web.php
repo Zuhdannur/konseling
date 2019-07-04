@@ -40,7 +40,7 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
 
        //profile
        $router->post('profile','UsersController@updateProfile');
-       $router->put('updateImage','UsersController@updateImageProfile');
+       $router->post('updateImage','UsersController@updateImageProfile');
 
        //schedule
        $router->post('schedule','SchedulesController@send');
