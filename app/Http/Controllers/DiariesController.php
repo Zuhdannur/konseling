@@ -87,14 +87,14 @@ class DiariesController extends Controller
 
     public function showMyDiaryToOthers(Request $request)
     {
-        $perPage = $request->pLimit;
+        // $perPage = $request->pLimit;
 
-        if ($request->pPage == "") {
-            $skip = 0;
-        }
-        else {
-            $skip = $perPage * $request->pPage;
-        }
+        // if ($request->pPage == "") {
+        //     $skip = 0;
+        // }
+        // else {
+        //     $skip = $perPage * $request->pPage;
+        // }
 
         $mySchool = \App\User::with('detail')->where('id',Auth::user()->id)->first()->detail;
         $diaries = \App\Diary::whereHas('user',function ($q) use ($mySchool){
@@ -102,9 +102,7 @@ class DiariesController extends Controller
                 $query->where('school',$mySchool->school);
             });
         })->with('user')
-        ->skip($skip)
-        ->take($perPage)
-        ->get();
+        ->paginate($request->limit);
 
         return \Illuminate\Support\Facades\Response::json($diaries, 200);
     }
