@@ -87,7 +87,7 @@ class DiariesController extends Controller
 
     public function showMyDiaryToOthers(Request $request)
     {
-        $limit = 15;
+        $limit = $request->limit;
 
         if ($request->pPage == "") {
             $skip = 0;
