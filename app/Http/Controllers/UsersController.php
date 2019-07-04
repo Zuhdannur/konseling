@@ -42,18 +42,18 @@ class UsersController extends Controller
 
         if (!$this->checking($request->username)) {
             $insert = new \App\User;
-            if ($request->file('photo') != null) {
-                $image = $request->file('photo');
-                $realpath = $request->file('photo')->getRealPath();
-                $filename = time() . '.' . $image->getClientOriginalExtension();
-                $path = base_path() . '\\public\\image\\';
-//                $path = public_path('images/'.$filename);
-                $image->move($path, $filename);
-                $insert->avatar = $filename;
-            } else {
-                $filename = 'default.png';
-                $insert->avatar = $filename;
-            }
+//             if ($request->file('photo') != null) {
+//                 $image = $request->file('photo');
+//                 $realpath = $request->file('photo')->getRealPath();
+//                 $filename = time() . '.' . $image->getClientOriginalExtension();
+//                 $path = base_path() . '\\public\\image\\';
+// //                $path = public_path('images/'.$filename);
+//                 $image->move($path, $filename);
+//                 $insert->avatar = $filename;
+//             } else {
+//                 $filename = 'default.png';
+//                 $insert->avatar = $filename;
+//             }
 
 //            $kraken = new Kraken("612e57b58501cfdfcaa2493248e99f6d","1c58fdd9be2d5f87f0896197749989883d3ed324");
 //
@@ -67,6 +67,7 @@ class UsersController extends Controller
             $insert->username = $request->username;
             $insert->password = Hash::make($request->password);
             $insert->role = $request->role;
+            $insert->avatar = $request->avatar;
             $insert->save();
 
             $insertDetail = new \App\DetailUser;
