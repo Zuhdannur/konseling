@@ -85,15 +85,26 @@ class DiariesController extends Controller
         return $request;
     }
 
-    public function showMyDiaryToOthers()
+    public function showMyDiaryToOthers(Request $request)
     {
+        $perPage = $request->perpage;
+
+        if ($request->page == "") {
+            $skip = 0;
+        }
+        else {
+            $skip = $perPage * $request->page;
+        }
 
         $mySchool = \App\User::with('detail')->where('id',Auth::user()->id)->first()->detail;
         $diaries = \App\Diary::whereHas('user',function ($q) use ($mySchool){
             $q->whereHas('detail',function ($query) use ($mySchool){
                 $query->where('school',$mySchool->school);
             });
-        })->with('user')->get();
+        })->with('user')
+        ->skip($skip)
+        ->take($perPage)
+        ->get();
 
         return \Illuminate\Support\Facades\Response::json($diaries, 200);
     }
