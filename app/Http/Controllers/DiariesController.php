@@ -90,7 +90,7 @@ class DiariesController extends Controller
         $perPage = $request->pLimit;
 
         if ($request->pPage == "") {
-            $skip = 1;
+            $skip = 0;
         }
         else {
             $skip = $perPage * $request->pPage;
