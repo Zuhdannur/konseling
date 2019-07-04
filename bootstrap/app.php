@@ -16,6 +16,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 | application as an "IoC" container and router for this framework.
 |
 */
+$app->register(MuhBayu\Fcm\FcmServiceProvider::class);
 
 $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
