@@ -173,4 +173,22 @@ class UsersController extends Controller
         return $request;
     }
 
+    public function updateImageProfile(Request $request) {
+        $image = \App\User::findOrFail(Auth::user()->id);
+
+        // Make sure you've got the Page model
+        if($image) {
+            $image->avatar = $request->avatar;
+            $image->save();
+
+            return Response::json([
+                "message" => "Success to update"
+            ], 200);
+        } else {
+            return Response::json([
+                "message" => "Failed to update"
+            ], 201);
+        }
+    }
+
 }
