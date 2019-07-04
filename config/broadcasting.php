@@ -27,6 +27,7 @@ return [
     | each available type of connection are provided inside this array.
     |
     */
+
     'connections' => [
 
         'pusher' => [
