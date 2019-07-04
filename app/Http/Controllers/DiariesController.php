@@ -109,8 +109,7 @@ class DiariesController extends Controller
         ->get();
 
         $count = $diaries
-        ->paginate($perPage)
-        ->getTotal();
+        ->paginate($perPage);
 
         return \Illuminate\Support\Facades\Response::json([
             "data" => $diaries,
