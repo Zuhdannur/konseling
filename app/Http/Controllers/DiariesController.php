@@ -101,7 +101,7 @@ class DiariesController extends Controller
             $q->whereHas('detail',function ($query) use ($mySchool){
                 $query->where('school',$mySchool->school);
             });
-        })->with('user')->orderBy('id');
+        })->with('user')->orderBy('id','desc');
 
         $data = $diaries
         ->skip($skip)
