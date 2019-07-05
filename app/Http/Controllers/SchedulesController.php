@@ -98,12 +98,12 @@ class SchedulesController extends Controller
     public function viewMySchedule($id = '')
     {
         if (Auth::user()->role == "siswa" && $id == '') {
-            $data['result'] = \App\Schedule::where('requester_id', Auth::user()->id)->get();
+            $data= \App\Schedule::where('requester_id', Auth::user()->id)->get();
             // $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
 
             return [
                 "message" => "success",
-                $data
+                "result" => $data
             ];
 
         } else {
