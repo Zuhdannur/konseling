@@ -103,7 +103,7 @@ class SchedulesController extends Controller
 
             return [
                 "message" => "success",
-                "result" => $data
+                $data
             ];
 
         } else {
