@@ -40,6 +40,7 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
 
        //profile
        $router->post('profile','UsersController@updateProfile');
+       $router->post('updateImage','UsersController@updateImageProfile');
 
        //schedule
        $router->post('schedule','SchedulesController@send');
@@ -54,6 +55,7 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
         $router->get('diary', 'DiariesController@showMyDiary');
         $router->get('deleteDiary/{id}', 'DiariesController@deleteDiary');
         $router->get('/shareDiary','DiariesController@showMyDiaryToOthers');
+        $router->get('/shareDiaryCount','DiariesController@showMyDiaryToOthersPageCount');
        //master
 
             //School

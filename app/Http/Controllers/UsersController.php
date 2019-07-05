@@ -42,18 +42,18 @@ class UsersController extends Controller
 
         if (!$this->checking($request->username)) {
             $insert = new \App\User;
-            if ($request->file('photo') != null) {
-                $image = $request->file('photo');
-                $realpath = $request->file('photo')->getRealPath();
-                $filename = time() . '.' . $image->getClientOriginalExtension();
-                $path = base_path() . '\\public\\image\\';
-//                $path = public_path('images/'.$filename);
-                $image->move($path, $filename);
-                $insert->avatar = $filename;
-            } else {
-                $filename = 'default.png';
-                $insert->avatar = $filename;
-            }
+//             if ($request->file('photo') != null) {
+//                 $image = $request->file('photo');
+//                 $realpath = $request->file('photo')->getRealPath();
+//                 $filename = time() . '.' . $image->getClientOriginalExtension();
+//                 $path = base_path() . '\\public\\image\\';
+// //                $path = public_path('images/'.$filename);
+//                 $image->move($path, $filename);
+//                 $insert->avatar = $filename;
+//             } else {
+//                 $filename = 'default.png';
+//                 $insert->avatar = $filename;
+//             }
 
 //            $kraken = new Kraken("612e57b58501cfdfcaa2493248e99f6d","1c58fdd9be2d5f87f0896197749989883d3ed324");
 //
@@ -67,6 +67,7 @@ class UsersController extends Controller
             $insert->username = $request->username;
             $insert->password = Hash::make($request->password);
             $insert->role = $request->role;
+            $insert->avatar = $request->avatar;
             $insert->save();
 
             $insertDetail = new \App\DetailUser;
@@ -81,6 +82,7 @@ class UsersController extends Controller
             if ($insertDetail) {
                 return Response::json([
                     'message' => 'register successfully',
+                    'user_id' => $insertDetail->id_user
                 ],200);
             } else {
                 return Response::json([
@@ -110,7 +112,7 @@ class UsersController extends Controller
     public function getMyProfile($id)
     {
         $data = \App\User::where('api_token', $id)->with('detail')->first();
-        $data['avatar'] = base_path() . '\\public\\image\\' . $data->avatar;
+        $data['avatar'] = $data->avatar;
         return Response::json([
             "message" => "success",
             "result" => $data
@@ -169,6 +171,24 @@ class UsersController extends Controller
             }
         }
         return $request;
+    }
+
+    public function updateImageProfile(Request $request) {
+        $image = \App\User::find(Auth::user()->id);
+
+        // Make sure you've got the Page model
+        if($image) {
+            $image->avatar = $request->avatar;
+            $image->save();
+
+            return Response::json([
+                "message" => "Success to update"
+            ], 200);
+        } else {
+            return Response::json([
+                "message" => "Failed to update"
+            ], 201);
+        }
     }
 
 }
