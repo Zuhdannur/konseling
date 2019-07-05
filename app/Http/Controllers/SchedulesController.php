@@ -99,7 +99,7 @@ class SchedulesController extends Controller
     {
         if (Auth::user()->role == "siswa" && $id == '') {
             $data['result'] = \App\Schedule::where('requester_id', Auth::user()->id)->get();
-            $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
+            // $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
 
             return [
                 "message" => "success",
