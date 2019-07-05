@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use function foo\func;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +24,11 @@ class SchedulesController extends Controller
                 $insert = $this->storeDaring($request);
             }
             if ($insert) {
+                $data = [
+                    'message'           => $request->message,
+                    'to'                => $request->to,
+                ];
+                Helper::sendNotification($data);
 //                $pusher = new Pusher(
 //                    'e06a6bacb2b9f8503317',
 //                    '865963b7338a3b21359a',
