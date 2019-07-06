@@ -172,7 +172,7 @@ class SchedulesController extends Controller
     }
 
     public function studentSchedule(Request $request) {
-        $data= \App\Schedule::where('requester_id', $request->id_user)->get();
+        $data = \App\Schedule::where('requester_id', $request->id_user)->get();
             // $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
 
             return [
