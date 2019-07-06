@@ -57,6 +57,20 @@ class DiariesController extends Controller
 
     public function showMyDiary(Request $request)
     {
+        $limit = $request->limit;
+
+        if ($request->pPage == "") {
+            $skip = 0;
+        }
+        else {
+            $skip = $limit * $request->pPage;
+        }
+
+        $data = $diaries
+        ->skip($skip)
+        ->take($limit)
+        ->get();
+
         $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc')->get();
         return \Illuminate\Support\Facades\Response::json(
             $datas
