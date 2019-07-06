@@ -65,7 +65,7 @@ class DiariesController extends Controller
         else {
             $skip = $limit * $request->pPage;
         }
-        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc')->get();
+        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc');
 
         $data = $datas
         ->skip($skip)
