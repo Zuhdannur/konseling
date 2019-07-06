@@ -175,10 +175,7 @@ class SchedulesController extends Controller
         $data = \App\Schedule::where('requester_id', $request->id_user)->get();
             // $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
 
-            return [
-                "message" => "success",
-                "result" => $data
-            ];
+            return [$data];
     }
 
 }
