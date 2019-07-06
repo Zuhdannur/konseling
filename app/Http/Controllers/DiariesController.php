@@ -65,7 +65,7 @@ class DiariesController extends Controller
         else {
             $skip = $limit * $request->pPage;
         }
-        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc')->get();
+        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc');
 
         $data = $datas
         ->skip($skip)
@@ -75,6 +75,27 @@ class DiariesController extends Controller
         return \Illuminate\Support\Facades\Response::json(
             $data
         , 200);
+    }
+
+    public function showMyDiaryPageCount(Request $request)
+    {
+        $limit = $request->limit;
+
+        if ($request->pPage == "") {
+            $skip = 0;
+        }
+        else {
+            $skip = $limit * $request->pPage;
+        }
+        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc');
+
+        $count = $datas
+        ->paginate($limit)
+        ->lastPage();
+
+        return \Illuminate\Support\Facades\Response::json([
+            "total_page" => $count
+        ],200);
     }
 
     public function updateDiary(Request $request)

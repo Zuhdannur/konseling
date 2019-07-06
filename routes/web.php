@@ -53,8 +53,9 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
        $router->post('diary','DiariesController@store');
        $router->post('updateDiary','DiariesController@updateDiary');
 
-        $router->get('diary', 'DiariesController@showMyDiary');
-        $router->get('deleteDiary/{id}', 'DiariesController@deleteDiary');
+       $router->get('diary', 'DiariesController@showMyDiary');
+       $router->get('diaryPageCount', 'DiariesController@showMyDiaryPageCount');
+       $router->get('deleteDiary/{id}', 'DiariesController@deleteDiary');
         $router->get('/shareDiary','DiariesController@showMyDiaryToOthers');
         $router->get('/shareDiaryCount','DiariesController@showMyDiaryToOthersPageCount');
        //master
