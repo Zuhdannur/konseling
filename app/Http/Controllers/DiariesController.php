@@ -77,6 +77,27 @@ class DiariesController extends Controller
         , 200);
     }
 
+    public function showMyDiaryPageCount(Request $request)
+    {
+        $limit = $request->limit;
+
+        if ($request->pPage == "") {
+            $skip = 0;
+        }
+        else {
+            $skip = $limit * $request->pPage;
+        }
+        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc');
+
+        $count = $datas
+        ->paginate($limit)
+        ->lastPage();
+
+        return \Illuminate\Support\Facades\Response::json([
+            "total_page" => $count
+        ],200);
+    }
+
     public function updateDiary(Request $request)
     {
         $update = \App\Diary::where('id', $request->id)->where('id_user', Auth::user()->id)->update([
