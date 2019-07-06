@@ -65,15 +65,15 @@ class DiariesController extends Controller
         else {
             $skip = $limit * $request->pPage;
         }
+        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc')->get();
 
-        $data = $diaries
+        $data = $datas
         ->skip($skip)
         ->take($limit)
         ->get();
 
-        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc')->get();
         return \Illuminate\Support\Facades\Response::json(
-            $datas
+            $data
         , 200);
     }
 
