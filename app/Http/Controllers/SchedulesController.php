@@ -104,7 +104,7 @@ class SchedulesController extends Controller
     public function viewMySchedule($id = '', Request $request)
     {
         $limit = $request->limit;
-        $request_id = $request->id;
+
 
         if (empty($request->pPage)) $skip = 0;
         else $skip = $limit * $request->pPage;
@@ -130,7 +130,7 @@ class SchedulesController extends Controller
                         $sql->where('school', $user->detail->school);
                     });
                 });
-                $query->where('type_schedule', $request->id);
+                $query->where('type_schedule', $id);
                 $query->where('status', 0);
             })->with('request')->with('consultant');
 
@@ -146,10 +146,9 @@ class SchedulesController extends Controller
     {
         $limit = $request->limit;
 
+
         if (empty($request->pPage)) $skip = 0;
         else $skip = $limit * $request->pPage;
-
-        $request_id = $request->id;
 
         if (Auth::user()->role == "siswa" && $id == '') {
             $data = \App\Schedule::where('requester_id', Auth::user()->id);
@@ -170,7 +169,7 @@ class SchedulesController extends Controller
                         $sql->where('school', $user->detail->school);
                     });
                 });
-                $query->where('type_schedule', $request_id);
+                $query->where('type_schedule', $id);
                 $query->where('status', 0);
             })->with('request')->with('consultant');
 
