@@ -147,7 +147,7 @@ class SchedulesController extends Controller
         return $insert;
     }
 
-    private function getPengajuanByStatus(Request $request) {
+    public function getPengajuanByStatus(Request $request) {
         $data= \App\Schedule::where('requester_id', Auth::user()->id)->where('status',$request->status)->get();
             // $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
 
