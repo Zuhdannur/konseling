@@ -48,7 +48,7 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
        $router->post('readStudentSchedule','SchedulesController@studentSchedule');
 
        $router->get('mySchedule','SchedulesController@viewMySchedule');
-       $router->get('myScheduleByStatus','SchedulesController@getPengajuanByStatus');
+       $router->get('mySchedule','SchedulesController@getPengajuanByStatus');
 
        //Diary
        $router->post('diary','DiariesController@store');
