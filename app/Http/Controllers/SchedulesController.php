@@ -202,7 +202,7 @@ class SchedulesController extends Controller
 
     public function getPengajuanByStatus(Request $request)
     {
-        $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('status', $request->status)->get();
+        $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('status', $request->status)->orderBy('created_at','desc')->get();
         // $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
 
         return Response::json($data, 200);
