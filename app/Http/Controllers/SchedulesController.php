@@ -205,7 +205,7 @@ class SchedulesController extends Controller
         $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('status', $request->status)->get();
         // $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
 
-        return Response::json([$data], 200);
+        return Response::json($data, 200);
     }
 
     private function storeDaring($request)
