@@ -44,10 +44,12 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
 
        //schedule
        $router->post('schedule','SchedulesController@send');
-       $router->get('mySchedule/{id}','SchedulesController@viewMySchedule');
+       $router->post('mySchedule/{id}','SchedulesController@viewMySchedule');
+       $router->post('mySchedulePageCount/{id}','SchedulesController@mySchedulePageCount');
        $router->post('readStudentSchedule','SchedulesController@studentSchedule');
 
-       $router->get('mySchedule','SchedulesController@viewMySchedule');
+        $router->post('mySchedulePageCount/','SchedulesController@mySchedulePageCount');
+        $router->post('mySchedule','SchedulesController@viewMySchedule');
        $router->get('mySchedule','SchedulesController@getPengajuanByStatus');
 
        //Diary

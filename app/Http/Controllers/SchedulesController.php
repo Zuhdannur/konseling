@@ -25,8 +25,8 @@ class SchedulesController extends Controller
             }
             if ($insert) {
                 $data = [
-                    'message'           => $request->message,
-                    'to'                => $request->to,
+                    'message' => $request->message,
+                    'to' => $request->to,
                 ];
                 Helper::sendNotification($data);
 //                $pusher = new Pusher(
@@ -86,7 +86,7 @@ class SchedulesController extends Controller
                 $result['requester_id'] = $schedule['requester_id'];
                 $result["title"] = $schedule['title'];
                 $result['desc'] = $schedule['desc'];
-                return Response::json($result,200);
+                return Response::json($result, 200);
             } else {
                 return [
                     "message" => "failed accept"
@@ -101,15 +101,25 @@ class SchedulesController extends Controller
         return $data[rand(0, count($data) - 1)];
     }
 
-    public function viewMySchedule($id = '')
+    public function viewMySchedule($id = '', Request $request)
     {
+        $limit = $request->limit;
+
+
+        if (empty($request->pPage)) $skip = 0;
+        else $skip = $limit * $request->pPage;
+
         if (Auth::user()->role == "siswa" && $id == '') {
-            $data= \App\Schedule::where('requester_id', Auth::user()->id)->get();
+            $data = \App\Schedule::where('requester_id', Auth::user()->id);
             // $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
+            $datas = $data
+                ->skip($skip)
+                ->take($limit)
+                ->get();
 
             return [
                 "message" => "success",
-                "result" => $data
+                "result" => $datas
             ];
 
         } else {
@@ -121,9 +131,52 @@ class SchedulesController extends Controller
                     });
                 });
                 $query->where('type_schedule', $id);
-                $query->where('status',0);
-            })->with('request')->with('consultant')->get();
-            return Response::json($schedule, 200);
+                $query->where('status', 0);
+            })->with('request')->with('consultant');
+
+            $datas = $schedule
+                ->skip($skip)
+                ->take($limit)
+                ->get();
+            return Response::json($datas, 200);
+        }
+    }
+
+    public function mySchedulePageCount(Request $request,$id = '')
+    {
+        $limit = $request->limit;
+
+
+        if (empty($request->pPage)) $skip = 0;
+        else $skip = $limit * $request->pPage;
+
+        if (Auth::user()->role == "siswa" && $id == '') {
+            $data = \App\Schedule::where('requester_id', Auth::user()->id);
+            // $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
+            $count = $data
+                ->paginate($skip)
+                ->lastPage($limit);
+
+            return [
+                "total_page" => $count
+            ];
+
+        } else {
+            $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
+            $schedule = \App\Schedule::where(function ($query) use ($user, $id) {
+                $query->whereHas('request', function ($q) use ($user) {
+                    $q->whereHas('detail', function ($sql) use ($user) {
+                        $sql->where('school', $user->detail->school);
+                    });
+                });
+                $query->where('type_schedule', $id);
+                $query->where('status', 0);
+            })->with('request')->with('consultant');
+
+            $count = $schedule
+                ->paginate($skip)
+                ->lastPage($limit);
+            return Response::json(["total_page"=>$count], 200);
         }
     }
 
@@ -147,9 +200,10 @@ class SchedulesController extends Controller
         return $insert;
     }
 
-    public function getPengajuanByStatus(Request $request) {
-        $data= \App\Schedule::where('requester_id', Auth::user()->id)->where('status',$request->status)->get();
-            // $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
+    public function getPengajuanByStatus(Request $request)
+    {
+        $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('status', $request->status)->get();
+        // $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
 
         return Response::json([$data], 200);
     }
@@ -178,9 +232,10 @@ class SchedulesController extends Controller
         return $insert;
     }
 
-    public function studentSchedule(Request $request) {
-        $data = \App\Schedule::where('requester_id', $request->id_user)->orderBy('created_at','desc')->take($request->limit)->get();
-            // $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
+    public function studentSchedule(Request $request)
+    {
+        $data = \App\Schedule::where('requester_id', $request->id_user)->orderBy('created_at', 'desc')->take($request->limit)->get();
+        // $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
 
         return Response::json($data);
     }
