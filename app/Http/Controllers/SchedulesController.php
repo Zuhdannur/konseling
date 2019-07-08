@@ -142,7 +142,7 @@ class SchedulesController extends Controller
         }
     }
 
-    public function mySchedulePageCount(Request $request,$id = '')
+    public function mySchedulePageCount(Request $request, $id = '')
     {
         $limit = $request->limit;
 
@@ -175,7 +175,7 @@ class SchedulesController extends Controller
             $count = $schedule
                 ->paginate($skip)
                 ->lastPage($limit);
-            return Response::json(["total_page"=>$count], 200);
+            return Response::json(["total_page" => $count], 200);
         }
     }
 
@@ -201,10 +201,30 @@ class SchedulesController extends Controller
 
     public function getPengajuanByStatus(Request $request)
     {
-        $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('status', $request->status)->orderBy('created_at','desc')->get();
-        // $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
+        $limit = $request->limit;
 
-        return Response::json($data, 200);
+        if (empty($request->pPage)) $skip = 0;
+        else $skip = $limit * $request->pPage;
+
+        $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('status', $request->status);
+        $result = $data->skip($skip)->take($limit)->get();
+
+        return Response::json([$result], 200);
+    }
+
+    public function getPengajuanByStatusPage(Request $request)
+    {
+        $limit = $request->limit;
+
+        if (empty($request->pPage)) $skip = 0;
+        else $skip = $limit * $request->pPage;
+
+        $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('status', $request->status);
+        $result = $data
+            ->paginate($skip)
+            ->lastPage($limit);
+
+        return Response::json(["total_page"=>$result], 200);
     }
 
     private function storeDaring($request)
