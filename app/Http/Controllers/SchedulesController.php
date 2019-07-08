@@ -130,7 +130,7 @@ class SchedulesController extends Controller
                         $sql->where('school', $user->detail->school);
                     });
                 });
-                $query->where('type_schedule', $id);
+                $query->where('type_schedule', $request->id);
                 $query->where('status', 0);
             })->with('request')->with('consultant');
 
@@ -145,7 +145,6 @@ class SchedulesController extends Controller
     public function mySchedulePageCount(Request $request,$id = '')
     {
         $limit = $request->limit;
-
 
         if (empty($request->pPage)) $skip = 0;
         else $skip = $limit * $request->pPage;
@@ -169,7 +168,7 @@ class SchedulesController extends Controller
                         $sql->where('school', $user->detail->school);
                     });
                 });
-                $query->where('type_schedule', $id);
+                $query->where('type_schedule', $request->id);
                 $query->where('status', 0);
             })->with('request')->with('consultant');
 
