@@ -128,7 +128,7 @@ class SchedulesController extends Controller
                     });
                 });
                 $query->where('type_schedule', $id);
-                $query->where('status', 0);
+                $query->where('status', $request->status);
             })->with('request')->with('consultant');
 
             $datas = $schedule
