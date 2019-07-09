@@ -105,7 +105,7 @@ class SchedulesController extends Controller
     public function viewMySchedule($id = '', Request $request)
     {
         $limit = $request->limit;
-
+        $status = $request->status;
 
         if (empty($request->pPage)) $skip = 0;
         else $skip = $limit * $request->pPage;
@@ -129,7 +129,7 @@ class SchedulesController extends Controller
                     });
                 });
                 $query->where('type_schedule', $id);
-                $query->where('status', $request->status);
+                $query->where('status', $status);
             })->with('request')->with('consultant');
 
             $datas = $schedule
