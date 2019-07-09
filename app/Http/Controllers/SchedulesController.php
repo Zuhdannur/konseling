@@ -203,7 +203,7 @@ class SchedulesController extends Controller
         else $skip = $limit * $request->pPage;
 
         $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('status', $request->status);
-        $result = $data->skip($skip)->take($limit)->get();
+        $result = $data->skip($skip)->take($limit)->orderBy('id','desc')->get();
 
         return Response::json($result, 200);
     }
