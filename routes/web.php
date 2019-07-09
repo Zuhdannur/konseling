@@ -52,6 +52,7 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
         $router->post('mySchedule','SchedulesController@viewMySchedule');
        $router->post('mySchedule','SchedulesController@getPengajuanByStatus');
        $router->post('mySchedulePage','SchedulesController@getPengajuanByStatusPageCount');
+       $router->get('expired/{id}','SchedulesController@deleteSchedule');
 
        //Diary
        $router->post('diary','DiariesController@store');
