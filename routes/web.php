@@ -51,7 +51,7 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
         $router->post('mySchedulePageCount/','SchedulesController@mySchedulePageCount');
         $router->post('mySchedule','SchedulesController@viewMySchedule');
        $router->post('mySchedule','SchedulesController@getPengajuanByStatus');
-       $router->post('mySchedulePage','SchedulesController@getPengajuanByStatusPage');
+       $router->post('mySchedulePage','SchedulesController@getPengajuanByStatusPageCount');
 
        //Diary
        $router->post('diary','DiariesController@store');
