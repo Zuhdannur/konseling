@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
+use Carbon\Carbon;
 use function foo\func;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -138,6 +139,9 @@ class SchedulesController extends Controller
                 ->skip($skip)
                 ->take($limit)
                 ->get();
+           foreach ($datas as $key => $row){
+               if($row->type_schedule == "daring") $datas[$key]['expired_tgl'] = Carbon::parse($row->created_at)->addDays(1)->format('Y-m-d');
+           }
             return Response::json($datas, 200);
         }
     }
