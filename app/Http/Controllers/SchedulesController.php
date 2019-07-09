@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
+use Carbon\Carbon;
 use function foo\func;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -135,8 +136,19 @@ class SchedulesController extends Controller
                 ->skip($skip)
                 ->take($limit)
                 ->get();
+            foreach ($datas as $key => $row) {
+                if ($row->type_schedule == "daring") $datas[$key]['expired_tgl'] = Carbon::parse($row->created_at)->addDays(1)->format('Y-m-d');
+                else $datas[$key]['expired_tgl'] = $row->time;
+            }
             return Response::json($datas, 200);
         }
+    }
+
+    public function deleteSchedule($id)
+    {
+        $delete = \App\Schedule::where('id',$id)->delete();
+        if($delete) return \response()->json(["message" => "success"]);
+        else return \response()->json(["message" => "failed"]);
     }
 
     public function mySchedulePageCount(Request $request, $id = '')
@@ -203,7 +215,7 @@ class SchedulesController extends Controller
         else $skip = $limit * $request->pPage;
 
         $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('status', $request->status);
-        $result = $data->skip($skip)->take($limit)->orderBy('id','desc')->get();
+        $result = $data->skip($skip)->take($limit)->orderBy('id', 'desc')->get();
 
         return Response::json($result, 200);
     }
@@ -220,7 +232,7 @@ class SchedulesController extends Controller
             ->paginate($skip)
             ->lastPage($limit);
 
-        return Response::json(["total_page"=>$result], 200);
+        return Response::json(["total_page" => $result], 200);
     }
 
     private function storeDaring($request)
