@@ -205,7 +205,7 @@ class SchedulesController extends Controller
         $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('status', $request->status);
         $result = $data->skip($skip)->take($limit)->get();
 
-        return Response::json([$result], 200);
+        return Response::json($result, 200);
     }
 
     public function getPengajuanByStatusPage(Request $request)
