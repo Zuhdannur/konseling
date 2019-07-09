@@ -117,10 +117,7 @@ class SchedulesController extends Controller
                 ->take($limit)
                 ->get();
 
-            return [
-                "message" => "success",
-                "result" => $datas
-            ];
+            return Response::json($datas, 200);
 
         } else {
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
@@ -146,7 +143,6 @@ class SchedulesController extends Controller
     {
         $limit = $request->limit;
 
-
         if (empty($request->pPage)) $skip = 0;
         else $skip = $limit * $request->pPage;
 
@@ -157,10 +153,9 @@ class SchedulesController extends Controller
                 ->paginate($skip)
                 ->lastPage($limit);
 
-            return [
+            return Response::json([
                 "total_page" => $count
-            ];
-
+            ], 200);
         } else {
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
             $schedule = \App\Schedule::where(function ($query) use ($user, $id) {
