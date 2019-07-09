@@ -105,7 +105,6 @@ class SchedulesController extends Controller
     public function viewMySchedule($id = '', Request $request)
     {
         $limit = $request->limit;
-        $status = $request->status;
 
         if (empty($request->pPage)) $skip = 0;
         else $skip = $limit * $request->pPage;
@@ -121,6 +120,8 @@ class SchedulesController extends Controller
             return Response::json($datas, 200);
 
         } else {
+            $status = $request->status;
+
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
             $schedule = \App\Schedule::where(function ($query) use ($user, $id) {
                 $query->whereHas('request', function ($q) use ($user) {
