@@ -138,6 +138,7 @@ class SchedulesController extends Controller
                 ->get();
            foreach ($datas as $key => $row){
                if($row->type_schedule == "daring") $datas[$key]['expired_tgl'] = Carbon::parse($row->created_at)->addDays(1)->format('Y-m-d');
+               else $datas[$key]['expired_tgl'] = $row->time;
            }
             return Response::json($datas, 200);
         }
