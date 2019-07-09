@@ -208,7 +208,7 @@ class SchedulesController extends Controller
         return Response::json($result, 200);
     }
 
-    public function getPengajuanByStatusPage(Request $request)
+    public function getPengajuanByStatusPageCount(Request $request)
     {
         $limit = $request->limit;
 
