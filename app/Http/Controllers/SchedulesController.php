@@ -120,7 +120,8 @@ class SchedulesController extends Controller
             return Response::json($datas, 200);
 
         } else {
-            $status = $request->status;
+            dd($request->status);
+//            $status = $request->status;
 
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
             $schedule = \App\Schedule::where(function ($query) use ($user, $id) {
