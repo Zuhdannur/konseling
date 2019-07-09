@@ -124,14 +124,14 @@ class SchedulesController extends Controller
             $stat = $request->status;
 
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
-            $schedule = \App\Schedule::where(function ($query) use ($user, $id) {
+            $schedule = \App\Schedule::where(function ($query) use ($user, $id,$stat) {
                 $query->whereHas('request', function ($q) use ($user) {
                     $q->whereHas('detail', function ($sql) use ($user) {
                         $sql->where('school', $user->detail->school);
                     });
                 });
                 $query->where('type_schedule', $id);
-                $query->where('status', $status);
+                $query->where('status', $stat);
             })->with('request')->with('consultant');
 
             $datas = $schedule
