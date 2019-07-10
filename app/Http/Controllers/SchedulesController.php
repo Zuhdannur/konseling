@@ -132,7 +132,7 @@ class SchedulesController extends Controller
                 });
                 $query->where('type_schedule', $id);
                 $query->where('status', $stat);
-            })->with('request')->with('consultant');
+            })->with('request')->with('consultant')->orderBy('id','desc');
 
             $datas = $schedule
                 ->skip($skip)
