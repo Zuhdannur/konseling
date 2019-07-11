@@ -69,7 +69,7 @@ class ArtikelsController extends Controller
         }
     }
 
-    public function getMyFavorite()
+    public function getMyFavorite(Request $request)
     {
         $limit = $request->limit;
 
