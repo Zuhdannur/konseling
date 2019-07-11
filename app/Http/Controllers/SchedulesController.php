@@ -110,17 +110,7 @@ class SchedulesController extends Controller
         else $skip = $limit * $request->pPage;
 
         if (Auth::user()->role == "siswa" && $id == '') {
-
-            $data = "";
-            if($request->only == "online") {
-                $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('type_schedule','online');
-            } else if($request->only == "daring") {
-                $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('type_schedule','daring');
-            } else if($request->only == "direct") {
-                $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('type_schedule','direct');
-            } else {
-                $data = \App\Schedule::where('requester_id', Auth::user()->id);
-            }
+            $data = \App\Schedule::where('requester_id', Auth::user()->id);
 
             // $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
             $datas = $data
@@ -236,7 +226,13 @@ class SchedulesController extends Controller
         if (empty($request->pPage)) $skip = 0;
         else $skip = $limit * $request->pPage;
 
-        $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('status', $request->status);
+        $data = "";
+        if(!empty($request->only)) {
+            $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('status', $request->status)->where('type_schedule',$request->only);
+        } else {
+            $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('status', $request->status);
+        }
+
         $result = $data->skip($skip)->take($limit)->orderBy('id', 'desc')->get();
 
         return Response::json($result, 200);
