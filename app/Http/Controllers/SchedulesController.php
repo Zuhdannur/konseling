@@ -245,7 +245,13 @@ class SchedulesController extends Controller
         if (empty($request->pPage)) $skip = 0;
         else $skip = $limit * $request->pPage;
 
-        $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('status', $request->status);
+        $data = "";
+        if(!empty($request->only)) {
+            $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('status', $request->status)->where('type_schedule',$request->only);
+        } else {
+            $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('status', $request->status);
+        }
+
         $result = $data
             ->paginate($skip)
             ->lastPage($limit);
