@@ -172,7 +172,16 @@ class SchedulesController extends Controller
         else $skip = $limit * $request->pPage;
 
         if (Auth::user()->role == "siswa" && $id == '') {
-            $data = \App\Schedule::where('requester_id', Auth::user()->id);
+            $data = "";
+            if($request->only == "online") {
+                $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('type_schedule','online');
+            } else if($request->only == "daring") {
+                $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('type_schedule','daring');
+            } else if($request->only == "direct") {
+                $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('type_schedule','direct');
+            } else {
+                $data = \App\Schedule::where('requester_id', Auth::user()->id);
+            }
             // $data['result']['user'] = \App\User::where('id', $data['result']->consultant_id)->get();
             $count = $data
                 ->paginate($skip)
