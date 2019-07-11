@@ -31,6 +31,7 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
     $router->get('title','ArtikelsController@getTitle');
     $router->post('artikel','ArtikelsController@create');
     $router->post('related','ArtikelsController@getRelatedArtikel');
+    $router->post('relatedCount','ArtikelsController@getRelatedArtikelCount');
 
     $router->get('profile/{id}','UsersController@getMyProfile');
     $router->group(['middleware' => 'auth'],function () use ($router){
