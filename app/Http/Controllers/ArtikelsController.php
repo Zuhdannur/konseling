@@ -71,7 +71,21 @@ class ArtikelsController extends Controller
 
     public function getMyFavorite()
     {
-        $data = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel')->get();
+        $limit = $request->limit;
+
+        if ($request->pPage == "") {
+            $skip = 0;
+        }
+        else {
+            $skip = $limit * $request->pPage;
+        }
+
+        $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel')->get();
+        $data = $datas
+        ->skip($skip)
+        ->take($limit)
+        ->get();
+
         $result = [];
         foreach ($data as $key => $value) {
             $result[$key] = $value['artikel'];
@@ -80,6 +94,27 @@ class ArtikelsController extends Controller
         }
         $data['result'] = \response()->json($result, 200);
         return $data['result'];
+    }
+
+    public function getMyFavoriteCount(Request $request)
+    {
+        $limit = $request->limit;
+
+        if ($request->pPage == "") {
+            $skip = 0;
+        }
+        else {
+            $skip = $limit * $request->pPage;
+        }
+        $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel')->get();
+
+        $count = $datas
+        ->paginate($limit)
+        ->lastPage();
+
+        return \Illuminate\Support\Facades\Response::json([
+            "total_page" => $count
+        ],200);
     }
 
     public function checkingArtikel($id)
