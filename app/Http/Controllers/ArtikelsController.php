@@ -36,14 +36,54 @@ class ArtikelsController extends Controller
 
     public function getRelatedArtikel(Request $request)
     {
+        $limit = $request->limit;
+
+        if ($request->pPage == "") {
+            $skip = 0;
+        }
+        else {
+            $skip = $limit * $request->pPage;
+        }
+
 //        $data = \App\Artikel::where('LOWER(`title`)','LIKE','%'.strtolower($request->title).'%')->get();
-        $data = \App\Artikel::where(function ($q) use ($request) {
+        $datas = \App\Artikel::where(function ($q) use ($request) {
             $q->whereRaw('LOWER(title) LIKE ? ', '%' . strtolower($request->title) . '%');
-        })->get();
+        });
+
+        $data = $datas
+        ->skip($skip)
+        ->take($limit)
+        ->get();
+
         return \Illuminate\Support\Facades\Response::json([
             "message" => 'success',
             "result" => $data
         ], 200);
+    }
+
+    public function getRelatedArtikelCount(Request $request)
+    {
+        $limit = $request->limit;
+
+        if ($request->pPage == "") {
+            $skip = 0;
+        }
+        else {
+            $skip = $limit * $request->pPage;
+        }
+
+//        $data = \App\Artikel::where('LOWER(`title`)','LIKE','%'.strtolower($request->title).'%')->get();
+        $datas = \App\Artikel::where(function ($q) use ($request) {
+            $q->whereRaw('LOWER(title) LIKE ? ', '%' . strtolower($request->title) . '%');
+        });
+
+        $count = $datas
+        ->paginate($limit)
+        ->lastPage();
+
+        return \Illuminate\Support\Facades\Response::json([
+            "total_page" => $count
+        ],200);
     }
 
     public function storeFavorite(Request $request)
