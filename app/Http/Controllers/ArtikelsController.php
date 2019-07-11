@@ -80,7 +80,7 @@ class ArtikelsController extends Controller
             $skip = $limit * $request->pPage;
         }
 
-        $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel')->get();
+        $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel');
         $data = $datas
         ->skip($skip)
         ->take($limit)
@@ -106,7 +106,7 @@ class ArtikelsController extends Controller
         else {
             $skip = $limit * $request->pPage;
         }
-        $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel')->get();
+        $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel');
 
         $count = $datas
         ->paginate($limit)
