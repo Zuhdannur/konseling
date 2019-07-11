@@ -51,7 +51,7 @@ class ArtikelsController extends Controller
         if($this->checkingArtikel($request->id_artikel)){
             return \response()->json([
                 "message" => "duplicate artikel"
-            ]);
+            ], 202);
         }
         $insert = new \App\Favorite;
         $insert->id_artikel = $request->id_artikel;
