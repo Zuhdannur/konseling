@@ -205,19 +205,7 @@ class SchedulesController extends Controller
         return $data;
     }
 
-    private function storeOnlineRequest($request)
-    {
-        $insert = new \App\Schedule;
-        $insert->requester_id = Auth::user()->id;
-        $insert->tgl_pengajuan = $request->date;
-//            $consultant = $this->getConsultan()->id;
-        $insert->title = $request->title;
-        $insert->desc = $request->desc;
-        $insert->type_schedule = $request->type_schedule;
-//            $insert->consultant_id = $consultant;
-        $insert->save();
-        return $insert;
-    }
+
 
     public function getPengajuanByStatus(Request $request)
     {
@@ -257,6 +245,20 @@ class SchedulesController extends Controller
             ->lastPage($limit);
 
         return Response::json(["total_page" => $result], 200);
+    }
+
+    private function storeOnlineRequest($request)
+    {
+        $insert = new \App\Schedule;
+        $insert->requester_id = Auth::user()->id;
+        $insert->time = $request->time;
+//            $consultant = $this->getConsultan()->id;
+        $insert->title = $request->title;
+        $insert->desc = $request->desc;
+        $insert->type_schedule = $request->type_schedule;
+//            $insert->consultant_id = $consultant;
+        $insert->save();
+        return $insert;
     }
 
     private function storeDaring($request)
