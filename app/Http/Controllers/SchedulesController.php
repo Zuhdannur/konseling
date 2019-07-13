@@ -143,9 +143,9 @@ class SchedulesController extends Controller
                 if ($row->type_schedule == "daring") $datas[$key]['expired_tgl'] = Carbon::parse($row->created_at)->addDays(1)->format('Y-m-d');
                 else {
                     if(Carbon::parse($row->time)->greaterThan(Carbon::now())){
-                        $datas[$key]['expired_tgl'] = 'expired';
-                    } else {
                         $datas[$key]['expired_tgl'] = 'expired at '. $row->time;
+                    } else {
+                        $datas[$key]['expired_tgl'] = 'expired';
                     }
                 }
             }
@@ -232,9 +232,9 @@ class SchedulesController extends Controller
             if ($row->type_schedule == "daring") $result[$key]['expired_tgl'] = Carbon::parse($row->created_at)->addDays(1)->format('Y-m-d');
             else {
                 if(Carbon::parse($row->time)->greaterThan(Carbon::now())){
-                    $result[$key]['expired_tgl'] = 'expired';
-                } else {
                     $result[$key]['expired_tgl'] = ' '. $row->time;
+                } else {
+                    $result[$key]['expired_tgl'] = 'expired';
                 }
             }
         }
