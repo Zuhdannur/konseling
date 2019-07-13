@@ -234,7 +234,7 @@ class SchedulesController extends Controller
                 if(Carbon::parse($row->time)->greaterThan(Carbon::now())){
                     $result[$key]['expired_tgl'] = 'expired';
                 } else {
-                    $result[$key]['expired_tgl'] = 'expired at '. $row->time;
+                    $result[$key]['expired_tgl'] = $row->time;
                 }
             }
         }
