@@ -134,8 +134,8 @@ class SchedulesController extends Controller
                 });
                 $query->where('type_schedule', $id);
                 $query->where('status', $stat);
-                dd($request->upcoming);
                 if($upcoming) $query->whereDate('time', '>', Carbon::now());
+                else $query->whereDate('time','<', Carbon::now());
             })->with('request')->with('consultant')->orderBy('id','desc');
 
             $datas = $schedule
