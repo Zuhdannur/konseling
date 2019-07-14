@@ -123,10 +123,9 @@ class SchedulesController extends Controller
         } else {
 //            dd($request->status);
             $stat = $request->status;
-            $upcoming = $request->upcoming;
 
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
-            $schedule = \App\Schedule::where(function ($query) use ($user, $id, $stat, $upcoming) {
+            $schedule = \App\Schedule::where(function ($query) use ($user, $id,$stat) {
                 $query->whereHas('request', function ($q) use ($user) {
                     $q->whereHas('detail', function ($sql) use ($user) {
                         $sql->where('school', $user->detail->school);
@@ -134,8 +133,7 @@ class SchedulesController extends Controller
                 });
                 $query->where('type_schedule', $id);
                 $query->where('status', $stat);
-                if($upcoming) $query->whereDate('time', '>', Carbon::now());
-                else $query->whereDate('time','<', Carbon::now());
+                if($request->upcoming) $query->where('time', '>', Carbon::now());
             })->with('request')->with('consultant')->orderBy('id','desc');
 
             $datas = $schedule
@@ -189,16 +187,15 @@ class SchedulesController extends Controller
                 "total_page" => $count
             ], 200);
         } else {
-            $status = $request->status;
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
-            $schedule = \App\Schedule::where(function ($query) use ($user, $id, $status) {
+            $schedule = \App\Schedule::where(function ($query) use ($user, $id) {
                 $query->whereHas('request', function ($q) use ($user) {
                     $q->whereHas('detail', function ($sql) use ($user) {
                         $sql->where('school', $user->detail->school);
                     });
                 });
                 $query->where('type_schedule', $id);
-                $query->where('status', $status);
+                $query->where('status', 0);
             })->with('request')->with('consultant');
 
             $count = $schedule
