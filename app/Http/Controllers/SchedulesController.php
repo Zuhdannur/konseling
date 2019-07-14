@@ -192,15 +192,20 @@ class SchedulesController extends Controller
                 "total_page" => $count
             ], 200);
         } else {
+            $upcoming = $request->upcoming;
+            $status = $request->status;
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
-            $schedule = \App\Schedule::where(function ($query) use ($user, $id) {
+            $schedule = \App\Schedule::where(function ($query) use ($user, $id, $status, $upcoming) {
                 $query->whereHas('request', function ($q) use ($user) {
                     $q->whereHas('detail', function ($sql) use ($user) {
                         $sql->where('school', $user->detail->school);
                     });
                 });
                 $query->where('type_schedule', $id);
-                $query->where('status', 0);
+                $query->where('status', $status);
+                if($upcoming) {
+                    $query->where('time', '>', Carbon::now());
+                }
             })->with('request')->with('consultant');
 
             $count = $schedule
