@@ -123,7 +123,6 @@ class SchedulesController extends Controller
         } else {
 //            dd($request->status);
             $stat = $request->status;
-            $upcoming = $request->upcoming;
 
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
             $schedule = \App\Schedule::where(function ($query) use ($user, $id,$stat, $upcoming) {
@@ -134,8 +133,6 @@ class SchedulesController extends Controller
                 });
                 $query->where('type_schedule', $id);
                 $query->where('status', $stat);
-                if($upcoming == true) $query->where('time', '>', Carbon::now());
-                else $query->where('time', '<', Carbon::now());
             })->with('request')->with('consultant')->orderBy('id','desc');
 
             $datas = $schedule
