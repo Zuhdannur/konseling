@@ -123,10 +123,9 @@ class SchedulesController extends Controller
         } else {
 //            dd($request->status);
             $stat = $request->status;
-            $upcoming = $request->upcoming;
 
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
-            $schedule = \App\Schedule::where(function ($query) use ($user, $id, $stat, $upcoming) {
+            $schedule = \App\Schedule::where(function ($query) use ($user, $id, $stat) {
                 $query->whereHas('request', function ($q) use ($user) {
                     $q->whereHas('detail', function ($sql) use ($user) {
                         $sql->where('school', $user->detail->school);
@@ -134,6 +133,9 @@ class SchedulesController extends Controller
                 });
                 $query->where('type_schedule', $id);
                 $query->where('status', $stat);
+
+                $upcoming = $request->upcoming;
+
                 if($upcoming) {
                     $query->where('time', '>', Carbon::now());
                 } 
