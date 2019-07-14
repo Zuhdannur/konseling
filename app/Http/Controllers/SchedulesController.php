@@ -124,6 +124,7 @@ class SchedulesController extends Controller
 //            dd($request->status);
             $stat = $request->status;
             $upcoming = $request->upcoming;
+            dd($request->upcoming);
 
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
             $schedule = \App\Schedule::where(function ($query) use ($user, $id, $stat, $upcoming) {
