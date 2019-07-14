@@ -126,7 +126,7 @@ class SchedulesController extends Controller
             $upcoming = $request->upcoming;
 
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
-            $schedule = \App\Schedule::where(function ($query) use ($user, $id, $stat) {
+            $schedule = \App\Schedule::where(function ($query) use ($user, $id, $stat, $upcoming) {
                 $query->whereHas('request', function ($q) use ($user) {
                     $q->whereHas('detail', function ($sql) use ($user) {
                         $sql->where('school', $user->detail->school);
