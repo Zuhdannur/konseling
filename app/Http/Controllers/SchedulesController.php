@@ -108,7 +108,7 @@ class SchedulesController extends Controller
         if (empty($request->pPage)) $skip = 0;
         else $skip = $limit * $request->pPage;
 
-        $stat = $request->status;
+        $stats = $request->status;
             $upcoming = $request->upcoming;
 
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
@@ -123,7 +123,7 @@ class SchedulesController extends Controller
                     });
                 });
                 $query->where('type_schedule', $id);
-                $query->where('status', $stat);
+                $query->where('status', $stats);
                 if($upcoming == "true") $query->where('time','>', Carbon::now());
             })->with('request')->with('consultant')->orderBy('id','desc');
 
