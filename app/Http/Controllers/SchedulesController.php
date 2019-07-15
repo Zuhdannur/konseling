@@ -112,7 +112,7 @@ class SchedulesController extends Controller
             $upcoming = $request->upcoming;
 
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
-            $schedule = \App\Schedule::where(function ($query) use ($user, $id,$stat, $upcoming) {
+            $schedule = \App\Schedule::where(function ($query) use ($user, $id,$stats, $upcoming) {
 
                 if(Auth::user()->role == "siswa")$query->where('requester_id',Auth::user()->id);
                 else $query->where('consultant_id',Auth::user()->id);
