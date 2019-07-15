@@ -102,6 +102,82 @@ class SchedulesController extends Controller
         return $data[rand(0, count($data) - 1)];
     }
 
+    public function postScheduleDirect(Request $request) {
+        $limit = $request->limit;
+
+        if (empty($request->pPage)) $skip = 0;
+        else $skip = $limit * $request->pPage;
+
+        $stat = $request->status;
+            $upcoming = $request->upcoming;
+
+            $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
+            $schedule = \App\Schedule::where(function ($query) use ($user, $id,$stat, $upcoming) {
+
+                if(Auth::user()->role == "siswa")$query->where('requester_id',Auth::user()->id);
+                else $query->where('consultant_id',Auth::user()->id);
+
+                $query->whereHas('request', function ($q) use ($user) {
+                    $q->whereHas('detail', function ($sql) use ($user) {
+                        $sql->where('school', $user->detail->school);
+                    });
+                });
+                $query->where('type_schedule', $id);
+                $query->where('status', $stat);
+                if($upcoming == "true") $query->where('time','>', Carbon::now());
+            })->with('request')->with('consultant')->orderBy('id','desc');
+
+
+            $datas = $schedule
+                ->skip($skip)
+                ->take($limit)
+                ->get();
+            foreach ($datas as $key => $row) {
+                if ($row->type_schedule != "daring") {
+                    if(Carbon::parse($row->time)->greaterThan(Carbon::now())){
+                        $datas[$key]['expired_tgl'] = 'expired at '. $row->time;
+                    } else {
+                        $datas[$key]['expired_tgl'] = 'expired';
+                    }
+                }
+            }
+            return Response::json($datas, 200);
+    }
+
+    public function postScheduleDirectCount() {
+        $limit = $request->limit;
+
+        if (empty($request->pPage)) $skip = 0;
+        else $skip = $limit * $request->pPage;
+
+        $stat = $request->status;
+            $upcoming = $request->upcoming;
+
+            $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
+            $schedule = \App\Schedule::where(function ($query) use ($user, $id,$stat, $upcoming) {
+
+                if(Auth::user()->role == "siswa")$query->where('requester_id',Auth::user()->id);
+                else $query->where('consultant_id',Auth::user()->id);
+
+                $query->whereHas('request', function ($q) use ($user) {
+                    $q->whereHas('detail', function ($sql) use ($user) {
+                        $sql->where('school', $user->detail->school);
+                    });
+                });
+                $query->where('type_schedule', $id);
+                $query->where('status', $stat);
+                if($upcoming == "true") $query->where('time','>', Carbon::now());
+            })->with('request')->with('consultant')->orderBy('id','desc');
+
+            $datas = $schedule
+            ->paginate($skip)
+            ->lastPage($limit);
+
+            return Response::json([
+                "total_page" => $count
+            ], 200);
+    }
+
     public function viewMySchedule($id = '', Request $request)
     {
         $limit = $request->limit;
