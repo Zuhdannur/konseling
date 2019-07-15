@@ -127,6 +127,10 @@ class SchedulesController extends Controller
 
             $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
             $schedule = \App\Schedule::where(function ($query) use ($user, $id,$stat, $upcoming) {
+
+                if(Auth::user()->role == "siswa")$query->where('requester_id',Auth::user()->id);
+                else $query->where('consultant_id',Auth::user()->id);
+
                 $query->whereHas('request', function ($q) use ($user) {
                     $q->whereHas('detail', function ($sql) use ($user) {
                         $sql->where('school', $user->detail->school);
@@ -136,8 +140,7 @@ class SchedulesController extends Controller
                 $query->where('status', $stat);
                 if($upcoming == "true") $query->where('time','>', Carbon::now());
             })->with('request')->with('consultant')->orderBy('id','desc');
-            if(Auth::user()->role == "siswa")$schedule = $schedule->where('requester_id',Auth::user()->id);
-            else $schedule = $schedule->where('consultant_id',Auth::user()->id);
+
 
             $datas = $schedule
                 ->skip($skip)
