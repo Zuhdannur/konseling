@@ -56,7 +56,7 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
        $router->get('expired/{id}','SchedulesController@deleteSchedule');
 
        $router->post('scheduleDirect/{id}','SchedulesController@postScheduleDirect');
-       $router->post('scheduleDirectCount','SchedulesController@postScheduleDirectCount');
+       $router->post('scheduleDirectCount/{id}','SchedulesController@postScheduleDirectCount');
 
        //Diary
        $router->post('diary','DiariesController@store');

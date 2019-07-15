@@ -102,7 +102,7 @@ class SchedulesController extends Controller
         return $data[rand(0, count($data) - 1)];
     }
 
-    public function postScheduleDirect(Request $request) {
+    public function postScheduleDirect(Request $request, $id) {
         $limit = $request->limit;
 
         if (empty($request->pPage)) $skip = 0;
@@ -144,7 +144,7 @@ class SchedulesController extends Controller
             return Response::json($datas, 200);
     }
 
-    public function postScheduleDirectCount() {
+    public function postScheduleDirectCount(Request $request, $id) {
         $limit = $request->limit;
 
         if (empty($request->pPage)) $skip = 0;
