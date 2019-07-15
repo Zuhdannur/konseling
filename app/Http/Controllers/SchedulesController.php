@@ -174,7 +174,7 @@ class SchedulesController extends Controller
             ->lastPage($limit);
 
             return Response::json([
-                "total_page" => $count
+                "total_page" => $datas
             ], 200);
     }
 
