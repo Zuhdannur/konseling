@@ -8,42 +8,47 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Pusher\Pusher;
+use sngrl\PhpFirebaseCloudMessaging\Client;
+use sngrl\PhpFirebaseCloudMessaging\Message;
+use sngrl\PhpFirebaseCloudMessaging\Notification;
+use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 
 class SchedulesController extends Controller
 {
 
     public function notification()
     {
-        $API_ACCSESS_KEY = 'AAAA_vRurwA:APA91bH6PpT6Uv6xEY1Z_3FC1vQefwYH6QbjQQ5l5kjxsZJOxzmZeakfR-9YbY-7-lCuBxx6neXph7zf_gxVxXDepW3pETJTpTGucualxk6e2k_evTRlqr2E3EEpm63Eaa7IgZVyEZ0O';
-        $data  = [
-            "title" => "test",
-            "message"=> "HALO"
-        ];
-//        $message = [
-//            "message" => $data['message'],
+        $data = array();
+        Helper::sendNotification($data);
+//        $data  = [
+//            "title" => "test",
+//            "message"=> "HALO"
 //        ];
-        $fields = array(
-            'to' => '/topics/global',
-            'data' => $data
-        );
-        $header = [
-            'Authorization: key='. $API_ACCSESS_KEY,
-            'Content-Type: application/json'
-        ];
-
-        $crul = curl_init();
-        curl_setopt($crul,CURLOPT_URL,'https://fcm.googleapis.com/fcm/send');
-        curl_setopt($crul,CURLOPT_POST,true);
-        curl_setopt( $crul,CURLOPT_HTTPHEADER, $header );
-        curl_setopt( $crul,CURLOPT_RETURNTRANSFER, true );
-        curl_setopt( $crul,CURLOPT_SSL_VERIFYPEER, false );
-        curl_setopt( $crul,CURLOPT_POSTFIELDS, json_encode( $fields ) );
-        $result = curl_exec($crul );
-        if($result == FALSE){
-            return response()->json(["Curl Failed "=>curl_error($crul)]);
-        }
-        curl_close( $crul );
-        return \response()->json(["responses"=>$result]);
+////        $message = [
+////            "message" => $data['message'],
+////        ];
+//        $fields = array(
+//            'to' => '/topics/global',
+//            'data' => $data
+//        );
+//        $header = [
+//            'Authorization: key='. $API_ACCSESS_KEY,
+//            'Content-Type: application/json'
+//        ];
+//
+//        $crul = curl_init();
+//        curl_setopt($crul,CURLOPT_URL,'https://fcm.googleapis.com/fcm/send');
+//        curl_setopt($crul,CURLOPT_POST,true);
+//        curl_setopt( $crul,CURLOPT_HTTPHEADER, $header );
+//        curl_setopt( $crul,CURLOPT_RETURNTRANSFER, true );
+//        curl_setopt( $crul,CURLOPT_SSL_VERIFYPEER, false );
+//        curl_setopt( $crul,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+//        $result = curl_exec($crul );
+//        if($result == FALSE){
+//            return response()->json(["Curl Failed "=>curl_error($crul)]);
+//        }
+//        curl_close( $crul );
+//        return \response()->json(["responses"=>$result]);
     }
 
     public function send(Request $request)
