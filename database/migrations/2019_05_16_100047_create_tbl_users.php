@@ -21,6 +21,7 @@ class CreateTblUsers extends Migration
             $table->string('password',255);
             $table->string('role',10);
             $table->string('api_token',255)->nullable();
+            $table->string('firebase_token',255)->nullable();
             $table->timestamps();
         });
     }

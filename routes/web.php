@@ -20,7 +20,7 @@
 $router->get('/', function (){
     return 'Welcome To Api visit https://master-konseling.herokuapp.com for more information';
 });
-
+$router->get('/test','SchedulesController@notification');
 $router->group(['prefix'=>'v1/api'],function () use ($router){
     $router->post('login','UsersController@login');
     $router->post('register','UsersController@register');

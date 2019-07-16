@@ -18,7 +18,8 @@ class UsersController extends Controller
             if (Hash::check($request->password, $user->password)) {
                 $apiKey = base64_encode(str_random(40));
                 \App\User::where('username', $request->username)->update([
-                    'api_token' => $apiKey
+                    'api_token' => $apiKey,
+                    'firebase_token' => $request->firebase_token
                 ]);
                 return Response::json([
                     "message"   => 'success',

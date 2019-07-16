@@ -1,5 +1,6 @@
 <?php namespace App\Helpers;
 
+use Illuminate\Support\Facades\Auth;
 use Pusher\Pusher;
 
 class Helper
@@ -17,8 +18,8 @@ class Helper
             "message" => $data['message'],
         ];
         $fields = array(
-            'to' => $data['to'],
-            'data' => $message
+            'to' => '/topics/global',
+            'data' => 'TEST'
         );
         $header = [
             'Authorization: key='. $API_ACCSESS_KEY,
@@ -33,6 +34,9 @@ class Helper
         curl_setopt( $crul,CURLOPT_SSL_VERIFYPEER, false );
         curl_setopt( $crul,CURLOPT_POSTFIELDS, json_encode( $fields ) );
         $result = curl_exec($crul );
+        if($result == FALSE){
+            return response()->json(["Curl Failed "=>curl_error($crul)]);
+        }
         curl_close( $crul );
         return $result;
     }
