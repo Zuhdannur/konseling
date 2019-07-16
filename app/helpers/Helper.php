@@ -19,12 +19,15 @@ class Helper
     public static function sendNotification($data)
     {
 //        $API_ACCSESS_KEY = 'AAAA_vRurwA:APA91bH6PpT6Uv6xEY1Z_3FC1vQefwYH6QbjQQ5l5kjxsZJOxzmZeakfR-9YbY-7-lCuBxx6neXph7zf_gxVxXDepW3pETJTpTGucualxk6e2k_evTRlqr2E3EEpm63Eaa7IgZVyEZ0O';
-//        $message = [
-//            "message" => $data['message'],
-//        ];
+//        $msg = array
+//        (
+//            'body'   => 'msg',
+//            'title'     => 'title',
+//            'key1'  => 'val1'
+//        );
 //        $fields = array(
 //            'to' => '/topics/global',
-//            'data' => 'TEST'
+//            'notification' => $msg
 //        );
 //        $header = [
 //            'Authorization: key='. $API_ACCSESS_KEY,
@@ -43,11 +46,12 @@ class Helper
 //            return response()->json(["Curl Failed "=>curl_error($crul)]);
 //        }
 //        curl_close( $crul );
-//        return $result;
+//        return response($result,200);
         $API_ACCSESS_KEY = 'AAAA_vRurwA:APA91bGd7ayeeU2Nlb5D0T1DwRc48CzU-G_ez4SM_qIgdGv-wpQvuUhbJ3xbUFmJZOPtr_EVe_vB2z38O4CUjJPY-WcapZb-Xy_Y1rC3B-v-AFIIQsRxMPJi6pZY8jX1k1eytQSdiXiW';
         $client = new Client();
         $client->setApiKey($API_ACCSESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
+        dd(Auth::user()->detail->school);
         $client->addTopicSubscription("1",array(Auth::user()->firebase_token));
 
         $message = new Message();

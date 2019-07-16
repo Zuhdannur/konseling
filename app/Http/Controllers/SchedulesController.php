@@ -16,20 +16,25 @@ use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 class SchedulesController extends Controller
 {
 
-    public function notification(Request $request)
+    public function notification()
     {
         $data = array();
         Helper::sendNotification($data);
-//        $data  = [
-//            "title" => "test",
-//            "message"=> "HALO"
-//        ];
-////        $message = [
-////            "message" => $data['message'],
-////        ];
+//        $API_ACCSESS_KEY = 'AAAA_vRurwA:APA91bGd7ayeeU2Nlb5D0T1DwRc48CzU-G_ez4SM_qIgdGv-wpQvuUhbJ3xbUFmJZOPtr_EVe_vB2z38O4CUjJPY-WcapZb-Xy_Y1rC3B-v-AFIIQsRxMPJi6pZY8jX1k1eytQSdiXiW';
+//        $msg = array
+//        (
+//            'message' 	=> 'here is a message. message',
+//            'title'		=> 'This is a title. title',
+//            'subtitle'	=> 'This is a subtitle. subtitle',
+//            'tickerText'	=> 'Ticker text here...Ticker text here...Ticker text here',
+//            'vibrate'	=> 1,
+//            'sound'		=> 1,
+//            'largeIcon'	=> 'large_icon',
+//            'smallIcon'	=> 'small_icon'
+//        );
 //        $fields = array(
-//            'to' => '/topics/global',
-//            'data' => $data
+//            'message' => 'fKdFlF1I53E:APA91bEYdySShRTsMt3xYF0Oz1QMuYXJaZBApgeRL005HkqNH-0n_teE-fdn4y7Y2ukwzQkp7UJa8yyLqM7_nsK8Q-fGk8blgmauxh0EswaWMumX9NiiH9j6H9qpn-2iP5kcoTgqNKhP',
+//            'notification' => $msg
 //        );
 //        $header = [
 //            'Authorization: key='. $API_ACCSESS_KEY,
@@ -48,7 +53,7 @@ class SchedulesController extends Controller
 //            return response()->json(["Curl Failed "=>curl_error($crul)]);
 //        }
 //        curl_close( $crul );
-//        return \response()->json(["responses"=>$result]);
+//        return response($result,200);
     }
 
     public function send(Request $request)
