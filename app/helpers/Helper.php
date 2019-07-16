@@ -48,6 +48,7 @@ class Helper
         $client = new Client();
         $client->setApiKey($API_ACCSESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
+        $client->addTopicSubscription("1",array(Auth::user()->firebase_token));
 
         $message = new Message();
         $message->setPriority('high');
@@ -55,7 +56,7 @@ class Helper
         $message->addRecipient(new Topic('global'));
         $message
             ->setNotification(new Notification(
-                "asdasdjaosj","hai"));
+                "Bismillah","hai"));
 
         $response = $client->send($message);
 //        dd($response->getStatusCode());

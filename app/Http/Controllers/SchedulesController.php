@@ -16,7 +16,7 @@ use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 class SchedulesController extends Controller
 {
 
-    public function notification()
+    public function notification(Request $request)
     {
         $data = array();
         Helper::sendNotification($data);
@@ -53,11 +53,6 @@ class SchedulesController extends Controller
 
     public function send(Request $request)
     {
-        $data = [
-            'message' => $request->message,
-            'to' => $request->to,
-        ];
-        Helper::sendNotification($data);
         if (Auth::user()->role == "siswa") {
             if ($request->type_schedule == "online") {
                 //Store Online With Schedule
@@ -70,11 +65,6 @@ class SchedulesController extends Controller
                 $insert = $this->storeDaring($request);
             }
             if ($insert) {
-                $data = [
-                    'message' => $request->message,
-                    'to' => $request->to,
-                ];
-                Helper::sendNotification($data);
 //                $pusher = new Pusher(
 //                    'e06a6bacb2b9f8503317',
 //                    '865963b7338a3b21359a',
