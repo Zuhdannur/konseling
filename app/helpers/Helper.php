@@ -10,13 +10,14 @@ use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 
 class Helper
 {
+    static protected $API_ACCSESS_KEY = 'AAAA_vRurwA:APA91bGd7ayeeU2Nlb5D0T1DwRc48CzU-G_ez4SM_qIgdGv-wpQvuUhbJ3xbUFmJZOPtr_EVe_vB2z38O4CUjJPY-WcapZb-Xy_Y1rC3B-v-AFIIQsRxMPJi6pZY8jX1k1eytQSdiXiW';
 
     public function sendMessage($message, $notification_type, $receiver)
     {
         return true;
     }
 
-    public static function sendNotification($data)
+    public static function sendNotificationTopic($data)
     {
 //        $API_ACCSESS_KEY = 'AAAA_vRurwA:APA91bH6PpT6Uv6xEY1Z_3FC1vQefwYH6QbjQQ5l5kjxsZJOxzmZeakfR-9YbY-7-lCuBxx6neXph7zf_gxVxXDepW3pETJTpTGucualxk6e2k_evTRlqr2E3EEpm63Eaa7IgZVyEZ0O';
 //        $msg = array
@@ -47,12 +48,23 @@ class Helper
 //        }
 //        curl_close( $crul );
 //        return response($result,200);
-        $API_ACCSESS_KEY = 'AAAA_vRurwA:APA91bGd7ayeeU2Nlb5D0T1DwRc48CzU-G_ez4SM_qIgdGv-wpQvuUhbJ3xbUFmJZOPtr_EVe_vB2z38O4CUjJPY-WcapZb-Xy_Y1rC3B-v-AFIIQsRxMPJi6pZY8jX1k1eytQSdiXiW';
+
         $client = new Client();
-        $client->setApiKey($API_ACCSESS_KEY);
+        $client->setApiKey(self::$API_ACCSESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
-        dd(Auth::user()->detail->school);
-        $client->addTopicSubscription("1",array(Auth::user()->firebase_token));
+
+        $query = \App\User::where(function ($query){
+            $query->where('role',"guru");
+            $query->whereHas('detail',function ($q){
+                $q->where('school',Auth::user()->detail->school);
+            });
+        })->get();
+        $getSchoolId = \App\School::where('school_name',Auth::user()->detail->school)->first()->id;
+        $users =[];
+        foreach ($query as $value){
+            $users[] = $value['firebase_token'];
+        }
+        $client->addTopicSubscription($getSchoolId, $users);
 
         $message = new Message();
         $message->setPriority('high');
@@ -60,7 +72,29 @@ class Helper
         $message->addRecipient(new Topic('global'));
         $message
             ->setNotification(new Notification(
-                "Bismillah","hai"));
+                $data->title, $data->body));
+
+        $response = $client->send($message);
+//        dd($response->getStatusCode());
+        dd($response->getBody()->getContents());
+        return \response()->json($response);
+    }
+
+    public static function sendNotificationToSingel($data)
+    {
+        $client = new Client();
+        $client->setApiKey(self::$API_ACCSESS_KEY);
+        $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
+
+        $firebase_token = \App\User::where('id',$data->id)->first()->firebase_token;
+
+        $message = new Message();
+        $message->setPriority('high');
+        $message->addRecipient(new Device($firebase_token));
+//        $message->addRecipient(new Topic('global'));
+        $message
+            ->setNotification(new Notification(
+                $data->title, $data->body));
 
         $response = $client->send($message);
 //        dd($response->getStatusCode());

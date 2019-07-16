@@ -18,8 +18,6 @@ class SchedulesController extends Controller
 
     public function notification()
     {
-        $data = array();
-        Helper::sendNotification($data);
 //        $API_ACCSESS_KEY = 'AAAA_vRurwA:APA91bGd7ayeeU2Nlb5D0T1DwRc48CzU-G_ez4SM_qIgdGv-wpQvuUhbJ3xbUFmJZOPtr_EVe_vB2z38O4CUjJPY-WcapZb-Xy_Y1rC3B-v-AFIIQsRxMPJi6pZY8jX1k1eytQSdiXiW';
 //        $msg = array
 //        (
@@ -58,6 +56,8 @@ class SchedulesController extends Controller
 
     public function send(Request $request)
     {
+        $data['title'] = $request->title;
+        $data['body'] = $request->body;
         if (Auth::user()->role == "siswa") {
             if ($request->type_schedule == "online") {
                 //Store Online With Schedule
@@ -70,20 +70,10 @@ class SchedulesController extends Controller
                 $insert = $this->storeDaring($request);
             }
             if ($insert) {
-//                $pusher = new Pusher(
-//                    'e06a6bacb2b9f8503317',
-//                    '865963b7338a3b21359a',
-//                    '786060',
-//                    [
-//                        'cluster' => 'ap1',
-//                        'useTLS' => true
-//                    ]
-//                );
-//
-//                $data['message'] = "Success create schedule";
-////                $data['consultant_id'] = $consultant;
-//
-//                $pusher->trigger('notif-schedule', 'my-event', $data);
+
+                //Mengirim Dari siswa ke Semua Guru berdasarkan Sekolah
+                Helper::sendNotificationTopic($data);
+
                 return \Illuminate\Support\Facades\Response::json([
                     "message" => 'success create schedule'
                 ], 200);
@@ -109,24 +99,15 @@ class SchedulesController extends Controller
                 ]);
             }
             if ($update) {
-//                $pusher = new Pusher(
-//                    'e06a6bacb2b9f8503317',
-//                    '865963b7338a3b21359a',
-//                    '786060',
-//                    [
-//                        'cluster' => 'ap1',
-//                        'useTLS' => true
-//                    ]
-//                );
-//
-//                $data['message'] = "confirmation schedule";
-//                $data['requester_id'] = \App\Schedule::where('id', $request->schedule_id)->first()->requester_id;
-//
-//                $pusher->trigger('notif-schedule', 'my-event', $data);
                 $schedule = \App\Schedule::where('id', $request->schedule_id)->first();
+
+                $data['id'] = $schedule['requester_id'];
+                Helper::sendNotificationToSingel($data);
+
                 $result['requester_id'] = $schedule['requester_id'];
                 $result["title"] = $schedule['title'];
                 $result['desc'] = $schedule['desc'];
+
                 return Response::json($result, 200);
             } else {
                 return [
