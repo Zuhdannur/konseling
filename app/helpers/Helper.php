@@ -17,7 +17,7 @@ class Helper
         return true;
     }
 
-    public static function sendNotificationTopic($data)
+    public static function sendNotificationTopic($title, $desc)
     {
 //        $API_ACCSESS_KEY = 'AAAA_vRurwA:APA91bH6PpT6Uv6xEY1Z_3FC1vQefwYH6QbjQQ5l5kjxsZJOxzmZeakfR-9YbY-7-lCuBxx6neXph7zf_gxVxXDepW3pETJTpTGucualxk6e2k_evTRlqr2E3EEpm63Eaa7IgZVyEZ0O';
 //        $msg = array
@@ -72,20 +72,20 @@ class Helper
         $message->addRecipient(new Topic('global'));
         $message
             ->setNotification(new Notification(
-                $data->title, $data->desc));
+                $title, $desc));
 
         $response = $client->send($message);
 //        dd($response->getStatusCode());
         return \response()->json($response);
     }
 
-    public static function sendNotificationToSingel($data)
+    public static function sendNotificationToSingel($id)
     {
         $client = new Client();
         $client->setApiKey(self::$API_ACCSESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
-        $firebase_token = \App\User::where('id',$data->id)->first()->firebase_token;
+        $firebase_token = \App\User::where('id',$id)->first()->firebase_token;
 
         $message = new Message();
         $message->setPriority('high');

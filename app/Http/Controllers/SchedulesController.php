@@ -56,8 +56,8 @@ class SchedulesController extends Controller
 
     public function send(Request $request)
     {
-        $data['title'] = $request->title;
-        $data['desc'] = $request->desc;
+        $title = $request->title;
+        $desc = $request->desc;
         if (Auth::user()->role == "siswa") {
             if ($request->type_schedule == "online") {
                 //Store Online With Schedule
@@ -72,7 +72,7 @@ class SchedulesController extends Controller
             if ($insert) {
 
                 //Mengirim Dari siswa ke Semua Guru berdasarkan Sekolah
-                Helper::sendNotificationTopic($data);
+                Helper::sendNotificationTopic($title, $desc);
 
                 return \Illuminate\Support\Facades\Response::json([
                     "message" => 'success create schedule'
@@ -101,8 +101,8 @@ class SchedulesController extends Controller
             if ($update) {
                 $schedule = \App\Schedule::where('id', $request->schedule_id)->first();
 
-                $data['id'] = $schedule['requester_id'];
-                Helper::sendNotificationToSingel($data);
+                $id = $schedule['requester_id'];
+                Helper::sendNotificationToSingel($id);
 
                 $result['requester_id'] = $schedule['requester_id'];
                 $result["title"] = $schedule['title'];
