@@ -119,7 +119,7 @@ class SchedulesController extends Controller
 
     public function updateSchedule(Request $request)
     {
-        $update = \App\Schedule::where('id', $request->schedule_id)->where('id_user', Auth::user()->id)->update([
+        $update = \App\Schedule::where('id', $request->schedule_id)->where('requester_id', Auth::user()->id)->update([
             'title' => $request->title,
             'body' => $request->desc
         ]);
