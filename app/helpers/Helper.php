@@ -72,7 +72,7 @@ class Helper
         $message->addRecipient(new Topic('global'));
         $message
             ->setNotification(new Notification(
-                $data->title, $data->body));
+                $data->title, $data->desc));
 
         $response = $client->send($message);
 //        dd($response->getStatusCode());
