@@ -121,7 +121,7 @@ class SchedulesController extends Controller
     {
         $update = \App\Schedule::where('id', $request->schedule_id)->where('requester_id', Auth::user()->id)->update([
             'title' => $request->title,
-            'body' => $request->desc
+            'desc' => $request->desc
         ]);
 
         if($update) {
