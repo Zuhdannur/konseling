@@ -117,6 +117,25 @@ class SchedulesController extends Controller
         }
     }
 
+    public function updateSchedule(Request $request)
+    {
+        $update = \App\Schedule::where('id', $request->schedule_id)->where('id_user', Auth::user()->id)->update([
+            'title' => $request->title,
+            'body' => $request->desc
+        ]);
+
+        if($update) {
+            return \Illuminate\Support\Facades\Response::json([
+                "message" => 'schedule updated'
+            ],200);
+        } else {
+            return \Illuminate\Support\Facades\Response::json([
+                "message" => 'failed to update'
+            ],201);
+        }
+        return $request;
+    }
+
     public function getConsultan()
     {
         $data = \App\User::where('role', 'guru')->get();
