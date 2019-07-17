@@ -119,6 +119,22 @@ class SchedulesController extends Controller
 
     public function updateSchedule(Request $request)
     {
+        if($request == "daring") {
+            updateDaring($request);
+        } else if ($request == "online") {
+
+        } else if ($request == "direct") {
+
+        }
+
+        
+        return $request;
+    }
+
+    private function updateOnline(Request $request) {
+    }
+
+    private function updateDaring(Request $request) {
         $update = \App\Schedule::where('id', $request->schedule_id)->where('requester_id', Auth::user()->id)->update([
             'title' => $request->title,
             'desc' => $request->desc
@@ -133,7 +149,10 @@ class SchedulesController extends Controller
                 "message" => 'failed to update'
             ],201);
         }
-        return $request;
+    }
+
+    private function updateDirect(Request $request) {
+        
     }
 
     public function getConsultan()
