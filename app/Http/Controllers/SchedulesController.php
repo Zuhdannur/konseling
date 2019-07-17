@@ -120,7 +120,7 @@ class SchedulesController extends Controller
     public function updateSchedule(Request $request)
     {
         if($request->type_schedule == "daring") {
-            updateDaring($request);
+            $this->updateDaring($request);
         } else if ($request->type_schedule == "online") {
 
         } else if ($request->type_schedule == "direct") {
