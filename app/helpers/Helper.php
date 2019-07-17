@@ -76,7 +76,6 @@ class Helper
 
         $response = $client->send($message);
 //        dd($response->getStatusCode());
-        dd($response->getBody()->getContents());
         return \response()->json($response);
     }
 
