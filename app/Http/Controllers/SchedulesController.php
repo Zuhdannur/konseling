@@ -72,7 +72,6 @@ class SchedulesController extends Controller
             if ($insert) {
 
                 //Mengirim Dari siswa ke Semua Guru berdasarkan Sekolah
-                dd($data);
                 Helper::sendNotificationTopic($data);
 
                 return \Illuminate\Support\Facades\Response::json([
