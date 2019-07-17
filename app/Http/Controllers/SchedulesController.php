@@ -57,7 +57,7 @@ class SchedulesController extends Controller
     public function send(Request $request)
     {
         $data['title'] = $request->title;
-        $data['body'] = $request->body;
+        $data['desc'] = $request->desc;
         if (Auth::user()->role == "siswa") {
             if ($request->type_schedule == "online") {
                 //Store Online With Schedule
