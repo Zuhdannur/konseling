@@ -135,8 +135,22 @@ class SchedulesController extends Controller
                 ],201);
             }
         } else if ($request->type_schedule == "online") {
-
-        } else if ($request->type_schedule == "direct") {
+            $update = \App\Schedule::where('id', $request->schedule_id)->where('requester_id', Auth::user()->id)->update([
+                'title' => $request->title,
+                'desc' => $request->desc,
+                'time' => $request->time
+            ]);
+    
+            if($update) {
+                return \Illuminate\Support\Facades\Response::json([
+                    "message" => 'schedule updated'
+                ],200);
+            } else {
+                return \Illuminate\Support\Facades\Response::json([
+                    "message" => 'failed to update'
+                ],201);
+            }
+        } else {
 
         }
 
