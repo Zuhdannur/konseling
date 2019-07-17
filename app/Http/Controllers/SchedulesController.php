@@ -134,7 +134,7 @@ class SchedulesController extends Controller
     private function updateOnline($request) {
     }
 
-    private function updateDaring($request) {
+    public function updateDaring($request) {
         $update = \App\Schedule::where('id', $request->schedule_id)->where('requester_id', Auth::user()->id)->update([
             'title' => $request->title,
             'desc' => $request->desc
