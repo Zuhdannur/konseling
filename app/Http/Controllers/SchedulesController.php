@@ -426,9 +426,9 @@ class SchedulesController extends Controller
         $insert->type_schedule = $request->type_schedule;
 //            $insert->consultant_id = $consultant;
         if (Carbon::parse($request->time)->greaterThan(Carbon::now())) {
-            $insert->expire = false;
+            $insert->expired = false;
         } else {
-            $insert->expire = true;
+            $insert->expired = true;
         }
         $insert->save();
         return $insert;
