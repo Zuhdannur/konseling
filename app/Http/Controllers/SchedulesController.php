@@ -85,7 +85,7 @@ class SchedulesController extends Controller
 
         } else {
 
-            if(Schedule::where('id', $request->schedule_id)->exists()) {
+            if(\App\Schedule::where('id', $request->schedule_id)->exists()) {
                 $update = \App\Schedule::where('id', $request->schedule_id)->update([
                     'status' => 1,
                     'tgl_pengajuan' => $request->date,
