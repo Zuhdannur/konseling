@@ -72,7 +72,7 @@ class SchedulesController extends Controller
             if ($insert) {
 
                 //Mengirim Dari siswa ke Semua Guru berdasarkan Sekolah
-                Helper::sendNotificationTopic($title, $desc);
+                // Helper::sendNotificationTopic($title, $desc);
 
                 return \Illuminate\Support\Facades\Response::json([
                     "message" => 'success create schedule'
@@ -103,7 +103,7 @@ class SchedulesController extends Controller
                     $schedule = \App\Schedule::where('id', $request->schedule_id)->first();
     
                     $id = $schedule['requester_id'];
-                    Helper::sendNotificationToSingel($id);
+                    // Helper::sendNotificationToSingel($id);
     
                     $result['requester_id'] = $schedule['requester_id'];
                     $result["title"] = $schedule['title'];
