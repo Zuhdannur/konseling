@@ -56,6 +56,8 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
        $router->post('mySchedulePage','SchedulesController@getPengajuanByStatusPageCount');
        $router->get('expired/{id}','SchedulesController@deleteSchedule');
 
+        $router->delete('schedule/{id}','SchedulesController@deleteDirectSchedule');
+
        $router->post('scheduleDirect/{id}','SchedulesController@postScheduleDirect');
        $router->post('scheduleDirectCount/{id}','SchedulesController@postScheduleDirectCount');
 
