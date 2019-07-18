@@ -17,7 +17,7 @@ class CreateTblSchedule extends Migration
             $table->bigIncrements('id');
             $table->integer('requester_id')->unsigned();
             $table->string('title');
-            $table->boolean('expired');
+            $table->integer('expired')->default(0);
             $table->date('tgl_pengajuan')->nullable();
             $table->text('desc');
             $table->string('type_schedule');
