@@ -309,9 +309,9 @@ class SchedulesController extends Controller
 
     public function deleteSchedule($id)
     {
-        $delete = \App\Schedule::where('id', $id)->delete();
-        if ($delete) return \response()->json(["message" => "success"]);
-        else return \response()->json(["message" => "failed"]);
+        $delete = \App\Schedule::where('id', $id)->where('status',0)->delete();
+        if ($delete) return \response()->json(["message" => "success"], 200);
+        else return \response()->json(["message" => "failed"], 201);
     }
 
     public function mySchedulePageCount(Request $request, $id = '')
