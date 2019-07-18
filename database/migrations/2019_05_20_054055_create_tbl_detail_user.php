@@ -18,7 +18,7 @@ class CreateTblDetailUser extends Migration
             $table->integer('id_user')->length(11)->unsigned();
             $table->string('gender',25);
             $table->text('address');
-            $table->string('phone_number');
+            $table->string('phone_number', 12);
             $table->integer('id_kelas')->length(11)->unsigned()->nullable();
             $table->string('kelas')->nullable();
             $table->string('school');

@@ -134,7 +134,7 @@ class SchedulesController extends Controller
                     "message" => 'failed to update'
                 ],201);
             }
-        } else if ($request->type_schedule == "online") {
+        } else { //Direct dan Realtime
             $update = \App\Schedule::where('id', $request->schedule_id)->where('requester_id', Auth::user()->id)->where('status',0)->update([
                 'title' => $request->title,
                 'desc' => $request->desc,
@@ -150,9 +150,7 @@ class SchedulesController extends Controller
                     "message" => 'failed to update'
                 ],201);
             }
-        } else {
-
-        }
+        } 
 
         return $request;
     }

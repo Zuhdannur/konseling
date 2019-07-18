@@ -17,7 +17,7 @@ class CreateTblUsers extends Migration
             $table->bigIncrements('id');
             $table->string('avatar')->nullable();
             $table->string('name',50);
-            $table->string('username',50)->unique();
+            $table->string('username',15)->unique();
             $table->string('password',255);
             $table->string('role',10);
             $table->string('api_token',255)->nullable();
