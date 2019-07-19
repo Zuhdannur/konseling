@@ -5,7 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model {
 
     protected $fillable = [
-        'requester_id','tgl_pengajuan','status','consultant_id','type_schedule','room_id','time','exp'
+        'requester_id','tgl_pengajuan','status','consultant_id','type_schedule','room_id'
+        //'time'
     ];
 
     protected $primaryKey = "id";
