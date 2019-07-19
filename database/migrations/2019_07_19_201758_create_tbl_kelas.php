@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTblArtikelFavorit extends Migration
+class CreateTblKelas extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateTblArtikelFavorit extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_artikel_favorit', function (Blueprint $table) {
-            $table->bigIncrements('id_favorit');
-            $table->integer('id_artikel')->unsigned();
-            $table->integer('id_user')->unsigned();
+        Schema::create('tbl_kelas', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->integer('id_kelas')->unsigned();
+            $table->string('class_name');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateTblArtikelFavorit extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_artikel_favorit');
+        Schema::dropIfExists('tbl_kelas');
     }
 }

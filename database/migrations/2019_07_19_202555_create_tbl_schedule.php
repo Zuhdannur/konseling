@@ -21,6 +21,7 @@ class CreateTblSchedule extends Migration
             $table->text('desc');
             $table->string('type_schedule');
             $table->integer('status')->default(0);
+            $table->integer('exp')->default(0);
             $table->integer('consultant_id')->unsigned()->default(0);
             $table->string('room_id')->nullable();
             $table->string('time')->nullable();

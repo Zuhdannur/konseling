@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTblRoom extends Migration
+class CreateTblFavArtikel extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class CreateTblRoom extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_room', function (Blueprint $table) {
-            $table->bigIncrements('id_room');
+        Schema::create('tbl_fav_artikel', function (Blueprint $table) {
+            $table->bigIncrements('id_favorit');
+            $table->integer('id_artikel')->unsigned();
+            $table->integer('id_user')->unsigned();
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateTblRoom extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_room');
+        Schema::dropIfExists('tbl_fav_artikel');
     }
 }
