@@ -435,6 +435,7 @@ class SchedulesController extends Controller
         $insert->desc = $request->desc;
         $insert->type_schedule = $request->type_schedule;
 //            $insert->consultant_id = $consultant;
+        $insert->expired = 1;
         $insert->save();
         return $insert;
     }
