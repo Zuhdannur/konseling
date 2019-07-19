@@ -429,7 +429,7 @@ class SchedulesController extends Controller
     {
         $insert = new \App\Schedule;
         $insert->requester_id = Auth::user()->id;
-        // $insert->time = $request->time;
+        $insert->time = $request->time;
         $insert->title = $request->title;
         $insert->desc = $request->desc;
         $insert->type_schedule = $request->type_schedule;
