@@ -14,7 +14,7 @@ class Schedule extends Model {
         'time'
     ];
 
-    protected $table = "tbl_schedule";
+    protected $table = "schedule";
 
     public static $rules = [
         // Validation rules
