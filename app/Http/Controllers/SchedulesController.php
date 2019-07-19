@@ -430,12 +430,10 @@ class SchedulesController extends Controller
         $insert = new \App\Schedule;
         $insert->requester_id = Auth::user()->id;
         $insert->time = $request->time;
-//            $consultant = $this->getConsultan()->id;
+        $insert->exp = $request->exp; 
         $insert->title = $request->title;
         $insert->desc = $request->desc;
         $insert->type_schedule = $request->type_schedule;
-//            $insert->consultant_id = $consultant;
-        $insert->expired = 1;
         $insert->save();
         return $insert;
     }
