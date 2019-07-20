@@ -19,11 +19,11 @@ class DetailUser extends Model
     // Relationships
     public function kelas()
     {
-        return $this->hasOne('\App\Kelas', 'id_kelas', 'id_kelas');
+        return $this->hasOne('\App\Kelas', 'id', 'id_kelas');
     }
 
     public function sekolah()
     {
-        return $this->hasOne('\App\School', 'id_sekolah', 'id');
+        return $this->hasOne('\App\School', 'id', 'id_sekolah');
     }
 }
