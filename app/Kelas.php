@@ -13,7 +13,7 @@ class Kelas extends Model
     protected $table = "tbl_kelas";
 
     public static $rules = [
-        // Validation rules
+        // Validation rule
     ];
 
     // Relationships
