@@ -456,6 +456,7 @@ class SchedulesController extends Controller
         $insert->title = $request->title;
         $insert->desc = $request->desc;
         $insert->type_schedule = $request->type_schedule;
+        $insert->exp  = $request->exp;
         $insert->time = $request->time;
         $insert->location = $request->location;
         $insert->save();
