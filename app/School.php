@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class School extends Model {
-
+class School extends Model
+{
     protected $fillable = [
        'id', 'school_name','address'
     ];
@@ -17,7 +17,7 @@ class School extends Model {
     ];
 
     // Relationships
-    public function kelas(){
-        return $this->hasMany('\App\Class','id_school','id');
-    }
+    // public function kelas(){
+    //     return $this->hasMany('\App\Class','id_school','id');
+    // }
 }

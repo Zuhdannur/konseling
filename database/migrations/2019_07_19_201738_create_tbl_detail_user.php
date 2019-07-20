@@ -16,12 +16,13 @@ class CreateTblDetailUser extends Migration
         Schema::create('tbl_detail_user', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('id_user')->length(11)->unsigned();
-            $table->string('gender',25);
+            $table->string('gender', 25);
             $table->text('address');
             $table->string('phone_number', 12);
-            $table->integer('id_kelas')->length(11)->unsigned()->nullable();
-            $table->string('kelas')->nullable();
-            $table->string('school');
+            // $table->integer('id_kelas')->length(11)->unsigned()->nullable();
+            // $table->string('kelas')->nullable();
+            $table->integer('id_sekolah')->length(11)->unsigned();
+            $table->integer('id_kelas')->length(11)->unsigned();
             $table->timestamps();
         });
     }

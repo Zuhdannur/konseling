@@ -14,7 +14,7 @@ class CreateTblKelas extends Migration
     public function up()
     {
         Schema::create('tbl_kelas', function (Blueprint $table) {
-            $table->bigIncrements('id_kelas');
+            $table->bigIncrements('id');
             $table->string('nama_kelas');
             $table->timestamps();
         });

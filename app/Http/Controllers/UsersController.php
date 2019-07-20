@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
-
     public function login(Request $request)
     {
         $user = $this->checking($request->username);
@@ -25,22 +24,21 @@ class UsersController extends Controller
                     "message"   => 'success',
                     "api_token" => $apiKey,
                     "role"      => $user->role,
-                ],200);
+                ], 200);
             } else {
-				return Response::json([
+                return Response::json([
                     "message" => 'wrong password',
-                ],201);
-			}
+                ], 201);
+            }
         } else {
             return Response::json([
                 'message' => 'Username Not Found'
-            ],201);
+            ], 201);
         }
     }
 
     public function register(Request $request)
     {
-
         if (!$this->checking($request->username)) {
             $insert = new \App\User;
 //             if ($request->file('photo') != null) {
@@ -48,7 +46,7 @@ class UsersController extends Controller
 //                 $realpath = $request->file('photo')->getRealPath();
 //                 $filename = time() . '.' . $image->getClientOriginalExtension();
 //                 $path = base_path() . '\\public\\image\\';
-// //                $path = public_path('images/'.$filename);
+            // //                $path = public_path('images/'.$filename);
 //                 $image->move($path, $filename);
 //                 $insert->avatar = $filename;
 //             } else {
@@ -76,24 +74,40 @@ class UsersController extends Controller
             $insertDetail->gender = $request->gender;
             $insertDetail->address = $request->address;
             $insertDetail->phone_number = $request->phone;
-            $insertDetail->kelas = $request->kelas;
-            $insertDetail->school = $request->school;
+
+            $isSekolahIdExist = \App\School::find($request->id_sekolah);
+            if (!$isSekolahIdExist) {
+                return Response::json([
+                    'message' => 'sekolah id is not found'
+                ]);
+            }
+
+            $isKelasExist = \App\Kelas::find($request->id_kelas);
+            if (!$isKelasExist) {
+                return Response::json([
+                    'message' => 'kelas id is not found'
+                ]);
+            }
+
+            $insertDetail->id_kelas = $request->id_kelas;
+            $insertDetail->id_sekolah = $request->id_sekolah;
+            
             $insertDetail->save();
 
             if ($insertDetail) {
                 return Response::json([
                     'message' => 'register successfully',
                     'user_id' => $insertDetail->id_user
-                ],200);
+                ], 200);
             } else {
                 return Response::json([
                     'message' => 'register failed'
-                ],400);
+                ], 400);
             }
         } else {
             return Response::json([
                 'message' => 'Duplicate Username'
-            ],201);
+            ], 201);
         }
     }
 
@@ -107,7 +121,9 @@ class UsersController extends Controller
         $check = \App\User::where('username', $username)->first();
         if ($check) {
             return $check;
-        } else return null;
+        } else {
+            return null;
+        }
     }
 
     public function getMyProfile($id)
@@ -117,25 +133,25 @@ class UsersController extends Controller
         return Response::json([
             "message" => "success",
             "result" => $data
-        ],200);
+        ], 200);
     }
-	
-	public function getAllUser()
-	{
-		$data = \App\User::all();
+    
+    public function getAllUser()
+    {
+        $data = \App\User::all();
         return Response::json([
             "message" => "success",
             "result" => $data
-        ],200);
-	}
-	
-	 public function destroy($id)
+        ], 200);
+    }
+    
+    public function destroy($id)
     {
         $data = \App\User::where('id', $id)->delete();
-		$detail = \App\DetailUser::where('id_user', $id)->delete();
+        $detail = \App\DetailUser::where('id_user', $id)->delete();
         return Response::json([
             "message" => "success",
-        ],200);
+        ], 200);
     }
 
     public function updateProfile(Request $request)
@@ -147,10 +163,9 @@ class UsersController extends Controller
             if ($request->kelas == null) {
                 $kelas = '';
             }
-            if($request->school == null) {
+            if ($request->school == null) {
                 $school = '';
-            }
-            else {
+            } else {
                 $kelas = $request->kelas;
                 $school = $request->school;
             }
@@ -161,24 +176,25 @@ class UsersController extends Controller
                 'school' => $school
             ]);
 
-            if($update_detail){
+            if ($update_detail) {
                 return Response::json([
                     "message" => 'profile Updated'
-                ],200);
+                ], 200);
             } else {
                 return Response::json([
                     "message" => 'failed to Updated'
-                ],201);
+                ], 201);
             }
         }
         return $request;
     }
 
-    public function updateImageProfile(Request $request) {
+    public function updateImageProfile(Request $request)
+    {
         $image = \App\User::find(Auth::user()->id);
 
         // Make sure you've got the Page model
-        if($image) {
+        if ($image) {
             $image->avatar = $request->avatar;
             $image->save();
 
@@ -191,5 +207,4 @@ class UsersController extends Controller
             ], 201);
         }
     }
-
 }

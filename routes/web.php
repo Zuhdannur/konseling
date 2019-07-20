@@ -17,94 +17,83 @@
  * Routes for resource user
  */
 
-$router->get('/', function (){
+$router->get('/', function () {
     return 'Welcome To Api visit https://master-konseling.herokuapp.com for more information';
 });
-$router->get('/test','SchedulesController@notification');
-$router->group(['prefix'=>'v1/api'],function () use ($router){
-    $router->post('login','UsersController@login');
-    $router->post('register','UsersController@register');
+$router->get('/test', 'SchedulesController@notification');
+$router->group(['prefix'=>'v1/api'], function () use ($router) {
+    $router->post('login', 'UsersController@login');
+    $router->post('register', 'UsersController@register');
 
-    $router->get('allSchool','MastersController@getListSchool');
-    $router->get('allClass/{id}','MastersController@getListClass');
+    $router->get('title', 'ArtikelsController@getTitle');
+    $router->post('artikel', 'ArtikelsController@create');
+    $router->post('related', 'ArtikelsController@getRelatedArtikel');
+    $router->post('relatedCount', 'ArtikelsController@getRelatedArtikelCount');
 
-    $router->get('title','ArtikelsController@getTitle');
-    $router->post('artikel','ArtikelsController@create');
-    $router->post('related','ArtikelsController@getRelatedArtikel');
-    $router->post('relatedCount','ArtikelsController@getRelatedArtikelCount');
+    $router->get('profile/{id}', 'UsersController@getMyProfile');
 
-    $router->get('profile/{id}','UsersController@getMyProfile');
-    $router->group(['middleware' => 'auth'],function () use ($router){
+    $router->get('sekolah', 'SekolahsController@all');
+    $router->get('sekolah/{id}', 'SekolahsController@get');
+    $router->post('sekolah', 'SekolahsController@add');
+    $router->put('sekolah/{id}', 'SekolahsController@put');
+    $router->delete('sekolah/{id}', 'SekolahsController@remove');
+
+    $router->get('kelas', 'KelasController@all');
+    $router->get('kelas/{id}', 'KelasController@get');
+    $router->post('kelas', 'KelasController@add');
+    $router->put('kelas/{id}', 'KelasController@put');
+    $router->delete('kelas/{id}', 'KelasController@remove');
+
+    $router->group(['middleware' => 'auth'], function () use ($router) {
         
         //Message
-        $router->get('index','MessagesController@index');
-        $router->post('send','MessagesController@store');
+        $router->get('index', 'MessagesController@index');
+        $router->post('send', 'MessagesController@store');
 
         //profile
-        $router->post('profile','UsersController@updateProfile');
-        $router->post('updateImage','UsersController@updateImageProfile');
+        $router->post('profile', 'UsersController@updateProfile');
+        $router->post('updateImage', 'UsersController@updateImageProfile');
 
         //schedule
-        $router->post('schedule','SchedulesController@send');
-        $router->post('updateSchedule','SchedulesController@updateSchedule');
-        $router->post('mySchedule/{id}','SchedulesController@viewMySchedule');
-        $router->post('mySchedulePageCount/{id}','SchedulesController@mySchedulePageCount');
-        $router->post('readStudentSchedule','SchedulesController@studentSchedule');
+        $router->post('schedule', 'SchedulesController@send');
+        $router->post('updateSchedule', 'SchedulesController@updateSchedule');
+        $router->post('mySchedule/{id}', 'SchedulesController@viewMySchedule');
+        $router->post('mySchedulePageCount/{id}', 'SchedulesController@mySchedulePageCount');
+        $router->post('readStudentSchedule', 'SchedulesController@studentSchedule');
 
-        $router->post('mySchedulePageCount/','SchedulesController@mySchedulePageCount');
-        $router->post('mySchedule','SchedulesController@viewMySchedule');
-        $router->post('mySchedule','SchedulesController@getPengajuanByStatus');
-        $router->post('mySchedulePage','SchedulesController@getPengajuanByStatusPageCount');
-        $router->get('expired/{id}','SchedulesController@deleteSchedule');
+        $router->post('mySchedulePageCount/', 'SchedulesController@mySchedulePageCount');
+        $router->post('mySchedule', 'SchedulesController@viewMySchedule');
+        $router->post('mySchedule', 'SchedulesController@getPengajuanByStatus');
+        $router->post('mySchedulePage', 'SchedulesController@getPengajuanByStatusPageCount');
+        $router->get('expired/{id}', 'SchedulesController@deleteSchedule');
 
-        $router->delete('schedule/{id}','SchedulesController@deleteDirectSchedule');
+        $router->delete('schedule/{id}', 'SchedulesController@deleteDirectSchedule');
 
-        $router->post('scheduleDirect/{id}','SchedulesController@postScheduleDirect');
-        $router->post('scheduleDirectCount/{id}','SchedulesController@postScheduleDirectCount');
+        $router->post('scheduleDirect/{id}', 'SchedulesController@postScheduleDirect');
+        $router->post('scheduleDirectCount/{id}', 'SchedulesController@postScheduleDirectCount');
 
         //Diary
-        $router->post('diary','DiariesController@store');
-        $router->post('updateDiary','DiariesController@updateDiary');
+        $router->post('diary', 'DiariesController@store');
+        $router->post('updateDiary', 'DiariesController@updateDiary');
 
         $router->get('diary', 'DiariesController@showMyDiary');
         $router->get('diaryPageCount', 'DiariesController@showMyDiaryPageCount');
         $router->get('deleteDiary/{id}', 'DiariesController@deleteDiary');
-        $router->get('/shareDiary','DiariesController@showMyDiaryToOthers');
-        $router->get('/shareDiaryCount','DiariesController@showMyDiaryToOthersPageCount');
-       //master
+        $router->get('/shareDiary', 'DiariesController@showMyDiaryToOthers');
+        $router->get('/shareDiaryCount', 'DiariesController@showMyDiaryToOthersPageCount');
+        //master
 
         //School
-        $router->post('storeSchool','MastersController@storeSchool');
-        $router->get('deleteSchool/{id}','MastersController@destroySchool');
-
-
-        $router->get('kelas', 'KelasController@all');
-        $router->get('kelas/{id}', 'KelasController@get');
-        $router->post('kelas', 'KelasController@add');
-        $router->put('kelas/{id}', 'KelasController@put');
-        $router->delete('kelas/{id}', 'KelasController@remove');
-			
-		//User
-		$router->get('user/{id}','UsersController@destroy');
-        $router->get('user','UsersController@getAllUser');
+        $router->get('deleteSchool/{id}', 'MastersController@destroySchool');
             
-			//Favorite Artikels
-        $router->post('favorit','ArtikelsController@storeFavorite');
-        $router->get('favorit','ArtikelsController@getMyFavorite');
-        $router->get('favoritCount','ArtikelsController@getMyFavoriteCount');
-        $router->get('favorit/{id}','ArtikelsController@removeMyFavorit');
+        //User
+        $router->get('user/{id}', 'UsersController@destroy');
+        $router->get('user', 'UsersController@getAllUser');
+            
+        //Favorite Artikels
+        $router->post('favorit', 'ArtikelsController@storeFavorite');
+        $router->get('favorit', 'ArtikelsController@getMyFavorite');
+        $router->get('favoritCount', 'ArtikelsController@getMyFavoriteCount');
+        $router->get('favorit/{id}', 'ArtikelsController@removeMyFavorit');
     });
 });
-
-/**
- * Routes for resource artikel
- */
-
-
-/**
- * Routes for resource kelas-controller
- */
-/**
- * Routes for resource kelas
- */
-
