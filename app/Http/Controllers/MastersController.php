@@ -94,6 +94,4 @@ class MastersController extends Controller
             ];
         }
     }
-
-
 }
