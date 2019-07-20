@@ -78,11 +78,11 @@ $router->group(['prefix'=>'v1/api'],function () use ($router){
         $router->get('deleteSchool/{id}','MastersController@destroySchool');
 
 
-        $app->get('kelas', 'KelasController@all');
-        $app->get('kelas/{id}', 'KelasController@get');
-        $app->post('kelas', 'KelasController@add');
-        $app->put('kelas/{id}', 'KelasController@put');
-        $app->delete('kelas/{id}', 'KelasController@remove');
+        $router->get('kelas', 'KelasController@all');
+        $router->get('kelas/{id}', 'KelasController@get');
+        $router->post('kelas', 'KelasController@add');
+        $router->put('kelas/{id}', 'KelasController@put');
+        $router->delete('kelas/{id}', 'KelasController@remove');
 			
 		//User
 		$router->get('user/{id}','UsersController@destroy');
