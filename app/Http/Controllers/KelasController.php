@@ -17,8 +17,11 @@ class KelasController extends Controller
     public function add(Request $request)
     {
         $insert = new \App\Kelas;
-        $insert->nama_kelas = $request->nama_kelas;
-        $insert->save();
+
+        $insert->updateOrCreate([
+            'nama_kelas' => $request->nama_kelas
+        ]);
+
         if ($insert) {
             return Response::json([
                 "message" => "successfuly"
