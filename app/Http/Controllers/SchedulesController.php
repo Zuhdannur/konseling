@@ -92,7 +92,7 @@ class SchedulesController extends Controller
 
         foreach ($schedule as $key => $val) {
             if ($val->type_schedule != "daring") {
-                if (Carbon::parse($val->time)->lt(Carbon::now())) {
+                if (Carbon::parse($val->time)->greatherThan(Carbon::now())) {
                     $schedule = $schedule->update([
                         'exp' => 1
                     ]);
