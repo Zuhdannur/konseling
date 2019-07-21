@@ -128,7 +128,7 @@ class UsersController extends Controller
 
     public function getMyProfile($id)
     {
-        $data = \App\User::where('api_token', $id)->with('detail')->first();
+        $data = \App\User::where('api_token', $id)->with('detail', 'detail.sekolah', 'detail.kelas')->first();
         $data['avatar'] = $data->avatar;
         return Response::json([
             "message" => "success",
