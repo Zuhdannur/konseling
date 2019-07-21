@@ -155,7 +155,7 @@ class SchedulesController extends Controller
     private function storeRealtime($request)
     {
         $insert = new \App\Schedule;
-        $insert->requester_id = 1;
+        $insert->requester_id = Auth::user()->id;
         $insert->time = $request->time;
         $insert->title = $request->title;
         $insert->desc = $request->desc;
@@ -169,7 +169,7 @@ class SchedulesController extends Controller
     private function storeDaring($request)
     {
         $insert = new \App\Schedule;
-        $insert->requester_id = 1;
+        $insert->requester_id = Auth::user()->id;
         $insert->title = $request->title;
         $insert->desc = $request->desc;
         $insert->type_schedule = 'daring';
@@ -180,7 +180,7 @@ class SchedulesController extends Controller
     private function storeDirect($request)
     {
         $insert = new \App\Schedule;
-        $insert->requester_id = 1;
+        $insert->requester_id = Auth::user()->id;
         $insert->title = $request->title;
         $insert->desc = $request->desc;
         $insert->type_schedule = 'direct';
