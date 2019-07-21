@@ -30,8 +30,6 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     $router->post('related', 'ArtikelsController@getRelatedArtikel');
     $router->post('relatedCount', 'ArtikelsController@getRelatedArtikelCount');
 
-    $router->get('profile/{id}', 'UsersController@getMyProfile');
-
     $router->get('sekolah', 'SekolahsController@all');
     $router->get('sekolah/{id}', 'SekolahsController@get');
     $router->post('sekolah', 'SekolahsController@add');
@@ -90,6 +88,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
             
         //User
         $router->delete('user/{id}', 'UsersController@destroy');
+        $router->get('profile/{id}', 'UsersController@getMyProfile');
         // $router->get('user', 'UsersController@getAllUser');
             
         //Favorite Artikels
