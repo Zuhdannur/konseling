@@ -31,23 +31,33 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     $router->post('related', 'ArtikelsController@getRelatedArtikel');
     $router->post('relatedCount', 'ArtikelsController@getRelatedArtikelCount');
 
+    /**
+    * Routes for resource sekolah
+    */
     $router->get('sekolah', 'SekolahsController@all');
     $router->get('sekolah/{id}', 'SekolahsController@get');
     $router->post('sekolah', 'SekolahsController@add');
     $router->put('sekolah/{id}', 'SekolahsController@put');
     $router->delete('sekolah/{id}', 'SekolahsController@remove');
 
+    /**
+    * Routes for resource kelas
+    */
     $router->get('kelas', 'KelasController@all');
     $router->get('kelas/{id}', 'KelasController@get');
     $router->post('kelas', 'KelasController@add');
     $router->put('kelas/{id}', 'KelasController@put');
     $router->delete('kelas/{id}', 'KelasController@remove');
 
+    //For Develpment Purposes
     $router->get('user', 'UsersController@all');
-    // $router->get('user/{id}', 'UsersController@get');
-    // $router->put('user/{id}', 'UsersController@put');
-    // $router->delete('user/{id}', 'UsersController@remove');
+    $router->get('diary', 'DiariesController@all');
 
+
+
+
+
+    
     $router->group(['middleware' => 'auth'], function () use ($router) {
         
         //Message
@@ -76,18 +86,20 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->post('scheduleDirect/{id}', 'SchedulesController@postScheduleDirect');
         $router->post('scheduleDirectCount/{id}', 'SchedulesController@postScheduleDirectCount');
 
-        //Diary
-        $router->post('diary', 'DiariesController@store');
-        $router->post('updateDiary', 'DiariesController@updateDiary');
+        /**
+         * Routes for resource diary
+         */
+        $router->post('diary', 'DiariesController@add');
+        $router->put('diary', 'DiariesController@put');
+        $router->delete('diary/{id}', 'DiariesController@remove');
 
-        $router->get('diary', 'DiariesController@showMyDiary');
-        $router->get('diaryPageCount', 'DiariesController@showMyDiaryPageCount');
-        $router->get('deleteDiary/{id}', 'DiariesController@deleteDiary');
-        $router->get('/shareDiary', 'DiariesController@showMyDiaryToOthers');
-        $router->get('/shareDiaryCount', 'DiariesController@showMyDiaryToOthersPageCount');
+        $router->get('shareDiary', 'DiariesController@showMyDiaryToOthers');
+        $router->get('shareDiaryCount', 'DiariesController@showMyDiaryToOthersPageCount');
+        $router->get('diaryPageCount', 'DiariesController@diaryCount');
             
-        //User
-        // $router->get('user', 'UsersController@all');
+        /**
+         * Routes for resource user
+         */
         $router->get('user/{id}', 'UsersController@get');
         $router->put('user', 'UsersController@put');
         $router->delete('user/{id}', 'UsersController@remove');
@@ -103,4 +115,6 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
 /**
  * Routes for resource user
  */
+
+
 

@@ -9,7 +9,7 @@ use App\Helpers;
 class DiariesController extends Controller
 {
 
-    public function store(Request $request)
+    public function add(Request $request)
     {
         $insert = new \App\Diary;
         $insert->id_user = Auth::user()->id;
@@ -18,22 +18,6 @@ class DiariesController extends Controller
         $insert->tgl = $request->tgl;
         $insert->save();
         if ($insert) {
-
-//            $push = new Pusher(
-//                'e06a6bacb2b9f8503317',
-//                '865963b7338a3b21359a',
-//                '786060',
-//                [
-//                    'cluster' => 'ap1',
-//                    'useTLS' => true
-//                ]
-//            );
-//
-//            $data['message']    = "Created Diary";
-//            $data['sender_id']  = \App\User::where('id',Auth::user()->id)->first()->name;
-//            $data['to']         = \App\User::where('id',Auth::user()->id)->with('detail')->first()->detail->school;
-//            $push->trigger('diary', 'notification', $data);
-
             return \Illuminate\Support\Facades\Response::json([
                 'message' => 'success',
             ], 200);
@@ -41,7 +25,7 @@ class DiariesController extends Controller
         return $request;
     }
 
-    public function deleteDiary($id)
+    public function remove($id)
     {
         $data = \App\Diary::where('id', $id)->where('id_user', Auth::user()->id)->delete();
         if($data) {
@@ -55,7 +39,7 @@ class DiariesController extends Controller
         }
     }
 
-    public function showMyDiary(Request $request)
+    public function all(Request $request)
     {
         $limit = $request->limit;
 
@@ -77,7 +61,7 @@ class DiariesController extends Controller
         , 200);
     }
 
-    public function showMyDiaryPageCount(Request $request)
+    public function diaryCount(Request $request)
     {
         $limit = $request->limit;
 
@@ -98,7 +82,7 @@ class DiariesController extends Controller
         ],200);
     }
 
-    public function updateDiary(Request $request)
+    public function put(Request $request)
     {
         $update = \App\Diary::where('id', $request->id)->where('id_user', Auth::user()->id)->update([
             'title' => $request->title,
