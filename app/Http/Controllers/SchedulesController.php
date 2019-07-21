@@ -86,7 +86,7 @@ class SchedulesController extends Controller
 
         if ($filters->has('upcoming')) {
             if($filters->upcoming == 'true') {
-                $schedule = $schedule->where('time', Carbon::now());
+                $schedule = $schedule->where('time', ">" ,Carbon::now());
             }
         }
 
@@ -227,27 +227,39 @@ class SchedulesController extends Controller
             }
         } else { 
             //Direct dan Realtime
-            $update = \App\Schedule::where('id', $request->schedule_id)
-            ->where('requester_id', Auth::user()->id)
-            ->where('exp', 0)
-            ->where('status', 0)->update([
-                'title' => $request->title,
-                'desc' => $request->desc,
-                'time' => $request->time
-            ]);
+            if (!$this->isExpired($request->original_time)) {
+                $update = \App\Schedule::where('id', $request->schedule_id)
+                ->where('requester_id', Auth::user()->id)
+                ->where('exp', 0)
+                ->where('status', 0)->update([
+                    'title' => $request->title,
+                    'desc' => $request->desc,
+                    'time' => $request->time
+                ]);
     
-            if($update) {
-                return \Illuminate\Support\Facades\Response::json([
-                    "message" => 'schedule updated'
-                ],200);
+                if ($update) {
+                    return \Illuminate\Support\Facades\Response::json([
+                    "message" => 'schedule updated'], 200);
+                } else {
+                    return \Illuminate\Support\Facades\Response::json([
+                    "message" => 'failed to update'], 201);
+                }
             } else {
-                return \Illuminate\Support\Facades\Response::json([
-                    "message" => 'failed to update'
-                ],201);
+                return \Illuminate\Support\Facades\Response::json(["message" => 'pengajuan telah kadaluarsa.'], 201);
             }
         } 
 
         return $request;
+    }
+
+    private function isExpired($time) {
+        if (Carbon::parse($time)->lte(Carbon::now())) {
+            $row->update([
+                'exp'=> 1
+            ]);
+            return true;
+        } 
+        return false;
     }
 
     public function remove($id, Request $request)
