@@ -442,6 +442,7 @@ class SchedulesController extends Controller
         $insert->save();
         return $insert;
     }
+    
 
     private function storeDaring($request)
     {

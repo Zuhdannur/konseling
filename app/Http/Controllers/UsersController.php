@@ -128,8 +128,8 @@ class UsersController extends Controller
 
     public function getMyProfile($id)
     {
-        $data = \App\User::where('api_token', $id)->with('detail', 'detail.sekolah', 'detail.kelas')->first();
-        $data['avatar'] = $data->avatar;
+        $data = \App\User::where('id', $id)->with('detail', 'detail.sekolah', 'detail.kelas')->first();
+        // $data['avatar'] = $data->avatar;
         return Response::json($data, 200);
     }
     
@@ -142,8 +142,8 @@ class UsersController extends Controller
     
     public function destroy($id)
     {
-        $data = \App\User::where('id', $id)->delete();
-        $detail = \App\DetailUser::where('id_user', $id)->delete();
+        $data = \App\User::find($id)->delete();
+        $detail = \App\DetailUser::find($id)->delete();
         return Response::json([
             "message" => "success",
         ], 200);

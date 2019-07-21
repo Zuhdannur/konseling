@@ -44,7 +44,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     $router->put('kelas/{id}', 'KelasController@put');
     $router->delete('kelas/{id}', 'KelasController@remove');
 
-    $router->get('user', 'UsersController@getAllUser');
+    // $router->get('user', 'UsersController@getAllUser');
 
     $router->group(['middleware' => 'auth'], function () use ($router) {
         
@@ -89,8 +89,8 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('deleteSchool/{id}', 'MastersController@destroySchool');
             
         //User
-        $router->get('user/{id}', 'UsersController@destroy');
-        // $router->get('user', 'UsersController@getAllUser');
+        $router->delete('user/{id}', 'UsersController@destroy');
+        $router->get('user', 'UsersController@getAllUser');
             
         //Favorite Artikels
         $router->post('favorit', 'ArtikelsController@storeFavorite');

@@ -16,6 +16,10 @@ class DetailUser extends Model
         // Validation rules
     ];
 
+    protected $hidden = [
+        'created_at','updated_at'
+    ];
+
     // Relationships
     public function kelas()
     {

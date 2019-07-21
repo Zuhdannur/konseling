@@ -16,5 +16,9 @@ class Kelas extends Model
         // Validation rule
     ];
 
+    protected $hidden = [
+        'created_at','updated_at'
+    ];
+
     // Relationships
 }
