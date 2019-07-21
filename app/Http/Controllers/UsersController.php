@@ -1,5 +1,13 @@
 <?php namespace App\Http\Controllers;
 
+use App\Classes\Kraken;
+use Faker\Provider\Image;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
+
 class UsersController extends Controller {
 
     const MODEL = "App\User";
