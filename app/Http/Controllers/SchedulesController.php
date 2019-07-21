@@ -254,7 +254,7 @@ class SchedulesController extends Controller
 
     private function isExpired($time) {
         if (Carbon::parse($time)->lte(Carbon::now())) {
-            $row->update([
+            Schedule::where('id', $request->schedule_id)->update([
                 'exp'=> 1
             ]);
             return true;
