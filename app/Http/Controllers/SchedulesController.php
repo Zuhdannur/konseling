@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
+use Illuminate\Support\Facades\Config;
 use Carbon\Carbon;
 use function foo\func;
 use Illuminate\Http\Request;
@@ -54,26 +55,128 @@ class SchedulesController extends Controller
 //        return response($result,200);
     }
 
+    public function add(Request $request) {
+        if ($request->type_schedule == 'realtime') {
+            $insert = $this->storeRealtime($request);
+        } elseif ($request->type_schedule == 'direct') {
+            $insert = $this->storeDirect($request);
+        } else {
+            $insert = $this->storeDaring($request);
+        }
+
+        if ($insert) {
+            // Helper::sendNotificationTopic($title, $desc);
+            return \Illuminate\Support\Facades\Response::json([
+                "message" => 'success create schedule'
+            ], 200);
+        } else {
+            return Response::json([
+                "message" => 'failed create schedule'
+            ], 201);
+        }
+    }
+
+    private function storeRealtime($request)
+    {
+        $insert = new \App\Schedule;
+        $insert->requester_id = 1;
+        $insert->time = $request->time;
+        $insert->title = $request->title;
+        $insert->desc = $request->desc;
+        $insert->exp  = $request->exp;
+        $insert->type_schedule = 'realtime';
+        $insert->save();
+        return $insert;
+    }
+    
+
+    private function storeDaring($request)
+    {
+        $insert = new \App\Schedule;
+        $insert->requester_id = 1;
+        $insert->title = $request->title;
+        $insert->desc = $request->desc;
+        $insert->type_schedule = 'daring';
+        $insert->save();
+        return $insert;
+    }
+
+    private function storeDirect($request)
+    {
+        $insert = new \App\Schedule;
+        $insert->requester_id = 1;
+        $insert->title = $request->title;
+        $insert->desc = $request->desc;
+        $insert->type_schedule = 'direct';
+        $insert->exp  = $request->exp;
+        $insert->time = $request->time;
+        $insert->location = $request->location;
+        $insert->save();
+        return $insert;
+    }
+
+    public function put(Request $request)
+    {
+        if($request->type_schedule == Config::get('constants.scheduletype.daring')) {
+            $update = \App\Schedule::where('id', $request->schedule_id)->where('requester_id', Auth::user()->id)->where('status',0)->update([
+                'title' => $request->title,
+                'desc' => $request->desc
+            ]);
+    
+            if($update) {
+                return \Illuminate\Support\Facades\Response::json([
+                    "message" => 'schedule updated'
+                ],200);
+            } else {
+                return \Illuminate\Support\Facades\Response::json([
+                    "message" => 'failed to update'
+                ],201);
+            }
+        } else { 
+            //Direct dan Realtime
+            $update = \App\Schedule::where('id', $request->schedule_id)->where('requester_id', Auth::user()->id)->where('status',0)->update([
+                'title' => $request->title,
+                'desc' => $request->desc,
+                'time' => $request->time
+            ]);
+    
+            if($update) {
+                return \Illuminate\Support\Facades\Response::json([
+                    "message" => 'schedule updated'
+                ],200);
+            } else {
+                return \Illuminate\Support\Facades\Response::json([
+                    "message" => 'failed to update'
+                ],201);
+            }
+        } 
+
+        return $request;
+    }
+
+    public function remove($id, Request $request)
+    {
+        $delete = \App\Schedule::where('id', $id)->where('status', $request->status)->delete();
+        if ($delete) return \response()->json(["message" => "success"], 200);
+        else return \response()->json(["message" => "failed"], 201);
+    }
+
     public function send(Request $request)
     {
         $title = $request->title;
         $desc = $request->desc;
-        if (Auth::user()->role == "siswa") {
-            if ($request->type_schedule == "online") {
-                //Store Online With Schedule
-                $insert = $this->storeOnlineRequest($request);
-            } elseif ($request->type_schedule == "direct") {
-                // Go to Direct
+        if (Auth::user()->role == Config::get('constants.usertype.siswa')) {
+            if ($request->type_schedule == Config::get('constants.scheduletype.realtime')) {
+                $insert = $this->storeRealtime($request);
+            } elseif ($request->type_schedule == Config::get('constants.scheduletype.direct')) {
                 $insert = $this->storeDirect($request);
             } else {
-                //Store To Daring
                 $insert = $this->storeDaring($request);
             }
-            if ($insert) {
 
+            if ($insert) {
                 //Mengirim Dari siswa ke Semua Guru berdasarkan Sekolah
                 // Helper::sendNotificationTopic($title, $desc);
-
                 return \Illuminate\Support\Facades\Response::json([
                     "message" => 'success create schedule'
                 ], 200);
@@ -82,7 +185,6 @@ class SchedulesController extends Controller
                     "message" => 'failed create schedule'
                 ], 201);
             }
-
         } else {
             if(\App\Schedule::where('id', $request->schedule_id)->exists()) {
                 if(\App\Schedule::where('id',$request->schedule_id)->first()->exp) {
@@ -130,44 +232,6 @@ class SchedulesController extends Controller
         $delete = \App\Schedule::where('id', $id)->where('status', 1)->delete();
         if ($delete) return \response()->json(["message" => "success"], 200);
         else return \response()->json(["message" => "failed"], 201);
-    }
-
-    public function updateSchedule(Request $request)
-    {
-        if($request->type_schedule == "daring") {
-            $update = \App\Schedule::where('id', $request->schedule_id)->where('requester_id', Auth::user()->id)->where('status',0)->update([
-                'title' => $request->title,
-                'desc' => $request->desc
-            ]);
-    
-            if($update) {
-                return \Illuminate\Support\Facades\Response::json([
-                    "message" => 'schedule updated'
-                ],200);
-            } else {
-                return \Illuminate\Support\Facades\Response::json([
-                    "message" => 'failed to update'
-                ],201);
-            }
-        } else { //Direct dan Realtime
-            $update = \App\Schedule::where('id', $request->schedule_id)->where('requester_id', Auth::user()->id)->where('status',0)->update([
-                'title' => $request->title,
-                'desc' => $request->desc,
-                'time' => $request->time
-            ]);
-    
-            if($update) {
-                return \Illuminate\Support\Facades\Response::json([
-                    "message" => 'schedule updated'
-                ],200);
-            } else {
-                return \Illuminate\Support\Facades\Response::json([
-                    "message" => 'failed to update'
-                ],201);
-            }
-        } 
-
-        return $request;
     }
 
     private function updateOnline($request) {
@@ -322,13 +386,6 @@ class SchedulesController extends Controller
         }
     }
 
-    public function deleteSchedule($id)
-    {
-        $delete = \App\Schedule::where('id', $id)->where('status',0)->delete();
-        if ($delete) return \response()->json(["message" => "success"], 200);
-        else return \response()->json(["message" => "failed"], 201);
-    }
-
     public function mySchedulePageCount(Request $request, $id = '')
     {
         $limit = $request->limit;
@@ -428,45 +485,6 @@ class SchedulesController extends Controller
             ->lastPage($limit);
 
         return Response::json(["total_page" => $result], 200);
-    }
-
-    private function storeOnlineRequest($request)
-    {
-        $insert = new \App\Schedule;
-        $insert->requester_id = Auth::user()->id;
-        $insert->time = $request->time;
-        $insert->title = $request->title;
-        $insert->desc = $request->desc;
-        $insert->exp  = $request->exp;
-        $insert->type_schedule = $request->type_schedule;
-        $insert->save();
-        return $insert;
-    }
-    
-
-    private function storeDaring($request)
-    {
-        $insert = new \App\Schedule;
-        $insert->requester_id = Auth::user()->id;
-        $insert->title = $request->title;
-        $insert->desc = $request->desc;
-        $insert->type_schedule = $request->type_schedule;
-        $insert->save();
-        return $insert;
-    }
-
-    private function storeDirect($request)
-    {
-        $insert = new \App\Schedule;
-        $insert->requester_id = Auth::user()->id;
-        $insert->title = $request->title;
-        $insert->desc = $request->desc;
-        $insert->type_schedule = $request->type_schedule;
-        $insert->exp  = $request->exp;
-        $insert->time = $request->time;
-        $insert->location = $request->location;
-        $insert->save();
-        return $insert;
     }
 
     public function studentSchedule(Request $request)

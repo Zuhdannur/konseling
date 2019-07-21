@@ -51,13 +51,13 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
 
     //For Develpment Purposes
     $router->get('user', 'UsersController@all');
-    $router->get('diary', 'DiariesController@all');
 
+    $router->post('schedule', 'SchedulesController@add');
+        $router->get('schedule', 'SchedulesController@all');
+        $router->get('schedule/{id}', 'SchedulesController@get');
+        $router->put('schedule', 'SchedulesController@put');
+        $router->delete('schedule/{id}', 'SchedulesController@remove');
 
-
-
-
-    
     $router->group(['middleware' => 'auth'], function () use ($router) {
         
         //Message
@@ -69,26 +69,36 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->post('updateImage', 'UsersController@updateImageProfile');
 
         //schedule
-        $router->post('schedule', 'SchedulesController@send');
-        $router->post('updateSchedule', 'SchedulesController@updateSchedule');
-        $router->post('mySchedule/{id}', 'SchedulesController@viewMySchedule');
-        $router->post('mySchedulePageCount/{id}', 'SchedulesController@mySchedulePageCount');
-        $router->post('readStudentSchedule', 'SchedulesController@studentSchedule');
+        // $router->post('schedule', 'SchedulesController@send');
+        // $router->post('updateSchedule', 'SchedulesController@updateSchedule');
+        // $router->post('mySchedule/{id}', 'SchedulesController@viewMySchedule');
+        // $router->post('mySchedulePageCount/{id}', 'SchedulesController@mySchedulePageCount');
+        // $router->post('readStudentSchedule', 'SchedulesController@studentSchedule');
 
-        $router->post('mySchedulePageCount/', 'SchedulesController@mySchedulePageCount');
-        $router->post('mySchedule', 'SchedulesController@viewMySchedule');
-        $router->post('mySchedule', 'SchedulesController@getPengajuanByStatus');
-        $router->post('mySchedulePage', 'SchedulesController@getPengajuanByStatusPageCount');
-        $router->get('expired/{id}', 'SchedulesController@deleteSchedule');
+        // $router->post('mySchedulePageCount/', 'SchedulesController@mySchedulePageCount');
+        // $router->post('mySchedule', 'SchedulesController@viewMySchedule');
+        // $router->post('mySchedule', 'SchedulesController@getPengajuanByStatus');
+        // $router->post('mySchedulePage', 'SchedulesController@getPengajuanByStatusPageCount');
+        // $router->get('expired/{id}', 'SchedulesController@deleteSchedule');
 
-        $router->delete('schedule/{id}', 'SchedulesController@deleteDirectSchedule');
+        // $router->delete('schedule/{id}', 'SchedulesController@deleteDirectSchedule');
 
-        $router->post('scheduleDirect/{id}', 'SchedulesController@postScheduleDirect');
-        $router->post('scheduleDirectCount/{id}', 'SchedulesController@postScheduleDirectCount');
+        // $router->post('scheduleDirect/{id}', 'SchedulesController@postScheduleDirect');
+        // $router->post('scheduleDirectCount/{id}', 'SchedulesController@postScheduleDirectCount');
+
+        /**
+         * Routes for resource schedule
+         */
+        // $router->post('schedule', 'SchedulesController@add');
+        // $router->get('schedule', 'SchedulesController@all');
+        // $router->get('schedule/{id}', 'SchedulesController@get');
+        // $router->put('schedule', 'SchedulesController@put');
+        // $router->delete('schedule/{id}', 'SchedulesController@remove');
 
         /**
          * Routes for resource diary
          */
+        $router->get('diary', 'DiariesController@all');
         $router->post('diary', 'DiariesController@add');
         $router->put('diary', 'DiariesController@put');
         $router->delete('diary/{id}', 'DiariesController@remove');
@@ -115,6 +125,8 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
 /**
  * Routes for resource user
  */
+
+
 
 
 
