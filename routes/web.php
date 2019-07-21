@@ -22,7 +22,6 @@ $router->get('/', function () {
 });
 $router->get('/test', 'SchedulesController@notification');
 $router->group(['prefix'=>'v1/api'], function () use ($router) {
-
     $router->post('login', 'UsersController@login');
     $router->post('register', 'UsersController@register');
 
@@ -51,12 +50,6 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
 
     //For Develpment Purposes
     $router->get('user', 'UsersController@all');
-
-    $router->post('schedule', 'SchedulesController@add');
-        $router->get('schedule', 'SchedulesController@all');
-        $router->get('schedule/{id}', 'SchedulesController@get');
-        $router->put('schedule', 'SchedulesController@put');
-        $router->delete('schedule/{id}', 'SchedulesController@remove');
 
     $router->group(['middleware' => 'auth'], function () use ($router) {
         
@@ -89,11 +82,12 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         /**
          * Routes for resource schedule
          */
-        // $router->post('schedule', 'SchedulesController@add');
-        // $router->get('schedule', 'SchedulesController@all');
-        // $router->get('schedule/{id}', 'SchedulesController@get');
-        // $router->put('schedule', 'SchedulesController@put');
-        // $router->delete('schedule/{id}', 'SchedulesController@remove');
+        $router->post('schedule', 'SchedulesController@add');
+        $router->get('schedule', 'SchedulesController@all');
+        $router->get('schedule/{id}', 'SchedulesController@get');
+        $router->put('schedule', 'SchedulesController@put');
+        $router->delete('schedule/{id}', 'SchedulesController@remove');
+        $router->get('schedulePageCount', 'SchedulesController@count');
 
         /**
          * Routes for resource diary
@@ -125,8 +119,3 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
 /**
  * Routes for resource user
  */
-
-
-
-
-

@@ -56,9 +56,75 @@ class SchedulesController extends Controller
     }
 
     public function all(Request $filters) {
-        $schedule = \App\Schedule::where('status', $filters->status);
+        $schedule = new \App\Schedule;
+        $schedule = $schedule->with('request', 'consultant');
 
-        return Response::json($schedule->get());
+        if ($filters->has('status')) {
+            $schedule = $schedule->where('status', $filters->status);
+        }
+
+        if ($filters->has('type_schedule')) {
+            $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+        }
+
+        if ($filters->has('exp')) {
+            $schedule = $schedule->where('exp', $filters->exp);
+        }
+
+        if ($filters->has('upcoming')) {
+            if($filters->upcoming == 'true') {
+                $schedule = $schedule->where('time', Carbon::now());
+            }
+        }
+
+        if($filters->has('limit') && $filters->has('page')) {
+            $limit = $filters->limit;
+
+            if (empty($filters->page)) $skip = 0;
+            else $skip = $limit * $filters->page;
+
+            $schedule = $schedule
+                ->skip($skip)
+                ->take($limit);
+        }
+
+        return Response::json($schedule->get(), 200);
+    }
+
+    public function count() {
+        $schedule = new \App\Schedule;
+        $schedule = $schedule->with('request', 'consultant');
+
+        if ($filters->has('status')) {
+            $schedule = $schedule->where('status', $filters->status);
+        }
+
+        if ($filters->has('type_schedule')) {
+            $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+        }
+
+        if ($filters->has('exp')) {
+            $schedule = $schedule->where('exp', $filters->exp);
+        }
+
+        if ($filters->has('upcoming')) {
+            if($filters->upcoming == 'true') {
+                $schedule = $schedule->where('time', Carbon::now());
+            }
+        }
+
+        if($filters->has('limit') && $filters->has('page')) {
+            $limit = $filters->limit;
+
+            if (empty($filters->page)) $skip = 0;
+            else $skip = $limit * $filters->page;
+
+            $schedule = $schedule
+                ->paginate($skip)
+                ->lastPage($limit);
+        }
+
+        return Response::json(["page_count" => $schedule], 200);
     }
 
     public function add(Request $request) {
@@ -238,17 +304,6 @@ class SchedulesController extends Controller
         $delete = \App\Schedule::where('id', $id)->where('status', 1)->delete();
         if ($delete) return \response()->json(["message" => "success"], 200);
         else return \response()->json(["message" => "failed"], 201);
-    }
-
-    private function updateOnline($request) {
-    }
-
-    public function updateDaring($request) {
-        
-    }
-
-    private function updateDirect($request) {
-        
     }
 
     public function getConsultan()
