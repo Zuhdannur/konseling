@@ -56,7 +56,7 @@ class SchedulesController extends Controller
 
     public function all(Request $filters) {
         $schedule = new \App\Schedule;
-        $schedule = $schedule->where('requester_id', 1);
+        $schedule = $schedule->where('requester_id', Auth::user()->id);
 
         foreach ($schedule->get() as $key => $row) {
             if ($row->type_schedule != "daring") {
