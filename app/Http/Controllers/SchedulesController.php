@@ -64,7 +64,9 @@ class SchedulesController extends Controller
         }
 
         if ($filters->has('type_schedule')) {
-            $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+            if(!empty($filters->type_schedule)) {
+                $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+            }
         }
 
         if ($filters->has('exp')) {
