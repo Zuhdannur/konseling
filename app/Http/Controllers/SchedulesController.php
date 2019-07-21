@@ -1,7 +1,6 @@
 <?php namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
-use Illuminate\Support\Facades\Config;
 use Carbon\Carbon;
 use function foo\func;
 use Illuminate\Http\Request;
@@ -232,7 +231,7 @@ class SchedulesController extends Controller
 
     public function remove($id, Request $request)
     {
-        if (Auth::user()-role == 'siswa') {
+        if (Auth::user()->role == 'siswa') {
             $delete = \App\Schedule::where('id', $id)->where('requester_id', Auth::user()->id)->where('status', $request->status)->delete();
             if ($delete) {
                 return \response()->json(["message" => "success"], 200);
