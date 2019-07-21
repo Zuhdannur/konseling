@@ -257,18 +257,18 @@ class SchedulesController extends Controller
                 ->where('requester_id', Auth::user()->id)
                 ->delete();
             if ($delete) {
-                return \response()->json(["message" => "success"], 200);
+                return \Illuminate\Support\Facades\Response::json(["message" => "success"], 200);
             } else {
-                return \response()->json(["message" => "failed"], 201);
+                return \Illuminate\Support\Facades\Response::json(["message" => "failed"], 201);
             }
         } else {
             $delete = \App\Schedule::find($id)
                 ->where('requester_id', Auth::user()->id)
                 ->delete();
             if ($delete) {
-                return \response()->json(["message" => "success"], 200);
+                return \Illuminate\Support\Facades\Response::json(["message" => "success"], 200);
             } else {
-                return \response()->json(["message" => "failed"], 201);
+                return \Illuminate\Support\Facades\Response::json(["message" => "failed"], 201);
             }
         }
     }
