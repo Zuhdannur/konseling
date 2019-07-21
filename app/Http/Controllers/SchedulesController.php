@@ -253,7 +253,7 @@ class SchedulesController extends Controller
     public function remove($id, Request $request)
     {
         if (Auth::user()->role == 'siswa') {
-            $delete = \App\Schedule::find($id)
+            $delete = \App\Schedule::where('id', $id)
                 ->where('requester_id', Auth::user()->id)
                 ->delete();
             if ($delete) {
@@ -262,7 +262,7 @@ class SchedulesController extends Controller
                 return \Illuminate\Support\Facades\Response::json(["message" => "failed"], 201);
             }
         } else {
-            $delete = \App\Schedule::find($id)
+            $delete = \App\Schedule::where('id', $id)
                 ->where('requester_id', Auth::user()->id)
                 ->delete();
             if ($delete) {
