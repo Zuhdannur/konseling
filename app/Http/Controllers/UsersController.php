@@ -151,16 +151,16 @@ class UsersController extends Controller {
         ], 200);
     }
 
-    public function put(Request $request, $id)
+    public function put(Request $request)
     {
-        $update = \App\User::find($id)->update([
+        $update = \App\User::find(Auth::user()->id)->update([
             'name' => $request->name
         ]);
         
         $kelasId = \App\Kelas::where('nama_kelas', $request->nama_kelas)->first()->id;
         
         if ($update && $kelasId) {
-            $update_detail = \App\DetailUser::where('id_user', $id)->update([
+            $update_detail = \App\DetailUser::where('id_user', Auth::user()->id)->update([
                 'address' => $request->address,
                 'phone_number' => $request->phone_number,
                 'id_kelas' => $kelasId,
