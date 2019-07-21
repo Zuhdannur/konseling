@@ -55,6 +55,12 @@ class SchedulesController extends Controller
 //        return response($result,200);
     }
 
+    public function all(Request $filters) {
+        $schedule = \App\Schedule::where('status', $filters->status);
+
+        return Response::json($schedule->get());
+    }
+
     public function add(Request $request) {
         if ($request->type_schedule == 'realtime') {
             $insert = $this->storeRealtime($request);
