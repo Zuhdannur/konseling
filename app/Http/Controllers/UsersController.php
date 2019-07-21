@@ -155,20 +155,11 @@ class UsersController extends Controller
             'name' => $request->name
         ]);
         if ($update) {
-            if ($request->kelas == null) {
-                $kelas = '';
-            }
-            if ($request->school == null) {
-                $school = '';
-            } else {
-                $kelas = $request->kelas;
-                $school = $request->school;
-            }
             $update_detail = \App\DetailUser::where('id_user', Auth::user()->id)->update([
                 'address' => $request->address,
                 'phone_number' => $request->phone_number,
-                'kelas' => $kelas,
-                'school' => $school
+                'id_kelas' => $kelas,
+                'gender' => $request->gender
             ]);
 
             if ($update_detail) {
