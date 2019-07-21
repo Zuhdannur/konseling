@@ -57,6 +57,7 @@ class SchedulesController extends Controller
 
     public function all(Request $filters) {
         $schedule = new \App\Schedule;
+        $schedule = $schedule->where('requester_id', Auth::user()->id);
         $schedule = $schedule->with('request', 'consultant');
 
         if ($filters->has('status')) {
@@ -93,8 +94,9 @@ class SchedulesController extends Controller
         return Response::json($schedule->get(), 200);
     }
 
-    public function count() {
+    public function count(Request $filters) {
         $schedule = new \App\Schedule;
+        $schedule = $schedule->where('requester_id', Auth::user()->id);
         $schedule = $schedule->with('request', 'consultant');
 
         if ($filters->has('status')) {
