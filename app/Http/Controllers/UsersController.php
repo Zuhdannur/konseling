@@ -151,16 +151,19 @@ class UsersController extends Controller {
         ], 200);
     }
 
-    public function put(Request $request)
+    public function put(Request $request, $id)
     {
-        $update = \App\User::find(Auth::user()->id)->update([
+        $update = \App\User::find($id)->update([
             'name' => $request->name
         ]);
-        if ($update) {
-            $update_detail = \App\DetailUser::where('id_user', Auth::user()->id)->update([
+        
+        $kelasId = \App\Kelas::where('nama_kelas', $request->nama_kelas)->first()->id;
+        
+        if ($update && $kelasId) {
+            $update_detail = \App\DetailUser::where('id_user', $id)->update([
                 'address' => $request->address,
                 'phone_number' => $request->phone_number,
-                'id_kelas' => $kelas,
+                'id_kelas' => $kelasId,
                 'gender' => $request->gender
             ]);
 
@@ -173,6 +176,10 @@ class UsersController extends Controller {
                     "message" => 'failed to Updated'
                 ], 201);
             }
+        } else {
+            return Response::json([
+                "message" => 'nama siswa atau nama kelas tidak ditemukan'
+            ], 201);
         }
         return $request;
     }

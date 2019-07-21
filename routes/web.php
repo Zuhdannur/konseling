@@ -44,6 +44,9 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     $router->delete('kelas/{id}', 'KelasController@remove');
 
     $router->get('user', 'UsersController@all');
+    // $router->get('user/{id}', 'UsersController@get');
+    // $router->put('user/{id}', 'UsersController@put');
+    // $router->delete('user/{id}', 'UsersController@remove');
 
     $router->group(['middleware' => 'auth'], function () use ($router) {
         
