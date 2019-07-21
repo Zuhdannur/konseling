@@ -56,13 +56,13 @@ class SchedulesController extends Controller
 
     public function all(Request $filters) {
         $schedule = new \App\Schedule;
-        $schedule = $schedule->where('requester_id', Auth::user()->id);
+        $schedule = $schedule->where('requester_id', 1);
 
         foreach ($schedule->get() as $key => $row) {
             if ($row->type_schedule != "daring") {
                 if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
-                    $schedule->update([
-                        'exp' => 1
+                    $row->update([
+                        'exp'=> 1
                     ]);
                 }
             }
@@ -165,7 +165,7 @@ class SchedulesController extends Controller
     private function storeRealtime($request)
     {
         $insert = new \App\Schedule;
-        $insert->requester_id = Auth::user()->id;
+        $insert->requester_id = 1;
         $insert->time = $request->time;
         $insert->title = $request->title;
         $insert->desc = $request->desc;
@@ -179,7 +179,7 @@ class SchedulesController extends Controller
     private function storeDaring($request)
     {
         $insert = new \App\Schedule;
-        $insert->requester_id = Auth::user()->id;
+        $insert->requester_id = 1;
         $insert->title = $request->title;
         $insert->desc = $request->desc;
         $insert->type_schedule = 'daring';
@@ -190,7 +190,7 @@ class SchedulesController extends Controller
     private function storeDirect($request)
     {
         $insert = new \App\Schedule;
-        $insert->requester_id = Auth::user()->id;
+        $insert->requester_id = 1;
         $insert->title = $request->title;
         $insert->desc = $request->desc;
         $insert->type_schedule = 'direct';
