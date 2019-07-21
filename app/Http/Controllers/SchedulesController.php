@@ -57,6 +57,17 @@ class SchedulesController extends Controller
     public function all(Request $filters) {
         $schedule = new \App\Schedule;
         $schedule = $schedule->where('requester_id', Auth::user()->id);
+
+        foreach ($schedule->get() as $key => $row) {
+            if ($row->type_schedule != "daring") {
+                if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+                    $schedule->update([
+                        'exp' => 1
+                    ]);
+                }
+            }
+        }
+        
         $schedule = $schedule->with('request', 'consultant');
         
         if ($filters->has('status')) {
@@ -88,16 +99,6 @@ class SchedulesController extends Controller
             $schedule = $schedule
                 ->skip($skip)
                 ->take($limit);
-        }
-
-        foreach ($schedule as $key => $val) {
-            if ($val->type_schedule != "daring") {
-                if (Carbon::parse($val->time)->greatherThan(Carbon::now())) {
-                    $schedule = $schedule->update([
-                        'exp' => 1
-                    ]);
-                }
-            }
         }
 
         return Response::json($schedule->get(), 200);
