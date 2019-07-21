@@ -227,7 +227,7 @@ class SchedulesController extends Controller
             }
         } else { 
             //Direct dan Realtime
-            if (!$this->isExpired($request->original_time)) {
+            if (!$this->isExpired($request)) {
                 $update = \App\Schedule::where('id', $request->schedule_id)
                 ->where('requester_id', Auth::user()->id)
                 ->where('exp', 0)
@@ -252,8 +252,8 @@ class SchedulesController extends Controller
         return $request;
     }
 
-    private function isExpired($time) {
-        if (Carbon::parse($time)->lte(Carbon::now())) {
+    private function isExpired($request) {
+        if (Carbon::parse($request->original_time)->lte(Carbon::now())) {
             \App\Schedule::where('id', $request->schedule_id)->update([
                 'exp'=> 1
             ]);
