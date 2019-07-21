@@ -130,10 +130,7 @@ class UsersController extends Controller
     {
         $data = \App\User::where('api_token', $id)->with('detail', 'detail.sekolah', 'detail.kelas')->first();
         $data['avatar'] = $data->avatar;
-        return Response::json([
-            "message" => "success",
-            "result" => $data
-        ], 200);
+        return Response::json($data, 200);
     }
     
     public function getAllUser()
