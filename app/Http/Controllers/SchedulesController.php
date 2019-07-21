@@ -193,7 +193,7 @@ class SchedulesController extends Controller
 
     public function put(Request $request)
     {
-        if($request->type_schedule == Config::get('constants.scheduletype.daring')) {
+        if($request->type_schedule == 'daring') {
             $update = \App\Schedule::where('id', $request->schedule_id)->where('requester_id', Auth::user()->id)->where('status',0)->update([
                 'title' => $request->title,
                 'desc' => $request->desc
@@ -253,10 +253,10 @@ class SchedulesController extends Controller
     {
         $title = $request->title;
         $desc = $request->desc;
-        if (Auth::user()->role == Config::get('constants.usertype.siswa')) {
-            if ($request->type_schedule == Config::get('constants.scheduletype.realtime')) {
+        if (Auth::user()->role == 'siswa') {
+            if ($request->type_schedule == 'realtime') {
                 $insert = $this->storeRealtime($request);
-            } elseif ($request->type_schedule == Config::get('constants.scheduletype.direct')) {
+            } elseif ($request->type_schedule == 'direct') {
                 $insert = $this->storeDirect($request);
             } else {
                 $insert = $this->storeDaring($request);
