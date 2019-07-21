@@ -101,6 +101,8 @@ class SchedulesController extends Controller
                 ->take($limit);
         }
 
+        $schedule = $schedule->orderBy('created_at', 'desc');
+
         return Response::json($schedule->get(), 200);
     }
 
@@ -206,7 +208,10 @@ class SchedulesController extends Controller
     public function put(Request $request)
     {
         if($request->type_schedule == 'daring') {
-            $update = \App\Schedule::where('id', $request->schedule_id)->where('requester_id', Auth::user()->id)->where('status',0)->update([
+            $update = \App\Schedule::where('id', $request->schedule_id)
+            ->where('requester_id', Auth::user()->id)
+            ->where('exp', 0)
+            ->where('status', 0)->update([
                 'title' => $request->title,
                 'desc' => $request->desc
             ]);
@@ -222,7 +227,10 @@ class SchedulesController extends Controller
             }
         } else { 
             //Direct dan Realtime
-            $update = \App\Schedule::where('id', $request->schedule_id)->where('requester_id', Auth::user()->id)->where('status',0)->update([
+            $update = \App\Schedule::where('id', $request->schedule_id)
+            ->where('requester_id', Auth::user()->id)
+            ->where('exp', 0)
+            ->where('status', 0)->update([
                 'title' => $request->title,
                 'desc' => $request->desc,
                 'time' => $request->time
