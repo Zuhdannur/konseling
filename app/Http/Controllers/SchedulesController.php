@@ -242,7 +242,7 @@ class SchedulesController extends Controller
                     "message" => 'schedule updated'], 200);
                 } else {
                     return \Illuminate\Support\Facades\Response::json([
-                    "message" => 'failed to update'], 201);
+                    "message" => 'pengajuan telah diterima oleh guru.'], 201);
                 }
             } else {
                 return \Illuminate\Support\Facades\Response::json(["message" => 'pengajuan telah kadaluarsa.'], 201);
