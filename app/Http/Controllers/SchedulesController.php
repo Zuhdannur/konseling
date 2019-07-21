@@ -165,11 +165,12 @@ class SchedulesController extends Controller
     private function storeRealtime($request)
     {
         $insert = new \App\Schedule;
-        $insert->requester_id = 1;
+        $insert->requester_id = Auth::user()->id;
         $insert->time = $request->time;
         $insert->title = $request->title;
         $insert->desc = $request->desc;
         $insert->exp  = 0;
+        $insert->status  = 0;
         $insert->type_schedule = 'realtime';
         $insert->save();
         return $insert;
@@ -179,7 +180,7 @@ class SchedulesController extends Controller
     private function storeDaring($request)
     {
         $insert = new \App\Schedule;
-        $insert->requester_id = 1;
+        $insert->requester_id = Auth::user()->id;
         $insert->title = $request->title;
         $insert->desc = $request->desc;
         $insert->type_schedule = 'daring';
@@ -190,11 +191,12 @@ class SchedulesController extends Controller
     private function storeDirect($request)
     {
         $insert = new \App\Schedule;
-        $insert->requester_id = 1;
+        $insert->requester_id = Auth::user()->id;
         $insert->title = $request->title;
         $insert->desc = $request->desc;
         $insert->type_schedule = 'direct';
         $insert->exp  = 0;
+        $insert->status  = 0;
         $insert->time = $request->time;
         $insert->location = $request->location;
         $insert->save();
@@ -245,7 +247,6 @@ class SchedulesController extends Controller
         if (Auth::user()->role == 'siswa') {
             $delete = \App\Schedule::where('id', $id)
                 ->where('requester_id', Auth::user()->id)
-                ->where('status', $request->status)
                 ->delete();
             if ($delete) {
                 return \response()->json(["message" => "success"], 200);

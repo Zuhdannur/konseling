@@ -52,6 +52,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     $router->get('user', 'UsersController@all');
     $router->get('schedule', 'SchedulesController@all');
     $router->post('schedule', 'SchedulesController@add');
+    $router->delete('schedule/{id}', 'SchedulesController@remove');
 
     $router->group(['middleware' => 'auth'], function () use ($router) {
         
