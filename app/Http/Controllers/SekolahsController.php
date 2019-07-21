@@ -69,14 +69,7 @@ class SekolahsController extends Controller
     public function remove($id)
     {
         $delete = \App\School::find($id)->delete();
-        if ($delete) {
-            return Response::json([
-                "message" => 'berhasil hapus.'
-            ], 200);
-        } else {
-            return Response::json([
-                "message" => 'gagal menghapus.'
-            ], 201);
-        }
+        if ($delete) return Response::json(["message" => 'berhasil hapus.'], 200);
+        else return Response::json(["message" => 'gagal menghapus.'], 201);
     }
 }
