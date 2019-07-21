@@ -58,7 +58,7 @@ class SchedulesController extends Controller
         $schedule = new \App\Schedule;
         $schedule = $schedule->where('requester_id', Auth::user()->id);
         $schedule = $schedule->with('request', 'consultant');
-
+        
         if ($filters->has('status')) {
             $schedule = $schedule->where('status', $filters->status);
         }
@@ -88,6 +88,16 @@ class SchedulesController extends Controller
             $schedule = $schedule
                 ->skip($skip)
                 ->take($limit);
+        }
+
+        foreach ($schedule as $key => $val) {
+            if ($val->type_schedule != "daring") {
+                if (Carbon::parse($val->time)->lt(Carbon::now())) {
+                    $schedule = $schedule->update([
+                        'exp' => 1
+                    ]);
+                }
+            }
         }
 
         return Response::json($schedule->get(), 200);
@@ -158,7 +168,7 @@ class SchedulesController extends Controller
         $insert->time = $request->time;
         $insert->title = $request->title;
         $insert->desc = $request->desc;
-        $insert->exp  = false;
+        $insert->exp  = 0;
         $insert->type_schedule = 'realtime';
         $insert->save();
         return $insert;
@@ -183,7 +193,7 @@ class SchedulesController extends Controller
         $insert->title = $request->title;
         $insert->desc = $request->desc;
         $insert->type_schedule = 'direct';
-        $insert->exp  = false;
+        $insert->exp  = 0;
         $insert->time = $request->time;
         $insert->location = $request->location;
         $insert->save();
@@ -232,7 +242,10 @@ class SchedulesController extends Controller
     public function remove($id, Request $request)
     {
         if (Auth::user()->role == 'siswa') {
-            $delete = \App\Schedule::where('id', $id)->where('requester_id', Auth::user()->id)->where('status', $request->status)->delete();
+            $delete = \App\Schedule::where('id', $id)
+                ->where('requester_id', Auth::user()->id)
+                ->where('status', $request->status)
+                ->delete();
             if ($delete) {
                 return \response()->json(["message" => "success"], 200);
             } else {
