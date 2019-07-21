@@ -22,6 +22,7 @@ $router->get('/', function () {
 });
 $router->get('/test', 'SchedulesController@notification');
 $router->group(['prefix'=>'v1/api'], function () use ($router) {
+
     $router->post('login', 'UsersController@login');
     $router->post('register', 'UsersController@register');
 
@@ -42,7 +43,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     $router->put('kelas/{id}', 'KelasController@put');
     $router->delete('kelas/{id}', 'KelasController@remove');
 
-    $router->get('user', 'UsersController@getAllUser');
+    $router->get('user', 'UsersController@all');
 
     $router->group(['middleware' => 'auth'], function () use ($router) {
         
@@ -81,15 +82,12 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('deleteDiary/{id}', 'DiariesController@deleteDiary');
         $router->get('/shareDiary', 'DiariesController@showMyDiaryToOthers');
         $router->get('/shareDiaryCount', 'DiariesController@showMyDiaryToOthersPageCount');
-        //master
-
-        //School
-        $router->get('deleteSchool/{id}', 'MastersController@destroySchool');
             
         //User
-        $router->delete('user/{id}', 'UsersController@destroy');
-        $router->get('profile/{id}', 'UsersController@getMyProfile');
-        // $router->get('user', 'UsersController@getAllUser');
+        // $router->get('user', 'UsersController@all');
+        $router->get('user/{id}', 'UsersController@get');
+        $router->put('user', 'UsersController@put');
+        $router->delete('user/{id}', 'UsersController@remove');
             
         //Favorite Artikels
         $router->post('favorit', 'ArtikelsController@storeFavorite');
@@ -98,3 +96,8 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('favorit/{id}', 'ArtikelsController@removeMyFavorit');
     });
 });
+
+/**
+ * Routes for resource user
+ */
+

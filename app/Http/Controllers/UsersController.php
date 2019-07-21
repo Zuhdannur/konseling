@@ -1,15 +1,9 @@
 <?php namespace App\Http\Controllers;
 
-use App\Classes\Kraken;
-use Faker\Provider\Image;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Validator;
+class UsersController extends Controller {
 
-class UsersController extends Controller
-{
+    const MODEL = "App\User";
+
     public function login(Request $request)
     {
         $user = $this->checking($request->username);
@@ -126,21 +120,21 @@ class UsersController extends Controller
         }
     }
 
-    public function getMyProfile($id)
+    public function get($id)
     {
         $data = \App\User::where('id', $id)->with('detail', 'detail.sekolah', 'detail.kelas')->first();
         // $data['avatar'] = $data->avatar;
         return Response::json($data, 200);
     }
     
-    public function getAllUser()
+    public function all()
     {
         // $data = \App\User::with('detail', 'kelas', 'sekolah')->get();
         $data = \App\User::with('detail', 'detail.sekolah', 'detail.kelas')->get();
         return Response::json($data, 200);
     }
     
-    public function destroy($id)
+    public function remove($id)
     {
         $data = \App\User::find($id)->delete();
         $detail = \App\DetailUser::find($id)->delete();
@@ -149,7 +143,7 @@ class UsersController extends Controller
         ], 200);
     }
 
-    public function updateProfile(Request $request)
+    public function put(Request $request)
     {
         $update = \App\User::find(Auth::user()->id)->update([
             'name' => $request->name
@@ -193,4 +187,6 @@ class UsersController extends Controller
             ], 201);
         }
     }
+
+
 }
