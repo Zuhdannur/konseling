@@ -77,20 +77,6 @@ class UsersController extends Controller
             $insertDetail->address = $request->address;
             $insertDetail->phone_number = $request->phone;
 
-            $isSekolahIdExist = \App\School::find($request->id_sekolah);
-            if (!$isSekolahIdExist) {
-                return Response::json([
-                    'message' => 'sekolah id is not found'
-                ]);
-            }
-
-            $isKelasExist = \App\Kelas::find($request->id_kelas);
-            if (!$isKelasExist) {
-                return Response::json([
-                    'message' => 'kelas id is not found'
-                ]);
-            }
-
             $insertDetail->id_kelas = $request->id_kelas;
             $insertDetail->id_sekolah = $request->id_sekolah;
             
