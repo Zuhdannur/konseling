@@ -105,8 +105,9 @@ class DiariesController extends Controller
         if ($request->page == "") $skip = 0;
         else $skip = $limit * $request->page;
        
-        $mySchool = \App\User::with('detail')->where('id', Auth::user()->id)->first()->detail;
+        $mySchool = \App\User::with('detail')->where('id', Auth::user()->id)->first();
         dd($mySchool);
+
         $diaries = \App\Diary::whereHas('user', function ($q) use ($mySchool){
             $q->whereHas('detail',function ($query) use ($mySchool){
                 $query->where('id_sekolah', $mySchool->id_sekolah);
