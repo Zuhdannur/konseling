@@ -130,7 +130,7 @@ class UsersController extends Controller {
 
     public function get($id)
     {
-        $data = \App\User::where('id', Auth::user()->id)->with('detail', 'detail.sekolah', 'detail.kelas')->first();
+        $data = \App\User::where('id', Auth::user()->id)->with('detail', 'detail.sekolah')->first();
         // $data['avatar'] = $data->avatar;
         return Response::json($data, 200);
     }
