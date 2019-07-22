@@ -126,6 +126,44 @@ class SchedulesController extends Controller
         ], 200);
     }
 
+    public function accept(Request $request) {
+        
+        if(\App\Schedule::where('id', $request->schedule_id)->exists()) {
+            
+            if(\App\Schedule::where('id', $request->schedule_id)->first()->exp == 0) {
+
+                $update = \App\Schedule::where('id', $request->schedule_id)->update([
+                    'status' => 1,
+                    'tgl_pengajuan' => $request->date,
+                    'consultant_id' => Auth::user()->id
+                ]);
+
+                if ($update) {
+                    $schedule = \App\Schedule::where('id', $request->schedule_id)->first();
+
+                    $id = $schedule['requester_id'];
+                    // Helper::sendNotificationToSingel($id);
+
+                    $result['requester_id'] = $schedule['requester_id'];
+                    $result["title"] = $schedule['title'];
+                    $result['desc'] = $schedule['desc'];
+
+                    return Response::json($result, 200);
+                } else {
+                    return Response::json([
+                        "message" => "Gagal menerima."
+                    ], 201);
+                }
+            } else {
+                return Response::json([
+                    "message" => "Pengajuan telah kadaluarsa."
+                ],200);
+            }
+        } else {
+            return Response::json(["message" => "Pengajuan tidak ditemukan"], 201);
+        }
+    }
+
     public function all(Request $filters) {
         $schedule = new \App\Schedule;
         $schedule = $schedule->where('requester_id', Auth::user()->id);
