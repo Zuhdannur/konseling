@@ -93,7 +93,7 @@ class DiariesController extends Controller
         $mySchool = \App\User::with('detail')->where('id', Auth::user()->id)->first()->detail;
         $diaries = \App\Diary::whereHas('user', function ($q) use ($mySchool) {
             $q->whereHas('detail', function ($query) use ($mySchool) {
-                $query->where('school', $mySchool->school_name);
+                $query->where('id_sekolah', $mySchool->id_sekolah);
             });
         })->with('user')->orderBy('id', 'desc');
 
@@ -101,10 +101,6 @@ class DiariesController extends Controller
         ->skip($skip)
         ->take($limit)
         ->get();
-
-        $count = $diaries
-        ->paginate($limit)
-        ->lastPage();
 
         return \Illuminate\Support\Facades\Response::json([
             "data" => $data
