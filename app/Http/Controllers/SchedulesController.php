@@ -56,24 +56,10 @@ class SchedulesController extends Controller
 
     public function receive(Request $filters) {
         $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
-            // $schedule = \App\Schedule::where(function ($query) use ($user, $id, $stat, $upcoming) {
-
-            //     // if(Auth::user()->role == "siswa")$query->where('requester_id',Auth::user()->id);
-            //     // else $query->where('consultant_id',Auth::user()->id);
-
-            //     $query->whereHas('request', function ($q) use ($user) {
-            //         $q->whereHas('detail', function ($sql) use ($user) {
-            //             $sql->where('school', $user->detail->school);
-            //         });
-            //     });
-            //     $query->where('type_schedule', $id);
-            //     $query->where('status', $stat);
-            //     if ($upcoming == "true") $query->where('time', '>', Carbon::now());
-            // })->with('request')->with('consultant')->orderBy('id', 'desc');
 
         $schedule = \App\Schedule::where(function ($query) use ($user, $filters) {
-            $query->whereHas('request', function($q) use($user) {
-                $q->whereHas('detail', function($sql) use($user) {
+            $query->whereHas('request', function($q) use ($user) {
+                $q->whereHas('detail', function($sql) use ($user) {
                     $sql->where('id_sekolah', $user->detail->id_sekolah);
                 });
             });
@@ -90,30 +76,6 @@ class SchedulesController extends Controller
             }
         })->with('request')->with('consultant')->orderBy('id', 'desc');
 
-
-        // $schedule = \App\Schedule::where(function ($query) use ($user, $id, $stat, $upcoming) {
-
-        //         // if(Auth::user()->role == "siswa")$query->where('requester_id',Auth::user()->id);
-        //         // else $query->where('consultant_id',Auth::user()->id);
-
-        //     $query->whereHas('request', function ($q) use ($user) {
-        //         $q->whereHas('detail', function ($sql) use ($user) {
-        //             $sql->where('id_sekolah', $user->detail->id_sekolah);
-        //         });
-        //     });
-        //     if($filters.has('type_schedule')) {
-        //         $query->where('type_schedule', $filters->type_schedule);
-        //     }
-
-        //     if($filters.has('status')) {
-        //         $query->where('status', $filters->status);
-        //     }
-
-        //     if($filters.has('upcoming')) {
-        //         if ($upcoming == "true") $query->where('time', '>', Carbon::now());
-        //     }
-        // })->with('request')->with('consultant')->orderBy('id', 'desc');
-
         $limit = $filters->limit;
 
         if (empty($filters->page)) $skip = 0;
@@ -125,6 +87,43 @@ class SchedulesController extends Controller
             ->get();
             
         return Response::json($datas, 200);
+    }
+
+    public function receiveCount(Request $filters) {
+        $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
+
+        $schedule = \App\Schedule::where(function ($query) use ($user, $filters) {
+            $query->whereHas('request', function($q) use ($user) {
+                $q->whereHas('detail', function($sql) use ($user) {
+                    $sql->where('id_sekolah', $user->detail->id_sekolah);
+                });
+            });
+            if($filters->has('type_schedule')) {
+                $query->where('type_schedule', $filters->type_schedule);
+            }
+
+            if($filters->has('status')) {
+                $query->where('status', $filters->status);
+            }
+
+            if($filters->has('upcoming')) {
+                if ($filters->upcoming == "true") $query->where('time', '>', Carbon::now());
+            }
+        })->with('request')->with('consultant')->orderBy('id', 'desc');
+
+        $limit = $filters->limit;
+
+        if (empty($filters->page)) $skip = 0;
+        else $skip = $limit * $filters->page;
+
+
+        $count = $schedule
+        ->paginate($skip)
+        ->lastPage($limit);
+            
+        return Response::json([
+            'total_page' => $count
+        ], 200);
     }
 
     public function all(Request $filters) {

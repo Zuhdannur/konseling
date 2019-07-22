@@ -91,6 +91,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('schedulePageCount', 'SchedulesController@count');
 
         $router->get('scheduleReceive', 'SchedulesController@receive');
+        $router->get('scheduleReceiveCount', 'SchedulesController@receiveCount');
 
         /**
          * Routes for resource diary
