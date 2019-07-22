@@ -77,15 +77,15 @@ class SchedulesController extends Controller
                     $sql->where('id_sekolah', $user->detail->id_sekolah);
                 });
             });
-            if($filters.has('type_schedule')) {
+            if($filters->has('type_schedule')) {
                 $query->where('type_schedule', $filters->type_schedule);
             }
 
-            if($filters.has('status')) {
+            if($filters->has('status')) {
                 $query->where('status', $filters->status);
             }
 
-            if($filters.has('upcoming')) {
+            if($filters->has('upcoming')) {
                 if ($filters->upcoming == "true") $query->where('time', '>', Carbon::now());
             }
         })->with('request')->with('consultant')->orderBy('id', 'desc');
