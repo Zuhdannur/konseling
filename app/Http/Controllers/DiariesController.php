@@ -47,47 +47,29 @@ class DiariesController extends Controller
         } else {
             $skip = $limit * $request->page;
         }
-<<<<<<< HEAD
         $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
-=======
-        else {
-            $skip = $limit * $request->page;
-        }
-        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc');
->>>>>>> 2d93244bfc3917e87ebe8db268dc1f93d91a8c67
 
         $data = $datas
         ->skip($skip)
         ->take($limit)
         ->get();
 
-<<<<<<< HEAD
         return \Illuminate\Support\Facades\Response::json(
             $data,
             200
         );
-=======
-        return \Illuminate\Support\Facades\Response::json($data, 200);
->>>>>>> 2d93244bfc3917e87ebe8db268dc1f93d91a8c67
     }
 
     public function diaryCount(Request $request)
     {
         $limit = $request->limit;
 
-<<<<<<< HEAD
         if ($request->page == "") {
             $skip = 0;
         } else {
             $skip = $limit * $request->page;
         }
         $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
-=======
-        if ($request->page == "")$skip = 0;
-        else $skip = $limit * $request->page;
-
-        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc');
->>>>>>> 2d93244bfc3917e87ebe8db268dc1f93d91a8c67
 
         $count = $datas
         ->paginate($limit)
@@ -154,7 +136,6 @@ class DiariesController extends Controller
     public function sharedDiaryCount(Request $request) {
         $limit = $request->limit;
 
-<<<<<<< HEAD
         if ($request->page == "") {
             $skip = 0;
         } else {
@@ -173,19 +154,6 @@ class DiariesController extends Controller
         ->take($limit)
         ->get();
 
-=======
-        if ($request->page == "") $skip = 0;
-        else $skip = $limit * $request->page;
-       
-        $mySchool = \App\User::with('detail')->where('id', Auth::user()->id)->first();
-
-        $diaries = \App\Diary::whereHas('user', function ($q) use ($mySchool){
-            $q->whereHas('detail',function ($query) use ($mySchool){
-                $query->where('id_sekolah', $mySchool->id_sekolah);
-            });
-        })->with('user');
-        
->>>>>>> 2d93244bfc3917e87ebe8db268dc1f93d91a8c67
         $count = $diaries
         ->paginate($limit)
         ->lastPage();
@@ -199,7 +167,6 @@ class DiariesController extends Controller
     {
         $limit = $request->limit;
 
-<<<<<<< HEAD
         if ($request->page == "") {
             $skip = 0;
         } else {
@@ -210,15 +177,6 @@ class DiariesController extends Controller
         $diaries = \App\Diary::whereHas('user', function ($q) use ($mySchool) {
             $q->whereHas('detail', function ($query) use ($mySchool) {
                 $query->where('school', $mySchool->school);
-=======
-        if ($request->page == "") $skip = 0;
-        else $skip = $limit * $request->page;
-       
-        $mySchool = \App\User::with('detail')->where('id', Auth::user()->id)->first()->detail;
-        $diaries = \App\Diary::whereHas('user', function ($q) use ($mySchool){
-            $q->whereHas('detail',function ($query) use ($mySchool){
-                $query->where('id_sekolah', $mySchool->id_sekolah);
->>>>>>> 2d93244bfc3917e87ebe8db268dc1f93d91a8c67
             });
         })->with('user');
 
