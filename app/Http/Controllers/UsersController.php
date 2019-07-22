@@ -129,7 +129,7 @@ class UsersController extends Controller
             $this->addTopic($data);
         }
         // $data['avatar'] = $data->avatar;
-        return Response::json($data, 200);
+        // return Response::json($data, 200);
     }
 
     private function addTopic($data) {
