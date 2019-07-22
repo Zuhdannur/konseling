@@ -173,7 +173,7 @@ class UsersController extends Controller
         //     $client->addTopicSubscription($getSchoolId, $value['firebase_token']);
         // }
         return Response::json([
-            "data" => $query->detail->id_sekolah
+            "data" => $query
         ], 200);
     }
     
