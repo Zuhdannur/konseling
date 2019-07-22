@@ -96,10 +96,10 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->post('diary', 'DiariesController@add');
         $router->put('diary', 'DiariesController@put');
         $router->delete('diary/{id}', 'DiariesController@remove');
-
-        $router->get('shareDiary', 'DiariesController@showMyDiaryToOthers');
-        $router->get('shareDiaryCount', 'DiariesController@showMyDiaryToOthersPageCount');
         $router->get('diaryPageCount', 'DiariesController@diaryCount');
+
+        $router->get('shareDiary', 'DiariesController@sharedDiary');
+        $router->get('shareDiaryCount', 'DiariesController@sharedDiaryCount');
             
         /**
          * Routes for resource user

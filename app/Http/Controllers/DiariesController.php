@@ -43,11 +43,11 @@ class DiariesController extends Controller
     {
         $limit = $request->limit;
 
-        if ($request->pPage == "") {
+        if ($request->page == "") {
             $skip = 0;
         }
         else {
-            $skip = $limit * $request->pPage;
+            $skip = $limit * $request->page;
         }
         $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc');
 
@@ -65,11 +65,11 @@ class DiariesController extends Controller
     {
         $limit = $request->limit;
 
-        if ($request->pPage == "") {
+        if ($request->page == "") {
             $skip = 0;
         }
         else {
-            $skip = $limit * $request->pPage;
+            $skip = $limit * $request->page;
         }
         $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc');
 
@@ -104,49 +104,13 @@ class DiariesController extends Controller
         return $request;
     }
 
-    public function showMyDiaryToOthers(Request $request)
-    {
+    public function sharedDiaryCount(Request $filters) {
         $limit = $request->limit;
 
-        if ($request->pPage == "") {
-            $skip = 0;
-        }
-        else {
-            $skip = $limit * $request->pPage;
-        }
+        if ($request->page == "") $skip = 0;
+        else $skip = $limit * $request->page;
 
-        $mySchool = \App\User::with('detail')->where('id',Auth::user()->id)->first()->detail;
-        $diaries = \App\Diary::whereHas('user',function ($q) use ($mySchool){
-            $q->whereHas('detail',function ($query) use ($mySchool){
-                $query->where('school',$mySchool->school);
-            });
-        })->with('user')->orderBy('id','desc');
-
-        $data = $diaries
-        ->skip($skip)
-        ->take($limit)
-        ->get();
-
-        $count = $diaries
-        ->paginate($limit)
-        ->lastPage();
-
-        return \Illuminate\Support\Facades\Response::json([
-            "data" => $data
-        ], 200);
-    }
-
-    public function showMyDiaryToOthersPageCount(Request $request)
-    {
-        $limit = $request->limit;
-
-        if ($request->pPage == "") {
-            $skip = 0;
-        }
-        else {
-            $skip = $limit * $request->pPage;
-        }
-
+       
         $mySchool = \App\User::with('detail')->where('id',Auth::user()->id)->first()->detail;
         $diaries = \App\Diary::whereHas('user',function ($q) use ($mySchool){
             $q->whereHas('detail',function ($query) use ($mySchool){
@@ -163,4 +127,26 @@ class DiariesController extends Controller
         ], 200);
     }
 
+    public function sharedDiary(Request $request)
+    {
+        $limit = $request->limit;
+
+        if ($request->page == "") $skip = 0;
+        else $skip = $limit * $request->page;
+
+       
+        $mySchool = \App\User::with('detail')->where('id',Auth::user()->id)->first()->detail;
+        $diaries = \App\Diary::whereHas('user',function ($q) use ($mySchool){
+            $q->whereHas('detail',function ($query) use ($mySchool){
+                $query->where('school',$mySchool->school);
+            });
+        })->with('user');
+
+        $data = $diaries
+        ->skip($skip)
+        ->take($limit)
+        ->get();
+
+        return \Illuminate\Support\Facades\Response::json($data, 200);
+    }
 }
