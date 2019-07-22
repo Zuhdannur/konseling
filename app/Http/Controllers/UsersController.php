@@ -127,7 +127,7 @@ class UsersController extends Controller
     
     public function all()
     {
-        $data = \App\User::with('detail', 'sekolah')->get();
+        $data = \App\User::with('detail', 'detail.kelas', 'detail.sekolah')->get();
         return Response::json($data, 200);
     }
     
