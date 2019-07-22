@@ -54,6 +54,15 @@ class SchedulesController extends Controller
 //        return response($result,200);
     }
 
+    public function get($id) {
+        $data = \App\Schedule::where('requester_id', $id)
+        ->orderBy('created_at', 'desc')
+        ->take($request->limit)
+        ->get();
+
+        return Response::json($data);
+    }
+
     public function receive(Request $filters) {
         $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
 
