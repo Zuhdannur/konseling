@@ -90,6 +90,8 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->delete('schedule/{id}', 'SchedulesController@remove');
         $router->get('schedulePageCount', 'SchedulesController@count');
 
+        $router->get('scheduleReceive', 'SchedulesController@receive');
+
         /**
          * Routes for resource diary
          */
@@ -101,7 +103,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
 
         $router->get('shareDiary', 'DiariesController@readDiary');
         $router->get('shareDiaryCount', 'DiariesController@readDiaryCount');
-            
+
         /**
          * Routes for resource user
          */

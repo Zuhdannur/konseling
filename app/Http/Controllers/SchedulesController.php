@@ -54,6 +54,40 @@ class SchedulesController extends Controller
 //        return response($result,200);
     }
 
+    public function receive(Request $filters) {
+        $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
+        $schedule = \App\Schedule::where(function ($query) use ($user, $id, $stat, $upcoming) {
+
+                // if(Auth::user()->role == "siswa")$query->where('requester_id',Auth::user()->id);
+                // else $query->where('consultant_id',Auth::user()->id);
+
+            $query->whereHas('request', function ($q) use ($user) {
+                $q->whereHas('detail', function ($sql) use ($user) {
+                    $sql->where('id_sekolah', $user->detail->id_sekolah);
+                });
+            });
+            if($filters.has('type_schedule')) {
+                $query->where('type_schedule', $filters->type_schedule);
+            }
+
+            if($filters.has('status')) {
+                $query->where('status', $filters->status);
+            }
+
+            if($filters.has('upcoming')) {
+                if ($upcoming == "true") $query->where('time', '>', Carbon::now());
+            }
+        })->with('request')->with('consultant')->orderBy('id', 'desc');
+
+
+        $datas = $schedule
+            ->skip($skip)
+            ->take($limit)
+            ->get();
+            
+        return Response::json($datas, 200);
+    }
+
     public function all(Request $filters) {
         $schedule = new \App\Schedule;
         $schedule = $schedule->where('requester_id', Auth::user()->id);
