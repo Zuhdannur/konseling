@@ -22,7 +22,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $primaryKey = "id";
 
     protected $fillable = [
-        'name', 'username',
+        'name', 'username', 'avatar', 'role'
     ];
 
     /**
@@ -34,7 +34,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password'
     ];
 
-    public function detail(){
-        return $this->hasOne('\App\DetailUser','id_user','id');
+    public function detail()
+    {
+        return $this->hasOne('\App\DetailUser', 'id_user', 'id');
     }
 }

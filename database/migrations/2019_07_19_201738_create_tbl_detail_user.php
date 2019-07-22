@@ -22,7 +22,7 @@ class CreateTblDetailUser extends Migration
             // $table->integer('id_kelas')->length(11)->unsigned()->nullable();
             // $table->string('kelas')->nullable();
             $table->integer('id_sekolah')->length(11)->unsigned();
-            $table->integer('id_kelas')->length(11)->nullabe();
+            $table->integer('id_kelas')->nullable()->unsigned();
             $table->timestamps();
         });
     }

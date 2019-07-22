@@ -116,15 +116,14 @@ class UsersController extends Controller
 
     public function get($id)
     {
-        $data = \App\User::where('api_token', $id)->with('detail')->first();
+        $data = \App\User::where('api_token', $id)->with('detail', 'detail.kelas', 'detail.sekolah')->first();
         // $data['avatar'] = $data->avatar;
         return Response::json($data, 200);
     }
     
     public function all()
     {
-        // $data = \App\User::with('detail', 'kelas', 'sekolah')->get();
-        $data = \App\User::with('detail')->get();
+        $data = \App\User::with('detail', 'kelas', 'sekolah')->get();
         return Response::json($data, 200);
     }
     
