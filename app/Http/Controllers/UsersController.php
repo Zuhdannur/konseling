@@ -131,12 +131,16 @@ class UsersController extends Controller
         $client->setApiKey(self::$API_ACCSESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
-        $query = \App\User::where(function ($query){
-            $query->where('role',"guru");
-            $query->whereHas('detail',function ($q){
-                $q->where('id_sekolah', Auth::user()->detail->id_sekolah);
-            });
+        $query = \App\User::where('role','guru')->whereHas('detail', function($q) {
+            $q->where('id_sekolah', Auth::user()->detail->id_sekolah);
         })->get();
+
+        // $query = \App\User::where(function ($query){
+        //     $query->where('role',"guru");
+        //     $query->whereHas('detail',function ($q){
+        //         $q->where('id_sekolah', Auth::user()->detail->id_sekolah);
+        //     });
+        // })->get();
         foreach ($query as $value){
             dd($value->detail->id_sekolah);
             // $client->addTopicSubscription($value->detail->id_sekolah, $value['firebase_token']);
