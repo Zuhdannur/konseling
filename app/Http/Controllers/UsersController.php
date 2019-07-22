@@ -147,10 +147,10 @@ class UsersController extends Controller
         //         $q->where('id_sekolah', Auth::user()->detail->id_sekolah);
         //     });
         // })->get();
-        foreach ($query as $value){
-            dd($value->detail->id_sekolah);
-            // $client->addTopicSubscription($value->detail->id_sekolah, $value['firebase_token']);
-        }
+        // foreach ($query as $value){
+        //     dd($value->detail->id_sekolah);
+        //     // $client->addTopicSubscription($value->detail->id_sekolah, $value['firebase_token']);
+        // }
 
 
         // $client = new Client();
@@ -172,6 +172,9 @@ class UsersController extends Controller
         //     $pattern = "guru_". $id;
         //     $client->addTopicSubscription($getSchoolId, $value['firebase_token']);
         // }
+        return Response::json([
+            "data" => $query->detail->id_sekolah
+        ], 200);
     }
     
     public function all()
