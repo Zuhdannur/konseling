@@ -104,7 +104,7 @@ class DiariesController extends Controller
         return $request;
     }
 
-    public function sharedDiaryCount(Request $filters) {
+    public function sharedDiaryCount(Request $request) {
         $limit = $request->limit;
 
         if ($request->page == "") $skip = 0;
