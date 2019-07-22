@@ -84,8 +84,11 @@ class DiariesController extends Controller
     {
         $limit = $request->limit;
 
-        if ($request->page == "") $skip = 0;
-        else $skip = $limit * $request->page;
+        if ($request->page == "") {
+            $skip = 0;
+        } else {
+            $skip = $limit * $request->page;
+        }
 
         $mySchool = \App\User::with('detail')->where('id', Auth::user()->id)->first()->detail;
         $diaries = \App\Diary::whereHas('user', function ($q) use ($mySchool) {
@@ -106,8 +109,11 @@ class DiariesController extends Controller
     {
         $limit = $request->limit;
 
-        if ($request->page == "")  $skip = 0; 
-        else $skip = $limit * $request->page;
+        if ($request->page == "") {
+            $skip = 0;
+        } else {
+            $skip = $limit * $request->page;
+        }
 
         $mySchool = \App\User::with('detail')->where('id', Auth::user()->id)->first()->detail;
         $diaries = \App\Diary::whereHas('user', function ($q) use ($mySchool) {
@@ -146,5 +152,4 @@ class DiariesController extends Controller
         }
         return $request;
     }
-    
 }
