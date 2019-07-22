@@ -116,7 +116,11 @@ class UsersController extends Controller
 
     public function get($id)
     {
-        $data = \App\User::where('api_token', $id)->with('detail', 'detail.kelas', 'detail.sekolah')->first();
+        if (Auth::user()->role == 'siswa') {
+            $data = \App\User::where('api_token', $id)->with('detail', 'detail.kelas', 'detail.sekolah')->first();
+        } else {
+            $data = \App\User::where('api_token', $id)->with('detail', 'detail.sekolah')->first();
+        }
         // $data['avatar'] = $data->avatar;
         return Response::json($data, 200);
     }
