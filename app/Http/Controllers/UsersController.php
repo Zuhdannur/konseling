@@ -16,6 +16,7 @@ use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 class UsersController extends Controller
 {
     const MODEL = "App\User";
+    static protected $API_ACCESS_KEY = 'AAAA_vRurwA:APA91bGd7ayeeU2Nlb5D0T1DwRc48CzU-G_ez4SM_qIgdGv-wpQvuUhbJ3xbUFmJZOPtr_EVe_vB2z38O4CUjJPY-WcapZb-Xy_Y1rC3B-v-AFIIQsRxMPJi6pZY8jX1k1eytQSdiXiW';
 
     public function login(Request $request)
     {
@@ -133,7 +134,7 @@ class UsersController extends Controller
 
     private function addTopic($data) {
         $client = new Client();
-        $client->setApiKey(self::$API_ACCSESS_KEY);
+        $client->setApiKey(self::$API_ACCESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
         $query = \App\User::where('role','guru')->whereHas('detail', function($q) {
