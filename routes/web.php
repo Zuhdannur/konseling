@@ -100,7 +100,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('diaryPageCount', 'DiariesController@diaryCount');
 
         $router->get('shareDiary', 'DiariesController@readDiary');
-        $router->get('shareDiaryPageCount', 'DiariesController@readDiaryCount');
+        $router->get('shareDiaryCount', 'DiariesController@readDiaryCount');
             
         /**
          * Routes for resource user
