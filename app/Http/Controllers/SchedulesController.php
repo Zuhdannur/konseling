@@ -368,8 +368,8 @@ class SchedulesController extends Controller
     {
         $limit = $request->limit;
 
-        if (empty($request->pPage)) $skip = 0;
-        else $skip = $limit * $request->pPage;
+        if (empty($request->page)) $skip = 0;
+        else $skip = $limit * $request->page;
 
         $stats = $request->status;
         $upcoming = $request->upcoming;
@@ -411,8 +411,8 @@ class SchedulesController extends Controller
     {
         $limit = $request->limit;
 
-        if (empty($request->pPage)) $skip = 0;
-        else $skip = $limit * $request->pPage;
+        if (empty($request->page)) $skip = 0;
+        else $skip = $limit * $request->page;
 
         $stat = $request->status;
         $upcoming = $request->upcoming;
@@ -446,8 +446,8 @@ class SchedulesController extends Controller
     {
         $limit = $request->limit;
 
-        if (empty($request->pPage)) $skip = 0;
-        else $skip = $limit * $request->pPage;
+        if (empty($request->page)) $skip = 0;
+        else $skip = $limit * $request->page;
 
         if (Auth::user()->role == "siswa" && $id == '') {
             $data = \App\Schedule::where('requester_id', Auth::user()->id);
@@ -503,8 +503,8 @@ class SchedulesController extends Controller
     {
         $limit = $request->limit;
 
-        if (empty($request->pPage)) $skip = 0;
-        else $skip = $limit * $request->pPage;
+        if (empty($request->page)) $skip = 0;
+        else $skip = $limit * $request->page;
 
         if (Auth::user()->role == "siswa" && $id == '') {
             $data = "";
@@ -555,8 +555,8 @@ class SchedulesController extends Controller
     {
         $limit = $request->limit;
 
-        if (empty($request->pPage)) $skip = 0;
-        else $skip = $limit * $request->pPage;
+        if (empty($request->page)) $skip = 0;
+        else $skip = $limit * $request->page;
 
         $data = "";
         if (!empty($request->only)) {
@@ -583,8 +583,8 @@ class SchedulesController extends Controller
     {
         $limit = $request->limit;
 
-        if (empty($request->pPage)) $skip = 0;
-        else $skip = $limit * $request->pPage;
+        if (empty($request->page)) $skip = 0;
+        else $skip = $limit * $request->page;
 
         $data = "";
         if (!empty($request->only)) {

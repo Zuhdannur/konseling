@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
-class UsersController extends Controller {
-
+class UsersController extends Controller
+{
     const MODEL = "App\User";
 
     public function login(Request $request)
@@ -138,7 +138,7 @@ class UsersController extends Controller {
     public function all()
     {
         // $data = \App\User::with('detail', 'kelas', 'sekolah')->get();
-        $data = \App\User::with('detail', 'detail.sekolah', 'detail.kelas')->get();
+        $data = \App\User::with('detail')->get();
         return Response::json($data, 200);
     }
     
@@ -202,6 +202,4 @@ class UsersController extends Controller {
             ], 201);
         }
     }
-
-
 }

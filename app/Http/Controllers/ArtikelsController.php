@@ -38,11 +38,11 @@ class ArtikelsController extends Controller
     {
         $limit = $request->limit;
 
-        if ($request->pPage == "") {
+        if ($request->page == "") {
             $skip = 0;
         }
         else {
-            $skip = $limit * $request->pPage;
+            $skip = $limit * $request->page;
         }
 
 //        $data = \App\Artikel::where('LOWER(`title`)','LIKE','%'.strtolower($request->title).'%')->get();
@@ -65,11 +65,11 @@ class ArtikelsController extends Controller
     {
         $limit = $request->limit;
 
-        if ($request->pPage == "") {
+        if ($request->page == "") {
             $skip = 0;
         }
         else {
-            $skip = $limit * $request->pPage;
+            $skip = $limit * $request->page;
         }
 
 //        $data = \App\Artikel::where('LOWER(`title`)','LIKE','%'.strtolower($request->title).'%')->get();
@@ -113,11 +113,11 @@ class ArtikelsController extends Controller
     {
         $limit = $request->limit;
 
-        if ($request->pPage == "") {
+        if ($request->page == "") {
             $skip = 0;
         }
         else {
-            $skip = $limit * $request->pPage;
+            $skip = $limit * $request->page;
         }
 
         $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel');
@@ -140,11 +140,11 @@ class ArtikelsController extends Controller
     {
         $limit = $request->limit;
 
-        if ($request->pPage == "") {
+        if ($request->page == "") {
             $skip = 0;
         }
         else {
-            $skip = $limit * $request->pPage;
+            $skip = $limit * $request->page;
         }
         $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel');
 

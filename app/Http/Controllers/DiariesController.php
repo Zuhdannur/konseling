@@ -8,7 +8,6 @@ use App\Helpers;
 
 class DiariesController extends Controller
 {
-
     public function add(Request $request)
     {
         $insert = new \App\Diary;
@@ -28,14 +27,14 @@ class DiariesController extends Controller
     public function remove($id)
     {
         $data = \App\Diary::where('id', $id)->where('id_user', Auth::user()->id)->delete();
-        if($data) {
+        if ($data) {
             return \Illuminate\Support\Facades\Response::json([
                 "message" => "success",
-            ],200);
+            ], 200);
         } else {
             return \Illuminate\Support\Facades\Response::json([
                 "message" => 'failed'
-            ],201);
+            ], 201);
         }
     }
 
@@ -43,13 +42,12 @@ class DiariesController extends Controller
     {
         $limit = $request->limit;
 
-        if ($request->pPage == "") {
+        if ($request->page == "") {
             $skip = 0;
+        } else {
+            $skip = $limit * $request->page;
         }
-        else {
-            $skip = $limit * $request->pPage;
-        }
-        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc');
+        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
 
         $data = $datas
         ->skip($skip)
@@ -57,21 +55,21 @@ class DiariesController extends Controller
         ->get();
 
         return \Illuminate\Support\Facades\Response::json(
-            $data
-        , 200);
+            $data,
+            200
+        );
     }
 
     public function diaryCount(Request $request)
     {
         $limit = $request->limit;
 
-        if ($request->pPage == "") {
+        if ($request->page == "") {
             $skip = 0;
+        } else {
+            $skip = $limit * $request->page;
         }
-        else {
-            $skip = $limit * $request->pPage;
-        }
-        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at','desc');
+        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
 
         $count = $datas
         ->paginate($limit)
@@ -79,7 +77,38 @@ class DiariesController extends Controller
 
         return \Illuminate\Support\Facades\Response::json([
             "total_page" => $count
-        ],200);
+        ], 200);
+    }
+
+    public function readDiary(Request $request)
+    {
+        $limit = $request->limit;
+
+        if ($request->page == "") {
+            $skip = 0;
+        } else {
+            $skip = $limit * $request->page;
+        }
+
+        $mySchool = \App\User::with('detail')->where('id', Auth::user()->id)->first()->detail;
+        $diaries = \App\Diary::whereHas('user', function ($q) use ($mySchool) {
+            $q->whereHas('detail', function ($query) use ($mySchool) {
+                $query->where('school', $mySchool->school_name);
+            });
+        })->with('user')->orderBy('id', 'desc');
+
+        $data = $diaries
+        ->skip($skip)
+        ->take($limit)
+        ->get();
+
+        $count = $diaries
+        ->paginate($limit)
+        ->lastPage();
+
+        return \Illuminate\Support\Facades\Response::json([
+            "data" => $data
+        ], 200);
     }
 
     public function put(Request $request)
@@ -92,14 +121,14 @@ class DiariesController extends Controller
             'updated_at' => $request->updated_at
         ]);
 
-        if($update) {
+        if ($update) {
             return \Illuminate\Support\Facades\Response::json([
                 "message" => 'diary updated'
-            ],200);
+            ], 200);
         } else {
             return \Illuminate\Support\Facades\Response::json([
                 "message" => 'failed to update'
-            ],201);
+            ], 201);
         }
         return $request;
     }
@@ -108,19 +137,18 @@ class DiariesController extends Controller
     {
         $limit = $request->limit;
 
-        if ($request->pPage == "") {
+        if ($request->page == "") {
             $skip = 0;
-        }
-        else {
-            $skip = $limit * $request->pPage;
+        } else {
+            $skip = $limit * $request->page;
         }
 
-        $mySchool = \App\User::with('detail')->where('id',Auth::user()->id)->first()->detail;
-        $diaries = \App\Diary::whereHas('user',function ($q) use ($mySchool){
-            $q->whereHas('detail',function ($query) use ($mySchool){
-                $query->where('school',$mySchool->school);
+        $mySchool = \App\User::with('detail')->where('id', Auth::user()->id)->first()->detail;
+        $diaries = \App\Diary::whereHas('user', function ($q) use ($mySchool) {
+            $q->whereHas('detail', function ($query) use ($mySchool) {
+                $query->where('school', $mySchool->school);
             });
-        })->with('user')->orderBy('id','desc');
+        })->with('user')->orderBy('id', 'desc');
 
         $data = $diaries
         ->skip($skip)
@@ -140,17 +168,16 @@ class DiariesController extends Controller
     {
         $limit = $request->limit;
 
-        if ($request->pPage == "") {
+        if ($request->page == "") {
             $skip = 0;
-        }
-        else {
-            $skip = $limit * $request->pPage;
+        } else {
+            $skip = $limit * $request->page;
         }
 
-        $mySchool = \App\User::with('detail')->where('id',Auth::user()->id)->first()->detail;
-        $diaries = \App\Diary::whereHas('user',function ($q) use ($mySchool){
-            $q->whereHas('detail',function ($query) use ($mySchool){
-                $query->where('school',$mySchool->school);
+        $mySchool = \App\User::with('detail')->where('id', Auth::user()->id)->first()->detail;
+        $diaries = \App\Diary::whereHas('user', function ($q) use ($mySchool) {
+            $q->whereHas('detail', function ($query) use ($mySchool) {
+                $query->where('school', $mySchool->school);
             });
         })->with('user');
 
@@ -162,5 +189,4 @@ class DiariesController extends Controller
             "total_page" => $count
         ], 200);
     }
-
 }
