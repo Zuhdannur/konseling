@@ -50,6 +50,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
 
     //For Develpment Purposes
     $router->get('user', 'UsersController@all');
+    $router->get('user/{id}', 'UsersController@get');
 
     $router->group(['middleware' => 'auth'], function () use ($router) {
         
@@ -109,7 +110,6 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
          * Routes for resource user
          */
         // $router->get('user/{id}', 'UsersController@get');
-        $router->get('user/{id}', 'UsersController@get');
         $router->put('user', 'UsersController@put');
         $router->delete('user/{id}', 'UsersController@remove');
             
