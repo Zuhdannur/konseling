@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use sngrl\PhpFirebaseCloudMessaging\Client;
+use sngrl\PhpFirebaseCloudMessaging\Message;
+use sngrl\PhpFirebaseCloudMessaging\Notification;
+use sngrl\PhpFirebaseCloudMessaging\Recipient\Device;
+use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 
 class UsersController extends Controller
 {
