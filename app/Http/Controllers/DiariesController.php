@@ -106,7 +106,6 @@ class DiariesController extends Controller
         else $skip = $limit * $request->page;
        
         $mySchool = \App\User::with('detail')->where('id', Auth::user()->id)->first();
-        dd($mySchool);
 
         $diaries = \App\Diary::whereHas('user', function ($q) use ($mySchool){
             $q->whereHas('detail',function ($query) use ($mySchool){
@@ -119,7 +118,7 @@ class DiariesController extends Controller
         ->lastPage();
 
         return \Illuminate\Support\Facades\Response::json([
-            "total_page" => $count
+            "total_page" => $mySchool
         ], 200);
     }
 
