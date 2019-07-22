@@ -145,31 +145,44 @@ class UsersController extends Controller
         $update = \App\User::find(Auth::user()->id)->update([
             'name' => $request->name
         ]);
-        
-        $kelasId = \App\Kelas::where('nama_kelas', $request->nama_kelas)->first()->id;
-        
-        if ($update && $kelasId) {
-            $update_detail = \App\DetailUser::where('id_user', Auth::user()->id)->update([
-                'address' => $request->address,
-                'phone_number' => $request->phone_number,
-                'id_kelas' => $kelasId,
-                'gender' => $request->gender
-            ]);
 
-            if ($update_detail) {
-                return Response::json([
-                    "message" => 'profile Updated'
-                ], 200);
+        if(Auth::user()->role == 'siswa') {
+            $kelasId = \App\Kelas::where('nama_kelas', $request->nama_kelas)->first()->id;
+            if ($update && $kelasId) {
+                $update_detail = \App\DetailUser::where('id_user', Auth::user()->id)->update([
+                    'address' => $request->address,
+                    'phone_number' => $request->phone_number,
+                    'id_kelas' => $kelasId,
+                    'gender' => $request->gender
+                ]);
+
+                if ($update_detail) {
+                    return Response::json([
+                        "message" => 'profile Updated'
+                    ], 200);
+                } else {
+                    return Response::json([
+                        "message" => 'failed to Updated'
+                    ], 201);
+                }
             } else {
                 return Response::json([
-                    "message" => 'failed to Updated'
+                    "message" => 'nama siswa atau nama kelas tidak ditemukan'
                 ], 201);
             }
         } else {
-            return Response::json([
-                "message" => 'nama siswa atau nama kelas tidak ditemukan'
-            ], 201);
+            //Nama, Jenkel, Alamat, No HP
+            $update = \App\DetailUser::where('id_user', Auth::user()->id)->update([
+                'gender' => $request->gender,
+                'address' => $request->address,
+                'phone_number' => $request->phone_number
+            ]);
+
+            if($update) return Response::json(["message" => 'Profil berhasil disunting.'], 200);
+            else return Response::json(['message' => 'Gagal menyunting profil.']);
         }
+        
+        
         return $request;
     }
 
