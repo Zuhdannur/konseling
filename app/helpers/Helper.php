@@ -10,7 +10,7 @@ use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 
 class Helper
 {
-    static protected $API_ACCSESS_KEY = 'AAAA_vRurwA:APA91bGd7ayeeU2Nlb5D0T1DwRc48CzU-G_ez4SM_qIgdGv-wpQvuUhbJ3xbUFmJZOPtr_EVe_vB2z38O4CUjJPY-WcapZb-Xy_Y1rC3B-v-AFIIQsRxMPJi6pZY8jX1k1eytQSdiXiW';
+    static protected $API_ACCESS_KEY = 'AAAA_vRurwA:APA91bGd7ayeeU2Nlb5D0T1DwRc48CzU-G_ez4SM_qIgdGv-wpQvuUhbJ3xbUFmJZOPtr_EVe_vB2z38O4CUjJPY-WcapZb-Xy_Y1rC3B-v-AFIIQsRxMPJi6pZY8jX1k1eytQSdiXiW';
 
     public function sendMessage($message, $notification_type, $receiver)
     {
@@ -68,7 +68,7 @@ class Helper
 
         $client = new Client();
         $client->setApiKey(self::$API_ACCESS_KEY);
-        
+
         $message = new Message();
         $message->setPriority('high');
         $pattern = "guru".Auth::user()->detail->id_sekolah;
