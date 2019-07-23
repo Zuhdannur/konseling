@@ -393,8 +393,7 @@ class SchedulesController extends Controller
                 return \Illuminate\Support\Facades\Response::json(["message" => "failed"], 201);
             }
         } else {
-            $schedule = \App\Schedule::where('id', $id)->where('requester_id', Auth::user()->id)->first();
-            dd($schedule);
+            $schedule = \App\Schedule::where('id', $id)->where('requester_id', $request->$requester_id)->first();
             if($schedule) {
                 if($request->has('status')) {
                     $schedule = $schedule->where('status', $request->status);
