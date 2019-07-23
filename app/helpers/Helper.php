@@ -93,7 +93,7 @@ class Helper
         $message = new Message();
         $message->setPriority('medium');
         $message->addRecipient(new Device($firebase_token));
-        $message->setNotification(new Notification("Pengajuanmu telah diterima", $data->body));
+        $message->setNotification(new Notification("Pengajuanmu telah diterima", "Nice"));
 
         $response = $client->send($message);
         return \response()->json($response);
