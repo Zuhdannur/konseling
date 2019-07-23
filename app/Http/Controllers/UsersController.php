@@ -136,7 +136,7 @@ class UsersController extends Controller
         // $query = \App\User::where('role','guru')->whereHas('detail', function($q) {
         //     $q->with('sekolah')->where('id_sekolah', Auth::user()->detail->id_sekolah);
         // })->get();
-        $query = \App\User::where('role','guru')->with('detail', 'detail.sekolah', function ($q){
+        $query = \App\User::where('role','guru')->with('detail', function ($q){
             $q->where('id_sekolah', Auth::user()->detail->id_sekolah);
         })->get();
         return Response::json($query, 200);
