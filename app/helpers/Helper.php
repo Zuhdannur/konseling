@@ -76,7 +76,7 @@ class Helper
 
 //        $message->addRecipient(new Device("cQlOvwQ3lu4:APA91bHZiKXMaRYNmsSEx6LojxNrAUzJPKp1LsRJMUaIfxsZ3hu59P8CWhoZWaSz-fnCmETuP34o87whE9NnhFkPGZBnyLt4s8MDT4pk_mrMhdzli95gsjJ3v-_jIyR04Zw2S6KFu4Tm"));
         $message->addRecipient(new Topic($pattern));
-        $message->setNotification(new Notification('Pengajuan baru dari '.Auth::user()->name, $desc));
+        $message->setNotification(new Notification('Kamu mendapatkan pengajuan baru', "Pengajuan dari siswa bernama ".Auth::user()->name));
 
         $response = $client->send($message);
         return \response()->json($response);
