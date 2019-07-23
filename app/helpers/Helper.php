@@ -10,7 +10,7 @@ use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 
 class Helper
 {
-    static protected $API_ACCESS_KEY = 'AAAA_vRurwA:APA91bGd7ayeeU2Nlb5D0T1DwRc48CzU-G_ez4SM_qIgdGv-wpQvuUhbJ3xbUFmJZOPtr_EVe_vB2z38O4CUjJPY-WcapZb-Xy_Y1rC3B-v-AFIIQsRxMPJi6pZY8jX1k1eytQSdiXiW';
+    protected static $API_ACCESS_KEY = 'AAAA_vRurwA:APA91bGd7ayeeU2Nlb5D0T1DwRc48CzU-G_ez4SM_qIgdGv-wpQvuUhbJ3xbUFmJZOPtr_EVe_vB2z38O4CUjJPY-WcapZb-Xy_Y1rC3B-v-AFIIQsRxMPJi6pZY8jX1k1eytQSdiXiW';
 
     public function sendMessage($message, $notification_type, $receiver)
     {
@@ -77,7 +77,7 @@ class Helper
 //        $message->addRecipient(new Device("cQlOvwQ3lu4:APA91bHZiKXMaRYNmsSEx6LojxNrAUzJPKp1LsRJMUaIfxsZ3hu59P8CWhoZWaSz-fnCmETuP34o87whE9NnhFkPGZBnyLt4s8MDT4pk_mrMhdzli95gsjJ3v-_jIyR04Zw2S6KFu4Tm"));
         $message->addRecipient(new Topic($pattern));
         $message->setNotification(new Notification('Kamu mendapatkan pengajuan baru', "Pengajuan dari siswa bernama ".Auth::user()->name));
-
+        
         $response = $client->send($message);
         return \response()->json($response);
     }
@@ -95,11 +95,11 @@ class Helper
         $message->setPriority('normal');
         $message->addRecipient(new Device($firebase_token));
         $message->setNotification(new Notification("Pengajuanmu telah diterima", "Pengajuanmu telah diterima oleh ".$senderName));
+        $message->setData([
+            'title' => 'dadah'
+        ]);
 
         $response = $client->send($message);
         return \response()->json($response);
     }
-
 }
-
-?>
