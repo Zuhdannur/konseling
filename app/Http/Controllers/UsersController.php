@@ -123,9 +123,9 @@ class UsersController extends Controller
     public function get($id)
     {
         if (Auth::user()->role == 'siswa') {
-            $data = \App\User::where('id', $id)->with('detail', 'detail.kelas', 'detail.sekolah')->first();
+            $data = \App\User::where('api_token', $id)->with('detail', 'detail.kelas', 'detail.sekolah')->first();
         } else {
-            $data = \App\User::where('id', $id)->with('detail', 'detail.sekolah')->first();
+            $data = \App\User::where('api_token', $id)->with('detail', 'detail.sekolah')->first();
             $this->addTopic($data);
         }
         
