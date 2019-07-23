@@ -122,26 +122,14 @@ class UsersController extends Controller
 
     public function get($id)
     {
-        // if (Auth::user()->role == 'siswa') {
-        //     $data = \App\User::where('id', $id)->with('detail', 'detail.kelas', 'detail.sekolah')->first();
-        // } else {
-        //     $data = \App\User::where('id', $id)->with('detail', 'detail.sekolah')->first();
-        //     // $this->addTopic($data);
-        // }
-
-        $client = new Client();
-        $client->setApiKey(self::$API_ACCESS_KEY);
-        $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
-
-        $query = \App\User::where('role','guru')->withAndWhereHas('detail', function($query) {
-            $query->where('id_sekolah', Auth::user()->detail->id_sekolah);
-        })->get();
-
-        foreach ($query as $value){
-            dd($value['detail']['id_sekolah']);
-            // $client->addTopicSubscription($value->detail->id_sekolah, $value['firebase_token']);
+        if (Auth::user()->role == 'siswa') {
+            $data = \App\User::where('id', $id)->with('detail', 'detail.kelas', 'detail.sekolah')->first();
+        } else {
+            $data = \App\User::where('id', $id)->with('detail', 'detail.sekolah')->first();
+            $this->addTopic($data);
         }
-        return Response::json($query, 200);
+        
+        return Response::json($data, 200);
     }
 
     private function addTopic($data) {
@@ -153,34 +141,11 @@ class UsersController extends Controller
             $query->where('id_sekolah', Auth::user()->detail->id_sekolah);
         })->get();
 
+        $pattern = "guru_";
+
         foreach ($query as $value){
-            dd($value['detail']['id_sekolah']);
-            // $client->addTopicSubscription($value->detail->id_sekolah, $value['firebase_token']);
+            $client->addTopicSubscription($pattern.$value['detail']['id_sekolah'], $value['firebase_token']);
         }
-
-
-        // $client = new Client();
-        // $client->setApiKey(self::$API_ACCSESS_KEY);
-        // $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
-
-        // $query = \App\User::where(function ($query) {
-        //     $query->where('role',"guru");
-        //     $query->whereHas('detail', function ($q){
-        //         $q->where('id_sekolah', Auth::user()->detail->id_sekolah);
-        //     });
-        // })->get();
-
-        // $getSchoolId = \App\School::where('school_name',Auth::user()->detail->school)->first()->id;
-        // // $users = [];
-        // $pattern = "guru_". Auth::user()->detail->id_sekolah;
-        // $client->addTopicSubscription($pattern, $value['firebase_token']);
-        // foreach ($query as $value){
-        //     $pattern = "guru_". $id;
-        //     $client->addTopicSubscription($getSchoolId, $value['firebase_token']);
-        // }
-        return Response::json([
-            "data" => $query
-        ], 200);
     }
     
     public function all()
