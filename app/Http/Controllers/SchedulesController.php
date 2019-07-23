@@ -272,7 +272,7 @@ class SchedulesController extends Controller
         }
 
         if ($insert) {
-            Helper::sendNotificationTopic($request->$desc);
+            Helper::sendNotificationTopic($request->desc);
             return \Illuminate\Support\Facades\Response::json([
                 "message" => 'success create schedule'
             ], 200);
