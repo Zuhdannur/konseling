@@ -72,6 +72,16 @@ class SchedulesController extends Controller
                     $sql->where('id_sekolah', $user->detail->id_sekolah);
                 });
             });
+
+            foreach ($query->get() as $key => $row) {
+                if ($row->type_schedule != "daring") {
+                    if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+                        $row->update([
+                            'exp'=> 1
+                        ]);
+                    }
+                }
+            }
             if($filters->has('type_schedule')) {
                 $query->where('type_schedule', $filters->type_schedule);
             }
