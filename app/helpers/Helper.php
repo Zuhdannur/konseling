@@ -82,18 +82,19 @@ class Helper
         return \response()->json($response);
     }
 
-    public static function sendNotificationToSingle($id)
+    public static function sendNotificationToSingle($result)
     {
         $client = new Client();
         $client->setApiKey(self::$API_ACCESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
-        $firebase_token = \App\User::where('id', $id)->first()->firebase_token;
+        $firebase_token = \App\User::where('id', $result['requester_id'])->first()->firebase_token;
+        $senderName = \App\User::where('id', $result['consultant_id'])->first()->name;
 
         $message = new Message();
         $message->setPriority('normal');
         $message->addRecipient(new Device($firebase_token));
-        $message->setNotification(new Notification("Pengajuanmu telah diterima", "Nice"));
+        $message->setNotification(new Notification("Pengajuanmu telah diterima", "Pengajuanmu telah diterima oleh ".$senderName));
 
         $response = $client->send($message);
         return \response()->json($response);

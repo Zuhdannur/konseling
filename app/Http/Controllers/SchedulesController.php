@@ -150,12 +150,10 @@ class SchedulesController extends Controller
                 if ($update) {
                     $schedule = \App\Schedule::where('id', $request->schedule_id)->first();
 
-                    $id = $schedule['requester_id'];
-
                     $result['requester_id'] = $schedule['requester_id'];
-                    $result["title"] = $schedule['title'];
-                    $result['desc'] = $schedule['desc'];
-                    Helper::sendNotificationToSingle($id);
+                    $result['consultant_id'] = $schedule['consultant_id'];
+
+                    Helper::sendNotificationToSingle($result);
 
                     return Response::json($result, 200);
                 } else {
