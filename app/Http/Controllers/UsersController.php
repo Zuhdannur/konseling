@@ -133,9 +133,10 @@ class UsersController extends Controller
         $client->setApiKey(self::$API_ACCESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
-        $query = \App\User::where('role','guru')->whereHas('detail', function($q) {
-            $q->with('sekolah')->where('id_sekolah', Auth::user()->detail->id_sekolah);
-        })->get();
+        // $query = \App\User::where('role','guru')->whereHas('detail', function($q) {
+        //     $q->with('sekolah')->where('id_sekolah', Auth::user()->detail->id_sekolah);
+        // })->get();
+        $query = \App\User::with('detail', 'detail.sekolah')->where('role','guru')->where('id_sekolah', Auth::user()->detail->id_sekolah)->get();
         return Response::json($query, 200);
     }
 
@@ -144,9 +145,7 @@ class UsersController extends Controller
         $client->setApiKey(self::$API_ACCESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
-        $query = \App\User::where('role','guru')->whereHas('detail', function($q) {
-            $q->with('sekolah')->where('id_sekolah', Auth::user()->detail->id_sekolah);
-        })->get();
+        $query = \App\User::with('detail', 'detail.sekolah')->where('role','guru')->where('id_sekolah', Auth::user()->detail->id_sekolah)->get();
 
         // $query = \App\User::where(function ($query){
         //     $query->where('role',"guru");
