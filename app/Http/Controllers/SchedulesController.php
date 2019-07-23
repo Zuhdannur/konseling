@@ -164,7 +164,7 @@ class SchedulesController extends Controller
             } else {
                 return Response::json([
                     "message" => "Pengajuan telah kadaluarsa."
-                ],200);
+                ],201);
             }
         } else {
             return Response::json(["message" => "Pengajuan tidak ditemukan"], 201);
