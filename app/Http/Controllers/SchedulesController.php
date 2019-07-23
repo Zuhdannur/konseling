@@ -381,7 +381,7 @@ class SchedulesController extends Controller
         return false;
     }
 
-    public function remove($id, Request $request)
+    public function remove($id)
     {
         if (Auth::user()->role == 'siswa') {
             $delete = \App\Schedule::where('id', $id)
@@ -392,22 +392,23 @@ class SchedulesController extends Controller
             } else {
                 return \Illuminate\Support\Facades\Response::json(["message" => "failed"], 201);
             }
-        } else {
-            dd($request->$requester_id);
-            $schedule = \App\Schedule::where('id', $id)->where('requester_id', $request->$requester_id)->first();
-            if($schedule) {
-                if($request->has('status')) {
-                    $schedule = $schedule->where('status', $request->status);
-                }
+        }
+    }
 
-                if($schedule->delete()) {
-                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
-                } else {
-                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
-                }
-            } else {
-                return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan telah dibatalkan oleh siswa."], 201);
+    public function removeByGuru($id, $requester_id) {
+        $schedule = \App\Schedule::where('id', $id)->where('requester_id', $requester_id)->first();
+        if($schedule) {
+            if($request->has('status')) {
+                $schedule = $schedule->where('status', $request->status);
             }
+
+            if($schedule->delete()) {
+                 return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
+            } else {
+                return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
+            }
+        } else {
+            return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan telah dibatalkan oleh siswa."], 201);
         }
     }
 

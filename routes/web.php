@@ -92,6 +92,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('scheduleReceive', 'SchedulesController@receive');
         $router->get('scheduleReceiveCount', 'SchedulesController@receiveCount');
         $router->post('scheduleAccept', 'SchedulesController@accept');
+        $router->delete('schedule/{id}/{requester_id}', 'SchedulesController@removeByGuru');
 
         /**
          * Routes for resource diary
