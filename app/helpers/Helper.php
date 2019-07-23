@@ -56,15 +56,15 @@ class Helper
         // $query = \App\User::where(function ($query){
         //     $query->where('role',"guru");
         //     $query->whereHas('detail',function ($q){
-        //         $q->where('school',Auth::user()->detail->school);
+        //         $q->where('Sekolah',Auth::user()->detail->Sekolah);
         //     });
         // })->get();
-        // $getSchoolId = \App\School::where('school_name',Auth::user()->detail->school)->first()->id;
+        // $getSekolahId = \App\Sekolah::where('nama_sekolah',Auth::user()->detail->Sekolah)->first()->id;
         // $users =[];
         // foreach ($query as $value){
         //     $users[] = $value['firebase_token'];
         // }
-        // $client->addTopicSubscription($getSchoolId, $users);
+        // $client->addTopicSubscription($getSekolahId, $users);
 
         $client = new Client();
         $client->setApiKey(self::$API_ACCESS_KEY);

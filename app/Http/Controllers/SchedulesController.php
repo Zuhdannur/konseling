@@ -508,7 +508,7 @@ class SchedulesController extends Controller
 
             $query->whereHas('request', function ($q) use ($user) {
                 $q->whereHas('detail', function ($sql) use ($user) {
-                    $sql->where('school', $user->detail->school);
+                    $sql->where('Sekolah', $user->detail->Sekolah);
                 });
             });
             $query->where('type_schedule', $id);
@@ -551,7 +551,7 @@ class SchedulesController extends Controller
 
             $query->whereHas('request', function ($q) use ($user) {
                 $q->whereHas('detail', function ($sql) use ($user) {
-                    $sql->where('school', $user->detail->school);
+                    $sql->where('Sekolah', $user->detail->Sekolah);
                 });
             });
             $query->where('type_schedule', $id);
@@ -599,7 +599,7 @@ class SchedulesController extends Controller
 
                 $query->whereHas('request', function ($q) use ($user) {
                     $q->whereHas('detail', function ($sql) use ($user) {
-                        $sql->where('school', $user->detail->school);
+                        $sql->where('Sekolah', $user->detail->Sekolah);
                     });
                 });
                 $query->where('type_schedule', $id);
@@ -656,7 +656,7 @@ class SchedulesController extends Controller
             $schedule = \App\Schedule::where(function ($query) use ($user, $id) {
                 $query->whereHas('request', function ($q) use ($user) {
                     $q->whereHas('detail', function ($sql) use ($user) {
-                        $sql->where('school', $user->detail->school);
+                        $sql->where('Sekolah', $user->detail->Sekolah);
                     });
                 });
                 $query->where('type_schedule', $id);
@@ -670,7 +670,7 @@ class SchedulesController extends Controller
         }
     }
 
-    private function getSchoolName($id)
+    private function getSekolahName($id)
     {
         $data = \App\User::where('id', $id)->with('detail')->first();
         return $data;

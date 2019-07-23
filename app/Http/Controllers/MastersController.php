@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Validator;
 
 class MastersController extends Controller
 {
-    public function getListSchool()
+    public function getListSekolah()
     {
-        $data = \App\School::all();
+        $data = \App\Sekolah::all();
         return Response::json([
             "message" => "success",
             "result" => $data
@@ -17,22 +17,22 @@ class MastersController extends Controller
 
     // public function getListClass($id)
     // {
-    //     $data = \App\Kelas::where('id_school', $id)->get();
+    //     $data = \App\Kelas::where('id_Sekolah', $id)->get();
     //     return Response::json([
     //         "message" => 'success',
     //         "result" => $data
     //     ], 200);
     // }
 
-    public function storeSchool(Request $request)
+    public function storeSekolah(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'school_name' => 'required',
+            'nama_sekolah' => 'required',
             'address' => 'required'
         ]);
         if ($validator) {
-            $insert = new \App\School;
-            $insert->school_name = $request->school_name;
+            $insert = new \App\Sekolah;
+            $insert->nama_sekolah = $request->nama_sekolah;
             $insert->address = $request->address;
             $insert->save();
             if ($insert) {
@@ -51,9 +51,9 @@ class MastersController extends Controller
         }
     }
 
-    public function destroySchool($id)
+    public function destroySekolah($id)
     {
-        $delete = \App\School::find($id)->delete();
+        $delete = \App\Sekolah::find($id)->delete();
         if ($delete) {
             return Response::json([
                 "message" => 'success'

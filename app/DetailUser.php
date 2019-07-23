@@ -28,6 +28,6 @@ class DetailUser extends Model
 
     public function sekolah()
     {
-        return $this->hasOne('\App\School', 'id', 'id_sekolah');
+        return $this->hasOne('\App\Sekolah', 'id', 'id_sekolah');
     }
 }

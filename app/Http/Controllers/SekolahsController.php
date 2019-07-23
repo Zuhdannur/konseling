@@ -8,33 +8,33 @@ class SekolahsController extends Controller
 {
     public function all()
     {
-        $data = \App\School::all();
+        $data = \App\Sekolah::all();
         return Response::json($data, 200);
     }
 
     public function get($id)
     {
-        $data = \App\School::find($id)->get();
+        $data = \App\Sekolah::find($id)->get();
         return Response::json($data, 200);
     }
 
     public function add(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'school_name' => 'required',
-            'address' => 'required'
+            'nama_sekolah' => 'required',
+            'alamat' => 'required'
         ]);
 
 
         if ($validator) {
-            $insert = new \App\School;
-            // $insert->school_name = $request->school_name;
+            $insert = new \App\Sekolah;
+            // $insert->nama_sekolah = $request->nama_sekolah;
     
             // Replace apabila nama sudah ada
             $insert::updateOrCreate([
-                'school_name' => $request->school_name
+                'nama_sekolah' => $request->nama_sekolah
             ], [
-                'address' => $request->address
+                'alamat' => $request->alamat
             ]);
 
             if ($insert) {
@@ -55,9 +55,9 @@ class SekolahsController extends Controller
 
     public function put($id, Request $request)
     {
-        $update = \App\School::find($id)->update([
-            "school_name" => $request->school_name,
-            "address" => $request->address
+        $update = \App\Sekolah::find($id)->update([
+            "nama_sekolah" => $request->nama_sekolah,
+            "alamat" => $request->alamat
         ]);
         if ($update) {
             return Response::json([ "message" => "berhasil menyunting." ], 200);
@@ -68,7 +68,7 @@ class SekolahsController extends Controller
 
     public function remove($id)
     {
-        $delete = \App\School::find($id)->delete();
+        $delete = \App\Sekolah::find($id)->delete();
         if ($delete) return Response::json(["message" => 'berhasil hapus.'], 200);
         else return Response::json(["message" => 'gagal menghapus.'], 201);
     }

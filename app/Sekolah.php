@@ -2,15 +2,15 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class School extends Model
+class Sekolah extends Model
 {
     protected $fillable = [
-       'id', 'school_name','address'
+       'id', 'nama_sekolah','alamat'
     ];
 
     protected $dates = [];
 
-    protected $table = "tbl_school";
+    protected $table = "tbl_sekolah";
 
     protected $hidden = [
         'created_at','updated_at'
@@ -22,6 +22,6 @@ class School extends Model
 
     // Relationships
     // public function kelas(){
-    //     return $this->hasMany('\App\Class','id_school','id');
+    //     return $this->hasMany('\App\Class','id_Sekolah','id');
     // }
 }
