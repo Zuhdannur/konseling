@@ -91,7 +91,7 @@ class Helper
         $firebase_token = \App\User::where('id', $id)->first()->firebase_token;
 
         $message = new Message();
-        $message->setPriority('medium');
+        $message->setPriority('normal');
         $message->addRecipient(new Device($firebase_token));
         $message->setNotification(new Notification("Pengajuanmu telah diterima", "Nice"));
 
