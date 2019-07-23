@@ -394,6 +394,7 @@ class SchedulesController extends Controller
             }
         } else {
             $schedule = \App\Schedule::where('id', $id)->where('requester_id', Auth::user()->id)->first();
+            dd($schedule);
             if($schedule) {
                 if($request->has('status')) {
                     $schedule = $schedule->where('status', $request->status);
