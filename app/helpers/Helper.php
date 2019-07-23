@@ -66,6 +66,9 @@ class Helper
         // }
         // $client->addTopicSubscription($getSchoolId, $users);
 
+        $client = new Client();
+        $client->setApiKey(self::$API_ACCESS_KEY);
+        
         $message = new Message();
         $message->setPriority('high');
         $pattern = "guru".Auth::user()->detail->id_sekolah;
