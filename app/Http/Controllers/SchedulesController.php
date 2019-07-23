@@ -395,11 +395,11 @@ class SchedulesController extends Controller
         }
     }
 
-    public function removeByGuru($id, $requester_id) {
+    public function removeByGuru($id, $requester_id, $status) {
         $schedule = \App\Schedule::where('id', $id)->where('requester_id', $requester_id)->first();
         if($schedule) {
             if($request->has('status')) {
-                $schedule = $schedule->where('status', $request->status);
+                $schedule = $schedule->where('status', $status);
             }
 
             if($schedule->delete()) {
