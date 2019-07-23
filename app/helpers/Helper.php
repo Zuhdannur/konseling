@@ -85,7 +85,7 @@ class Helper
     public static function sendNotificationToSingle($id)
     {
         $client = new Client();
-        $client->setApiKey(self::$API_ACCSESS_KEY);
+        $client->setApiKey(self::$API_ACCESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
         $firebase_token = \App\User::where('id', $id)->first()->firebase_token;
