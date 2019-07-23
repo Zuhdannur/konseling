@@ -272,7 +272,7 @@ class SchedulesController extends Controller
         }
 
         if ($insert) {
-            // Helper::sendNotificationTopic($title, $desc);
+            Helper::sendNotificationTopic($title, $desc);
             return \Illuminate\Support\Facades\Response::json([
                 "message" => 'success create schedule'
             ], 200);
@@ -393,13 +393,19 @@ class SchedulesController extends Controller
                 return \Illuminate\Support\Facades\Response::json(["message" => "failed"], 201);
             }
         } else {
-            $delete = \App\Schedule::where('id', $id)
-                ->where('requester_id', Auth::user()->id)
-                ->delete();
-            if ($delete) {
-                return \Illuminate\Support\Facades\Response::json(["message" => "success"], 200);
+            $delete = \App\Schedule::where('id', $id)->where('requester_id', Auth::user()->id);
+            if($delete->exists()) {
+                if($request->has('status')) {
+                    $delete = $delete->where('status', $request->status);
+                }
+
+                if($delete->delete()) {
+                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
+                } else {
+                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
+                }
             } else {
-                return \Illuminate\Support\Facades\Response::json(["message" => "failed"], 201);
+                return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan telah dibatalkan oleh siswa."], 201);
             }
         }
     }

@@ -70,9 +70,7 @@ class Helper
         $message->setPriority('high');
 //        $message->addRecipient(new Device("cQlOvwQ3lu4:APA91bHZiKXMaRYNmsSEx6LojxNrAUzJPKp1LsRJMUaIfxsZ3hu59P8CWhoZWaSz-fnCmETuP34o87whE9NnhFkPGZBnyLt4s8MDT4pk_mrMhdzli95gsjJ3v-_jIyR04Zw2S6KFu4Tm"));
         $message->addRecipient(new Topic('global'));
-        $message
-            ->setNotification(new Notification(
-                $title, $desc));
+        $message->setNotification(new Notification($title, $desc));
 
         $response = $client->send($message);
 //        dd($response->getStatusCode());
