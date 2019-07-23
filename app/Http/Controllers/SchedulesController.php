@@ -396,10 +396,10 @@ class SchedulesController extends Controller
             $schedule = \App\Schedule::where('id', $id)->where('requester_id', Auth::user()->id)->first();
             if($schedule) {
                 if($request->has('status')) {
-                    $delete = $delete->where('status', $request->status);
+                    $schedule = $schedule->where('status', $request->status);
                 }
 
-                if($delete->delete()) {
+                if($schedule->delete()) {
                     return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
                 } else {
                     return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
