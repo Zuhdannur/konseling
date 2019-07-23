@@ -126,8 +126,14 @@ class UsersController extends Controller
             $data = \App\User::where('api_token', $id)->with('detail', 'detail.kelas', 'detail.sekolah')->first();
         } else {
             $data = \App\User::where('api_token', $id)->with('detail', 'detail.sekolah')->first();
-            $this->addTopic($data);
+            // $this->addTopic($data);
         }
+        $query = \App\User::where('role','guru')->whereHas('detail', function($q) {
+            $q->where('id_sekolah', Auth::user()->detail->id_sekolah);
+        })->get();
+        return Response::json([
+            "data" => $query
+        ], 200);
         // $data['avatar'] = $data->avatar;
         // return Response::json($data, 200);
     }
