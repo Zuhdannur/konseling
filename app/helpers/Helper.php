@@ -68,6 +68,7 @@ class Helper
 
         $client = new Client();
         $client->setApiKey(self::$API_ACCESS_KEY);
+        $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
         $message = new Message();
         $message->setPriority('high');
