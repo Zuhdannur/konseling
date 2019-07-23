@@ -133,16 +133,14 @@ class UsersController extends Controller
         $client->setApiKey(self::$API_ACCESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
-        // $query = \App\User::where('role','guru')->whereHas('detail', function($q) {
-        //     $q->with('sekolah')->where('id_sekolah', Auth::user()->detail->id_sekolah);
-        // })->get();
-        // $query = \App\User::where('role','guru')->whereHas('detail', function ($q){
-        //     $q->with('detail');
-        //     $q->where('id_sekolah', 1);
-        // })->get();
         $query = \App\User::where('role','guru')->withAndWhereHas('detail', function($query) {
             $query->where('id_sekolah', Auth::user()->detail->id_sekolah);
         })->get();
+
+        foreach ($query as $value){
+            dd($value['detail']['id_sekolah']);
+            // $client->addTopicSubscription($value->detail->id_sekolah, $value['firebase_token']);
+        }
         return Response::json($query, 200);
     }
 
@@ -151,18 +149,14 @@ class UsersController extends Controller
         $client->setApiKey(self::$API_ACCESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
-        $query = \App\User::with('detail', 'detail.sekolah')->where('role','guru')->where('id_sekolah', Auth::user()->detail->id_sekolah)->get();
+        $query = \App\User::where('role','guru')->withAndWhereHas('detail', function($query) {
+            $query->where('id_sekolah', Auth::user()->detail->id_sekolah);
+        })->get();
 
-        // $query = \App\User::where(function ($query){
-        //     $query->where('role',"guru");
-        //     $query->whereHas('detail',function ($q){
-        //         $q->where('id_sekolah', Auth::user()->detail->id_sekolah);
-        //     });
-        // })->get();
-        // foreach ($query as $value){
-        //     dd($value->detail->id_sekolah);
-        //     // $client->addTopicSubscription($value->detail->id_sekolah, $value['firebase_token']);
-        // }
+        foreach ($query as $value){
+            dd($value['detail']['id_sekolah']);
+            // $client->addTopicSubscription($value->detail->id_sekolah, $value['firebase_token']);
+        }
 
 
         // $client = new Client();
