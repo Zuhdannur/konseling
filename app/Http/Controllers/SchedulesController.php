@@ -397,10 +397,8 @@ class SchedulesController extends Controller
     }
 
     public function removeByGuru($id, $requester_id, $status) {
-        $schedule = \App\Schedule::where('id', $id)->where('requester_id', $requester_id)->first();
+        $schedule = \App\Schedule::where('id', $id)->where('requester_id', $requester_id)->where('status', 1)->first();
         if($schedule) {
-            $schedule = $schedule->where('status', $status);
-
             if($schedule->delete()) {
                  return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
             } else {
