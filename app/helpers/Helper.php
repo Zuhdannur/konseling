@@ -49,31 +49,32 @@ class Helper
 //        curl_close( $crul );
 //        return response($result,200);
 
-        $client = new Client();
-        $client->setApiKey(self::$API_ACCSESS_KEY);
-        $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
+        // $client = new Client();
+        // $client->setApiKey(self::$API_ACCSESS_KEY);
+        // $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
-        $query = \App\User::where(function ($query){
-            $query->where('role',"guru");
-            $query->whereHas('detail',function ($q){
-                $q->where('school',Auth::user()->detail->school);
-            });
-        })->get();
-        $getSchoolId = \App\School::where('school_name',Auth::user()->detail->school)->first()->id;
-        $users =[];
-        foreach ($query as $value){
-            $users[] = $value['firebase_token'];
-        }
-        $client->addTopicSubscription($getSchoolId, $users);
+        // $query = \App\User::where(function ($query){
+        //     $query->where('role',"guru");
+        //     $query->whereHas('detail',function ($q){
+        //         $q->where('school',Auth::user()->detail->school);
+        //     });
+        // })->get();
+        // $getSchoolId = \App\School::where('school_name',Auth::user()->detail->school)->first()->id;
+        // $users =[];
+        // foreach ($query as $value){
+        //     $users[] = $value['firebase_token'];
+        // }
+        // $client->addTopicSubscription($getSchoolId, $users);
 
         $message = new Message();
         $message->setPriority('high');
+        $pattern = "guru".Auth::user()->detail->id_sekolah;
+
 //        $message->addRecipient(new Device("cQlOvwQ3lu4:APA91bHZiKXMaRYNmsSEx6LojxNrAUzJPKp1LsRJMUaIfxsZ3hu59P8CWhoZWaSz-fnCmETuP34o87whE9NnhFkPGZBnyLt4s8MDT4pk_mrMhdzli95gsjJ3v-_jIyR04Zw2S6KFu4Tm"));
-        $message->addRecipient(new Topic('global'));
-        $message->setNotification(new Notification($title, $desc));
+        $message->addRecipient(new Topic($pattern));
+        $message->setNotification(new Notification('Pengajuan baru dari '.Auth::user()->name, $desc));
 
         $response = $client->send($message);
-//        dd($response->getStatusCode());
         return \response()->json($response);
     }
 
