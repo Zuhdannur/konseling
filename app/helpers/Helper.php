@@ -71,7 +71,7 @@ class Helper
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
         $message = new Message();
-        $message->setPriority('high');
+        $message->setPriority('low');
         $pattern = "guru".Auth::user()->detail->id_sekolah;
 
 //        $message->addRecipient(new Device("cQlOvwQ3lu4:APA91bHZiKXMaRYNmsSEx6LojxNrAUzJPKp1LsRJMUaIfxsZ3hu59P8CWhoZWaSz-fnCmETuP34o87whE9NnhFkPGZBnyLt4s8MDT4pk_mrMhdzli95gsjJ3v-_jIyR04Zw2S6KFu4Tm"));
@@ -82,25 +82,20 @@ class Helper
         return \response()->json($response);
     }
 
-    public static function sendNotificationToSingel($id)
+    public static function sendNotificationToSingle($id)
     {
         $client = new Client();
         $client->setApiKey(self::$API_ACCSESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
-        $firebase_token = \App\User::where('id',$id)->first()->firebase_token;
+        $firebase_token = \App\User::where('id', $id)->first()->firebase_token;
 
         $message = new Message();
-        $message->setPriority('high');
+        $message->setPriority('medium');
         $message->addRecipient(new Device($firebase_token));
-//        $message->addRecipient(new Topic('global'));
-        $message
-            ->setNotification(new Notification(
-                $data->title, $data->body));
+        $message->setNotification(new Notification("Pengajuanmu telah diterima", $data->body));
 
         $response = $client->send($message);
-//        dd($response->getStatusCode());
-        dd($response->getBody()->getContents());
         return \response()->json($response);
     }
 

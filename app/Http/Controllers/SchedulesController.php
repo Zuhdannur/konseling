@@ -151,11 +151,11 @@ class SchedulesController extends Controller
                     $schedule = \App\Schedule::where('id', $request->schedule_id)->first();
 
                     $id = $schedule['requester_id'];
-                    // Helper::sendNotificationToSingel($id);
 
                     $result['requester_id'] = $schedule['requester_id'];
                     $result["title"] = $schedule['title'];
                     $result['desc'] = $schedule['desc'];
+                    Helper::sendNotificationToSingle($id);
 
                     return Response::json($result, 200);
                 } else {
@@ -384,13 +384,16 @@ class SchedulesController extends Controller
     public function remove($id)
     {
         if (Auth::user()->role == 'siswa') {
-            $delete = \App\Schedule::where('id', $id)
-                ->where('requester_id', Auth::user()->id)
-                ->delete();
-            if ($delete) {
-                return \Illuminate\Support\Facades\Response::json(["message" => "success"], 200);
+            $delete = \App\Schedule::where('id', $id)->where('requester_id', Auth::user()->id);
+            if($delete->exists()) {
+                $delete->where('status', 0)->delete();
+                if ($delete) {
+                    return \Illuminate\Support\Facades\Response::json(["message" => "success"], 200);
+                } else {
+                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan telah diterima oleh guru."], 201);
+                }
             } else {
-                return \Illuminate\Support\Facades\Response::json(["message" => "failed"], 201);
+                return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan tidak ditemukan."], 201);
             }
         }
     }
