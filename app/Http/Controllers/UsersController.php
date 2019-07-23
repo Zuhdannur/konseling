@@ -122,20 +122,21 @@ class UsersController extends Controller
 
     public function get($id)
     {
-        if (Auth::user()->role == 'siswa') {
-            $data = \App\User::where('api_token', $id)->with('detail', 'detail.kelas', 'detail.sekolah')->first();
-        } else {
-            $data = \App\User::where('api_token', $id)->with('detail', 'detail.sekolah')->first();
-            // $this->addTopic($data);
-        }
+        // if (Auth::user()->role == 'siswa') {
+        //     $data = \App\User::where('id', $id)->with('detail', 'detail.kelas', 'detail.sekolah')->first();
+        // } else {
+        //     $data = \App\User::where('id', $id)->with('detail', 'detail.sekolah')->first();
+        //     // $this->addTopic($data);
+        // }
+
+        $client = new Client();
+        $client->setApiKey(self::$API_ACCESS_KEY);
+        $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
+
         $query = \App\User::where('role','guru')->whereHas('detail', function($q) {
-            $q->where('id_sekolah', Auth::user()->detail->id_sekolah);
+            $q->with('sekolah')->where('id_sekolah', Auth::user()->detail->id_sekolah);
         })->get();
-        return Response::json([
-            "data" => $query
-        ], 200);
-        // $data['avatar'] = $data->avatar;
-        // return Response::json($data, 200);
+        return Response::json($query, 200);
     }
 
     private function addTopic($data) {
@@ -144,7 +145,7 @@ class UsersController extends Controller
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
         $query = \App\User::where('role','guru')->whereHas('detail', function($q) {
-            $q->where('id_sekolah', Auth::user()->detail->id_sekolah);
+            $q->with('sekolah')->where('id_sekolah', Auth::user()->detail->id_sekolah);
         })->get();
 
         // $query = \App\User::where(function ($query){

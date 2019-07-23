@@ -108,10 +108,9 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         /**
          * Routes for resource user
          */
-        // $router->get('user/{id}', 'UsersController@get');
+        $router->get('user/{id}', 'UsersController@get');
         $router->put('user', 'UsersController@put');
         $router->delete('user/{id}', 'UsersController@remove');
-        $router->get('user/{id}', 'UsersController@get');
             
         //Favorite Artikels
         $router->post('favorit', 'ArtikelsController@storeFavorite');
