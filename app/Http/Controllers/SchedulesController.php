@@ -159,7 +159,7 @@ class SchedulesController extends Controller
                 ]);
 
                 if ($update) {
-                    $schedule = \App\Schedule::where('id', $request->schedule_id)->first();
+                    $schedule = \App\Schedule::where('id', $request->schedule_id)->with('consultant')->first();
 
                     // if($schedule->type_schedule == 'direct') {
                     //     $this->sendNotificationToDirect();
