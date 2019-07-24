@@ -171,10 +171,13 @@ class SchedulesController extends Controller
                         // if($schedule->type_schedule == 'daring') {
                         //     $this->sendNotificationToDaring();
                         // }
+                        $senderName = \App\User::where('id', $result['consultant_id'])->first()->name;
 
                         $result['requester_id'] = $schedule['requester_id'];
                         $result['consultant_id'] = $schedule['consultant_id'];
-
+                        $result['title'] = 'Pengajuanmu telah diterima';
+                        $result['body'] = "Pengajuanmu telah diterima oleh ".$senderName;
+                        
                         Helper::sendNotificationToSingle($result);
 
                         $data['requester_id'] = $schedule['requester_id'];
@@ -448,6 +451,15 @@ class SchedulesController extends Controller
     public function removeByGuru($id, $requester_id, $status) {
         $schedule = \App\Schedule::where('id', $id)->where('requester_id', $requester_id)->where('status', 1)->first();
         if($schedule) {
+
+            $senderName = \App\User::where('id', $schedule['consultant_id'])->first()->name;
+
+            $result['requester_id'] = $schedule['requester_id'];
+            $result['consultant_id'] = $schedule['consultant_id'];
+            $result['title'] = 'Pengajuanmu telah dibatalkan.';
+            $result['body'] = "Pengajuanmu telah dibatalkan oleh ".$senderName;
+            
+            Helper::sendNotificationToSingle($result);
 
             $data['requester_id'] = $schedule['requester_id'];
             $data['title'] = 'Pengajuanmu telah dibatalkan.';
