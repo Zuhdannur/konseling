@@ -15,8 +15,7 @@ use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 
 class UsersController extends Controller
 {
-    const MODEL = "App\User";
-    static protected $API_ACCESS_KEY = 'AAAA_vRurwA:APA91bGd7ayeeU2Nlb5D0T1DwRc48CzU-G_ez4SM_qIgdGv-wpQvuUhbJ3xbUFmJZOPtr_EVe_vB2z38O4CUjJPY-WcapZb-Xy_Y1rC3B-v-AFIIQsRxMPJi6pZY8jX1k1eytQSdiXiW';
+    protected static $API_ACCESS_KEY = 'AAAA_vRurwA:APA91bFvUdoT1ruL0WZC3rkvQWoK76WFOgUSAFuc3aUpN0_kjiP22y3Pf_o1TthpfN6_o_0HnHJeMGZMp8MqHzm1zTCk8zuTY4UzAByzknPDlcBlNFvz60oN6fx9Kq3gkfR373aboRy0';
 
     public function login(Request $request)
     {
@@ -132,18 +131,19 @@ class UsersController extends Controller
         return Response::json($data, 200);
     }
 
-    private function addTopic($data) {
+    private function addTopic($data)
+    {
         $client = new Client();
         $client->setApiKey(self::$API_ACCESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
-        $query = \App\User::where('role','guru')->withAndWhereHas('detail', function($query) {
+        $query = \App\User::where('role', 'guru')->withAndWhereHas('detail', function ($query) {
             $query->where('id_sekolah', Auth::user()->detail->id_sekolah);
         })->get();
 
         $pattern = "guru";
 
-        foreach ($query as $value){
+        foreach ($query as $value) {
             $client->addTopicSubscription($pattern.$value['detail']['id_sekolah']."pengajuan", $value['firebase_token']);
         }
     }
@@ -169,7 +169,7 @@ class UsersController extends Controller
             'name' => $request->name
         ]);
 
-        if(Auth::user()->role == 'siswa') {
+        if (Auth::user()->role == 'siswa') {
             $kelasId = \App\Kelas::where('nama_kelas', $request->nama_kelas)->first()->id;
             dd($kelasId);
             if ($update && $kelasId) {
@@ -202,8 +202,11 @@ class UsersController extends Controller
                 'phone_number' => $request->phone_number
             ]);
 
-            if($update) return Response::json(["message" => 'Profil berhasil disunting.'], 200);
-            else return Response::json(['message' => 'Gagal menyunting profil.']);
+            if ($update) {
+                return Response::json(["message" => 'Profil berhasil disunting.'], 200);
+            } else {
+                return Response::json(['message' => 'Gagal menyunting profil.']);
+            }
         }
         
         
