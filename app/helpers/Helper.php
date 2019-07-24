@@ -125,9 +125,9 @@ class Helper
         $message->setData([
             'title' => $notif->title,
             'body' =>  $notif->$body,
-            'type' => $notif->type,
-            'created_at' => Carbon::now()->toDateTimeString(),
-            'updated_at' => Carbon::now()->toDateTimeString()
+            'type' => $notif->type
+            // 'created_at' => Carbon::now()->toDateTimeString(),
+            // 'updated_at' => Carbon::now()->toDateTimeString()
         ]);
 
         $response = $client->send($message);
