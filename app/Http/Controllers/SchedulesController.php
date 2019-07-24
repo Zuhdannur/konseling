@@ -149,51 +149,56 @@ class SchedulesController extends Controller
     public function accept(Request $request) {
         
         if(\App\Schedule::where('id', $request->schedule_id)->exists()) {
-            
-            if(\App\Schedule::where('id', $request->schedule_id)->first()->exp == 0) {
 
-                $update = \App\Schedule::where('id', $request->schedule_id)->update([
-                    'status' => 1,
-                    'tgl_pengajuan' => $request->date,
-                    'consultant_id' => Auth::user()->id
-                ]);
+            if (\App\Schedule::where('id', $request->schedule_id)->first()->status == 0) {
+                if (\App\Schedule::where('id', $request->schedule_id)->first()->exp == 0) {
+                    $update = \App\Schedule::where('id', $request->schedule_id)->update([
+                        'status' => 1,
+                        'tgl_pengajuan' => $request->date,
+                        'consultant_id' => Auth::user()->id
+                    ]);
 
-                if ($update) {
-                    $schedule = \App\Schedule::where('id', $request->schedule_id)->with('consultant')->first();
+                    if ($update) {
+                        $schedule = \App\Schedule::where('id', $request->schedule_id)->with('consultant')->first();
 
-                    // if($schedule->type_schedule == 'direct') {
-                    //     $this->sendNotificationToDirect();
-                    // }
+                        // if($schedule->type_schedule == 'direct') {
+                        //     $this->sendNotificationToDirect();
+                        // }
 
-                    // if($schedule->type_schedule == 'realtime') {
-                    //     $this->sendNotificationToRealtime();
-                    // }
+                        // if($schedule->type_schedule == 'realtime') {
+                        //     $this->sendNotificationToRealtime();
+                        // }
 
-                    // if($schedule->type_schedule == 'daring') {
-                    //     $this->sendNotificationToDaring();
-                    // }
+                        // if($schedule->type_schedule == 'daring') {
+                        //     $this->sendNotificationToDaring();
+                        // }
 
-                    $result['requester_id'] = $schedule['requester_id'];
-                    $result['consultant_id'] = $schedule['consultant_id'];
+                        $result['requester_id'] = $schedule['requester_id'];
+                        $result['consultant_id'] = $schedule['consultant_id'];
 
-                    Helper::sendNotificationToSingle($result);
+                        Helper::sendNotificationToSingle($result);
 
-                    $data['requester_id'] = $schedule['requester_id'];
-                    $data['title'] = 'Pengajuanmu telah diterima.';
-                    $data['body'] = 'Pengajuan '.$schedule['title']. ' telah diterima oleh '. $schedule['consultant']['name'];
-                    $data['id_user'] = $schedule['requester_id'];
-                    Helper::storeDataNotification($data);
+                        $data['requester_id'] = $schedule['requester_id'];
+                        $data['title'] = 'Pengajuanmu telah diterima.';
+                        $data['body'] = 'Pengajuan '.$schedule['title']. ' telah diterima oleh '. $schedule['consultant']['name'];
+                        $data['id_user'] = $schedule['requester_id'];
+                        Helper::storeDataNotification($data);
 
-                    return Response::json($result, 200);
+                        return Response::json($result, 200);
+                    } else {
+                        return Response::json([
+                            "message" => "Gagal menerima."
+                        ], 201);
+                    }
                 } else {
                     return Response::json([
-                        "message" => "Gagal menerima."
+                        "message" => "Pengajuan telah kadaluarsa."
                     ], 201);
                 }
             } else {
                 return Response::json([
-                    "message" => "Pengajuan telah kadaluarsa."
-                ],201);
+                    "message" => "Pengajuan telah diterima oleh guru lain."
+                ], 201);
             }
         } else {
             return Response::json(["message" => "Pengajuan tidak ditemukan"], 201);
