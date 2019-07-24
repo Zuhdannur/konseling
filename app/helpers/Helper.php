@@ -122,9 +122,7 @@ class Helper
 
         $message->setData([
             'title' => $notif->title,
-            'body' =>  $notif->$body,
-            'created_at' =>  $notif->$created_at,
-            'updated_at' =>  $notif->$updated_at,
+            'body' =>  $notif->$body
         ]);
 
         $response = $client->send($message);
