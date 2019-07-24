@@ -72,7 +72,7 @@ class Helper
 
         $message = new Message();
         $message->setPriority('normal');
-        $pattern = "guru".Auth::user()->detail->id_sekolah;
+        $pattern = "guru".Auth::user()->detail->id_sekolah."pengajuan";
 
 //        $message->addRecipient(new Device("cQlOvwQ3lu4:APA91bHZiKXMaRYNmsSEx6LojxNrAUzJPKp1LsRJMUaIfxsZ3hu59P8CWhoZWaSz-fnCmETuP34o87whE9NnhFkPGZBnyLt4s8MDT4pk_mrMhdzli95gsjJ3v-_jIyR04Zw2S6KFu4Tm"));
         $message->addRecipient(new Topic($pattern));
@@ -96,7 +96,7 @@ class Helper
         $message->addRecipient(new Device($firebase_token));
         $message->setNotification(new Notification("Pengajuanmu telah diterima", "Pengajuanmu telah diterima oleh ".$senderName));
         $message->setData([
-            'title' => 'dadah'
+            'title' => $senderName." menerima pengajuanmu."
         ]);
 
         $response = $client->send($message);
