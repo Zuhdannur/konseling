@@ -28,6 +28,16 @@ class NotifikasisController extends Controller
         return Response::json($data, 200);
     }
 
+    public function removeAll(Request $request)
+    {
+        $app = \App\Notification::truncate();
+        if ($app) {
+            return Response::json(["message" => 'Berhasil menghapus semua data.'], 200);
+        } else {
+            return Response::json(['message' => 'Gagal menghapus semua data.'], 201);
+        }
+    }
+
     public function notifikasiCount(Request $filters)
     {
         $app = new \App\Notification;
