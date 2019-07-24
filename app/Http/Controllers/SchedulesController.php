@@ -188,7 +188,8 @@ class SchedulesController extends Controller
             if ($row->type_schedule != "daring") {
                 if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
                     $row->update([
-                        'exp'=> 1
+                        'exp'=> 1,
+                        'ended'=> 1
                     ]);
                 }
             }
