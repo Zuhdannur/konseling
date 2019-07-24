@@ -141,10 +141,10 @@ class UsersController extends Controller
             $query->where('id_sekolah', Auth::user()->detail->id_sekolah);
         })->get();
 
-        $pattern = "guru_";
+        $pattern = "guru";
 
         foreach ($query as $value){
-            $client->addTopicSubscription($pattern.$value['detail']['id_sekolah'], $value['firebase_token']);
+            $client->addTopicSubscription($pattern.$value['detail']['id_sekolah']."pengajuan", $value['firebase_token']);
         }
     }
     
