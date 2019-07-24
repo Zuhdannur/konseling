@@ -16,6 +16,8 @@ use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 class SchedulesController extends Controller
 {
 
+    protected static $API_ACCESS_KEY = 'AAAA_vRurwA:APA91bGd7ayeeU2Nlb5D0T1DwRc48CzU-G_ez4SM_qIgdGv-wpQvuUhbJ3xbUFmJZOPtr_EVe_vB2z38O4CUjJPY-WcapZb-Xy_Y1rC3B-v-AFIIQsRxMPJi6pZY8jX1k1eytQSdiXiW';
+
     public function notification()
     {
 //        $API_ACCSESS_KEY = 'AAAA_vRurwA:APA91bGd7ayeeU2Nlb5D0T1DwRc48CzU-G_ez4SM_qIgdGv-wpQvuUhbJ3xbUFmJZOPtr_EVe_vB2z38O4CUjJPY-WcapZb-Xy_Y1rC3B-v-AFIIQsRxMPJi6pZY8jX1k1eytQSdiXiW';
@@ -159,10 +161,27 @@ class SchedulesController extends Controller
                 if ($update) {
                     $schedule = \App\Schedule::where('id', $request->schedule_id)->first();
 
+                    // if($schedule->type_schedule == 'direct') {
+                    //     $this->sendNotificationToDirect();
+                    // }
+
+                    // if($schedule->type_schedule == 'realtime') {
+                    //     $this->sendNotificationToRealtime();
+                    // }
+
+                    // if($schedule->type_schedule == 'daring') {
+                    //     $this->sendNotificationToDaring();
+                    // }
+
                     $result['requester_id'] = $schedule['requester_id'];
                     $result['consultant_id'] = $schedule['consultant_id'];
 
                     Helper::sendNotificationToSingle($result);
+
+                    $data['title'] = 'Pengajuanmu telah diterima.';
+                    $data['body'] = 'Pengajuan '.$schedule['title']. ' telah diterima oleh '. $result['consultant']['name'];
+                    $data['id_user'] = $schedule['requester_id'];
+                    Helper::storeDataNotification($data);
 
                     return Response::json($result, 200);
                 } else {
@@ -178,6 +197,25 @@ class SchedulesController extends Controller
         } else {
             return Response::json(["message" => "Pengajuan tidak ditemukan"], 201);
         }
+    }
+
+    private function sendNotificationToDirect() {
+        $client = new Client();
+        $client->setApiKey(self::$API_ACCESS_KEY);
+        $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
+
+        $message = new Message();
+        $message->setPriority('normal');
+        $pattern = "guru".Auth::user()->detail->id_sekolah."pengajuan";
+
+//        $message->addRecipient(new Device("cQlOvwQ3lu4:APA91bHZiKXMaRYNmsSEx6LojxNrAUzJPKp1LsRJMUaIfxsZ3hu59P8CWhoZWaSz-fnCmETuP34o87whE9NnhFkPGZBnyLt4s8MDT4pk_mrMhdzli95gsjJ3v-_jIyR04Zw2S6KFu4Tm"));
+        $message->addRecipient(new Topic($pattern));
+        $message->setData([
+            'title' => $senderName." menerima pengajuanmu."
+        ]);
+        
+        $response = $client->send($message);
+        return \response()->json($response);
     }
 
     public function all(Request $filters) {

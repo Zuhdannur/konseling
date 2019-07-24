@@ -95,11 +95,40 @@ class Helper
         $message->setPriority('normal');
         $message->addRecipient(new Device($firebase_token));
         $message->setNotification(new Notification("Pengajuanmu telah diterima", "Pengajuanmu telah diterima oleh ".$senderName));
+
+        $response = $client->send($message);
+        return \response()->json($response);
+    }
+
+    public static function storeDataNotification($notification) {
+        $client = new Client();
+        $client->setApiKey(self::$API_ACCESS_KEY);
+        $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
+
+        $firebase_token = \App\User::where('id', $result['requester_id'])->first()->firebase_token;
+
+        $message = new Message();
+        $message->setPriority('normal');
+        $message->addRecipient(new Device($firebase_token));
+        //LocalBroadcast
+        $title = $notification['title'];
+        $body = $notification['body'];
+
+        $notif = new \App\Notification;
+        $notif->id_user = $notification['id_user'];
+        $notif->title = $title;
+        $notif->body = $body;
+        $notif->save();
+
         $message->setData([
-            'title' => $senderName." menerima pengajuanmu."
+            'title' => $notif->title,
+            'body' =>  $notif->$body,
+            'created_at' =>  $notif->$created_at,
+            'updated_at' =>  $notif->$updated_at,
         ]);
 
         $response = $client->send($message);
         return \response()->json($response);
     }
+
 }
