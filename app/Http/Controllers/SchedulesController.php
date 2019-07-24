@@ -16,7 +16,7 @@ use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 class SchedulesController extends Controller
 {
 
-    protected static $API_ACCESS_KEY = 'AAAA_vRurwA:APA91bGd7ayeeU2Nlb5D0T1DwRc48CzU-G_ez4SM_qIgdGv-wpQvuUhbJ3xbUFmJZOPtr_EVe_vB2z38O4CUjJPY-WcapZb-Xy_Y1rC3B-v-AFIIQsRxMPJi6pZY8jX1k1eytQSdiXiW';
+    protected static $API_ACCESS_KEY = 'AAAA_vRurwA:APA91bFvUdoT1ruL0WZC3rkvQWoK76WFOgUSAFuc3aUpN0_kjiP22y3Pf_o1TthpfN6_o_0HnHJeMGZMp8MqHzm1zTCk8zuTY4UzAByzknPDlcBlNFvz60oN6fx9Kq3gkfR373aboRy0';
 
     public function notification()
     {
@@ -448,6 +448,14 @@ class SchedulesController extends Controller
     public function removeByGuru($id, $requester_id, $status) {
         $schedule = \App\Schedule::where('id', $id)->where('requester_id', $requester_id)->where('status', 1)->first();
         if($schedule) {
+
+            $data['requester_id'] = $schedule['requester_id'];
+            $data['title'] = 'Pengajuanmu telah dibatalkan.';
+            $data['body'] = 'Pengajuan '.$schedule['title']. ' telah dibatalkan oleh '. $schedule['consultant']['name'];
+            $data['id_user'] = $schedule['requester_id'];
+            $data['type'] = 'cancel';
+            Helper::storeDataNotification($data);
+
             if($schedule->delete()) {
                  return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
             } else {
