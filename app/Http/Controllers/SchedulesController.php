@@ -171,7 +171,7 @@ class SchedulesController extends Controller
                         // if($schedule->type_schedule == 'daring') {
                         //     $this->sendNotificationToDaring();
                         // }
-                        $senderName = \App\User::where('id', $result['consultant_id'])->first()->name;
+                        $senderName = \App\User::where('id', $schedule['consultant_id'])->first()->name;
 
                         $result['requester_id'] = $schedule['requester_id'];
                         $result['consultant_id'] = $schedule['consultant_id'];
