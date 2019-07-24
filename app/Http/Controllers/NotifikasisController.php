@@ -16,7 +16,8 @@ class NotifikasisController extends Controller {
 
         $data = $app
             ->skip($skip)
-            ->take($limit);
+            ->take($limit)
+            ->get();
 
         return Response::json($data, 200);
     }
