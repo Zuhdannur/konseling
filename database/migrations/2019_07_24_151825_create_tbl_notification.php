@@ -18,6 +18,7 @@ class CreateTblNotification extends Migration
             $table->integer('id_user')->unsigned();
             $table->string('title');
             $table->string('body');
+            $table->string('type');
             $table->timestamps();
         });
     }
@@ -31,6 +32,4 @@ class CreateTblNotification extends Migration
     {
         Schema::dropIfExists('tbl_notification');
     }
-
-    
 }

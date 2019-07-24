@@ -1,7 +1,7 @@
 <?php namespace App\Helpers;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Pusher\Pusher;
 use sngrl\PhpFirebaseCloudMessaging\Client;
 use sngrl\PhpFirebaseCloudMessaging\Message;
 use sngrl\PhpFirebaseCloudMessaging\Notification;
@@ -100,7 +100,8 @@ class Helper
         return \response()->json($response);
     }
 
-    public static function storeDataNotification($notification) {
+    public static function storeDataNotification($notification)
+    {
         $client = new Client();
         $client->setApiKey(self::$API_ACCESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
@@ -118,15 +119,18 @@ class Helper
         $notif->id_user = $notification['id_user'];
         $notif->title = $title;
         $notif->body = $body;
+        $notif->type = $notification['type'];
         $notif->save();
 
         $message->setData([
             'title' => $notif->title,
-            'body' =>  $notif->$body
+            'body' =>  $notif->$body,
+            'type' => $notif->type,
+            'created_at' => Carbon::now()->toDateTimeString(),
+            'updated_at' => Carbon::now()->toDateTimeString()
         ]);
 
         $response = $client->send($message);
         return \response()->json($response);
     }
-
 }

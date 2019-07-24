@@ -182,6 +182,7 @@ class SchedulesController extends Controller
                         $data['title'] = 'Pengajuanmu telah diterima.';
                         $data['body'] = 'Pengajuan '.$schedule['title']. ' telah diterima oleh '. $schedule['consultant']['name'];
                         $data['id_user'] = $schedule['requester_id'];
+                        $data['type'] = 'accept';
                         Helper::storeDataNotification($data);
 
                         return Response::json($result, 200);
