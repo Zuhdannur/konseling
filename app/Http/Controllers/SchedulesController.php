@@ -179,7 +179,7 @@ class SchedulesController extends Controller
                     Helper::sendNotificationToSingle($result);
 
                     $data['title'] = 'Pengajuanmu telah diterima.';
-                    $data['body'] = 'Pengajuan '.$schedule['title']. ' telah diterima oleh '. $result['consultant']['name'];
+                    $data['body'] = 'Pengajuan '.$schedule['title']. ' telah diterima oleh '. $schedule['consultant']['name'];
                     $data['id_user'] = $schedule['requester_id'];
                     Helper::storeDataNotification($data);
 
