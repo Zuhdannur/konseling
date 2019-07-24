@@ -105,7 +105,7 @@ class Helper
         $client->setApiKey(self::$API_ACCESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
-        $firebase_token = \App\User::where('id', $result['requester_id'])->first()->firebase_token;
+        $firebase_token = \App\User::where('id', $notification['requester_id'])->first()->firebase_token;
 
         $message = new Message();
         $message->setPriority('normal');
