@@ -121,6 +121,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->post('notifikasi', 'NotifikasisController@add');
         $router->put('notifikasi/{id}', 'NotifikasisController@put');
         $router->delete('notifikasi/{id}', 'NotifikasisController@remove');
+        $router->get('notifikasiPageCount', 'DiariesController@notifikasiCount');
             
         //Favorite Artikels
         $router->post('favorit', 'ArtikelsController@storeFavorite');

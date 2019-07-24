@@ -11,15 +11,29 @@ class NotifikasisController extends Controller {
         $app = $app->where('id_user', Auth::user()->id)->get();
 
         $limit = $filters->limit;
+        if (empty($filters->page)) $skip = 0;
+        else $skip = $limit * $filters->page;
+        $data = $app
+            ->skip($skip)
+            ->take($limit);
+
+            return Response::json($data, 200);
+        }
+
+    public function notifikasiCount(Request $filters) {
+        $app = new \App\Notification;
+        $app = $app->where('id_user', Auth::user()->id)->get();
+
+        $limit = $filters->limit;
 
         if (empty($filters->page)) $skip = 0;
         else $skip = $limit * $filters->page;
 
-        $data = $schedule
-            ->skip($skip)
-            ->take($limit);
+        $data = $app
+            ->paginate($skip)
+            ->lastPage($limit);
 
-        return Response::json($data, 200);
+        return Response::json(["total_page" => $data], 200);
     }
 
 }
