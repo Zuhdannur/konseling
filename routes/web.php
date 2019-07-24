@@ -112,6 +112,15 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('user/{id}', 'UsersController@get');
         $router->put('user', 'UsersController@put');
         $router->delete('user/{id}', 'UsersController@remove');
+
+        /**
+         * Routes for resource notifikasi
+         */
+        $router->get('notifikasi', 'NotifikasisController@all');
+        $router->get('notifikasi/{id}', 'NotifikasisController@get');
+        $router->post('notifikasi', 'NotifikasisController@add');
+        $router->put('notifikasi/{id}', 'NotifikasisController@put');
+        $router->delete('notifikasi/{id}', 'NotifikasisController@remove');
             
         //Favorite Artikels
         $router->post('favorit', 'ArtikelsController@storeFavorite');
@@ -120,7 +129,3 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('favorit/{id}', 'ArtikelsController@removeMyFavorit');
     });
 });
-
-/**
- * Routes for resource user
- */

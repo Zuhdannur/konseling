@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class Notification extends Model {
 
     protected $fillable = [
-        'title', 'body'
+       'id', 'title', 'body', 'id_user'
     ];
 
     protected $dates = [];
