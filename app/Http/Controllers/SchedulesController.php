@@ -392,18 +392,16 @@ class SchedulesController extends Controller
     public function remove($id)
     {
         if (Auth::user()->role == 'siswa') {
-            $delete = \App\Schedule::where('id', $id)->where('requester_id', Auth::user()->id)->where('status', 0);
-            dd(\App\Schedule::where('status', 0)->first());
-            // if($delete->exists()) {
-            //     $delete->where('status', 0)->delete();
-            //     if ($delete) {
-            //         return \Illuminate\Support\Facades\Response::json(["message" => "success"], 200);
-            //     } else {
-            //         return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan telah diterima oleh guru."], 201);
-            //     }
-            // } else {
-            //     return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan tidak ditemukan."], 201);
-            // }
+            $delete = \App\Schedule::where('id', $id)->where('requester_id', Auth::user()->id)->where('status', 0)->delete();
+            if($delete->exists()) {
+                if ($delete) {
+                    return \Illuminate\Support\Facades\Response::json(["message" => "success"], 200);
+                } else {
+                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan telah diterima oleh guru."], 201);
+                }
+            } else {
+                return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan tidak ditemukan."], 201);
+            }
         }
     }
 
