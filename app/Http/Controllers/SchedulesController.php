@@ -272,6 +272,16 @@ class SchedulesController extends Controller
             $schedule = $schedule->where('ended', $filters->ended);
         }
 
+        if($filters->has('forHistory')) {
+            if($filters->forHistory == 'true') $schedule->where(function ($query){
+                $query->where('status', 1)
+                        ->where('ended', 1);
+            })->orWhere(function ($query){
+                $query->where('status', 1)
+                        ->where('canceled', 1);
+            });
+        }
+
         if($filters->has('limit') && $filters->has('page')) {
             $limit = $filters->limit;
 
