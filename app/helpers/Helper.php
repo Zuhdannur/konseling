@@ -99,7 +99,7 @@ class Helper
         $body = $result['body'];
 
         $notif = new \App\Notification;
-        $notif->id_user = $result['id_user'];
+        $notif->id_user = $result['requester_id'];
         $notif->title = $title;
         $notif->body = $body;
         $notif->type = $result['type'];

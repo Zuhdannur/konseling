@@ -172,7 +172,8 @@ class SchedulesController extends Controller
                         //     $this->sendNotificationToDaring();
                         // }
                         $senderName = \App\User::where('id', $schedule['consultant_id'])->first()->name;
-
+                        
+                        $result['type'] = "accept";
                         $result['requester_id'] = $schedule['requester_id'];
                         $result['consultant_id'] = $schedule['consultant_id'];
                         $result['title'] = 'Pengajuanmu telah diterima';
@@ -454,6 +455,7 @@ class SchedulesController extends Controller
 
             $senderName = \App\User::where('id', $schedule['consultant_id'])->first()->name;
 
+            $result['type'] = 'cancel';
             $result['requester_id'] = $schedule['requester_id'];
             $result['consultant_id'] = $schedule['consultant_id'];
             $result['title'] = 'Pengajuanmu telah dibatalkan.';
