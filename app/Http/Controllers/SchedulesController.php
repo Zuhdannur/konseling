@@ -250,7 +250,7 @@ class SchedulesController extends Controller
         }
 
         if ($filters->has('canceled')) {
-            $schedule = $schedule->where('canceled', $filters->canceled);
+            $schedule = $schedule->orWhere('canceled', $filters->canceled);
         }
 
         if ($filters->has('type_schedule')) {
@@ -299,7 +299,7 @@ class SchedulesController extends Controller
         }
 
         if ($filters->has('canceled')) {
-            $schedule = $schedule->where('canceled', $filters->canceled);
+            $schedule = $schedule->orWhere('canceled', $filters->canceled);
         }
 
         if ($filters->has('type_schedule')) {
