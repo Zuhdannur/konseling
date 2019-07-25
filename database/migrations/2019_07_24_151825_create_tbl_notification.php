@@ -19,6 +19,7 @@ class CreateTblNotification extends Migration
             $table->string('title');
             $table->string('body');
             $table->string('type');
+            $table->integer('read')->default(0);
             $table->timestamps();
         });
     }
