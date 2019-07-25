@@ -266,6 +266,10 @@ class SchedulesController extends Controller
             }
         }
 
+        if($filters->has('ended')) {
+            $schedule = $schedule->where('ended', $filters->ended);
+        }
+
         if($filters->has('limit') && $filters->has('page')) {
             $limit = $filters->limit;
 
@@ -297,6 +301,10 @@ class SchedulesController extends Controller
 
         if ($filters->has('exp')) {
             $schedule = $schedule->where('exp', $filters->exp);
+        }
+
+        if ($filters->has('ended')) {
+            $schedule = $schedule->where('ended', $filters->ended);
         }
 
         if ($filters->has('upcoming')) {
