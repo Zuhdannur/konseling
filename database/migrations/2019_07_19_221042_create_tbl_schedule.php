@@ -20,9 +20,12 @@ class CreateTblSchedule extends Migration
             $table->date('tgl_pengajuan')->nullable();
             $table->text('desc');
             $table->string('type_schedule');
+
             $table->integer('status')->default(0);
             $table->integer('exp')->default(0);
             $table->integer('ended')->default(0);
+            $table->integer('canceled')->default(0);
+
             $table->integer('consultant_id')->unsigned()->default(0);
             $table->string('time')->nullable();
             $table->string('location')->nullable();

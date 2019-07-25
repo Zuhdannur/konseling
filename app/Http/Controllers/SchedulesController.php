@@ -250,8 +250,8 @@ class SchedulesController extends Controller
             $schedule = $schedule->where('status', $filters->status);
         }
 
-        if ($filters->has('status2')) {
-            $schedule = $schedule->orWhere('status', $filters->status2);
+        if ($filters->has('canceled')) {
+            $schedule = $schedule->where('canceled', $filters->canceled);
         }
 
         if ($filters->has('type_schedule')) {
@@ -295,10 +295,12 @@ class SchedulesController extends Controller
         $schedule = $schedule->where('requester_id', Auth::user()->id);
         $schedule = $schedule->with('request', 'consultant');
 
-        if ($filters->has('status2') && $filters->has('status')) {
-            $schedule = $schedule->where('status', $filters->status)->orWhere('status', $filters->status2);
-        } else {
+        if ($filters->has('status')) {
             $schedule = $schedule->where('status', $filters->status);
+        }
+
+        if ($filters->has('canceled')) {
+            $schedule = $schedule->where('canceled', $filters->canceled);
         }
 
         if ($filters->has('type_schedule')) {
