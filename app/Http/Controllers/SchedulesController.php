@@ -178,6 +178,7 @@ class SchedulesController extends Controller
                         $result['consultant_id'] = $schedule['consultant_id'];
                         $result['title'] = 'Pengajuanmu telah diterima';
                         $result['body'] = "Pengajuanmu telah diterima oleh ".$senderName;
+                        $result['read'] = 0;
                         
                         Helper::sendNotificationToSingle($result);
 
@@ -460,6 +461,7 @@ class SchedulesController extends Controller
             $result['consultant_id'] = $schedule['consultant_id'];
             $result['title'] = 'Pengajuanmu telah dibatalkan.';
             $result['body'] = "Pengajuan ". $schedule['title'] ."telah dibatalkan oleh ".$senderName;
+            $result['read'] = 0;
             
             Helper::sendNotificationToSingle($result);
 

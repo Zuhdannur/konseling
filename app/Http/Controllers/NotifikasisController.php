@@ -57,4 +57,12 @@ class NotifikasisController extends Controller
 
         return Response::json(["total_page" => $data], 200);
     }
+
+    public function read($id) {
+        $app = \App\Notification::find($id)->update([
+            'read' => 1
+        ]);
+        if($app) return Response::json(["message" => 'Berhasil.'], 200);
+        else Response::json(["message" => 'Gagal.'], 201);
+    }
 }

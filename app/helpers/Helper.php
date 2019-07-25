@@ -88,6 +88,7 @@ class Helper
         $body = $result['body'];
         $type = $result['type'];
         $id = $result['requester_id'];
+        $read = $result['read'];
 
         $client = new Client();
         $client->setApiKey(self::$API_ACCESS_KEY);
@@ -105,6 +106,7 @@ class Helper
         $notif->title = $title;
         $notif->body = $body;
         $notif->type = $type;
+        $notif->read = $read;
         $notif->save();
 
         $message->setData([
@@ -112,7 +114,8 @@ class Helper
             'body' =>  $body,
             'type' => $type,
             'created_at' => Carbon::now()->toDateTimeString(),
-            'updated_at' => Carbon::now()->toDateTimeString()
+            'updated_at' => Carbon::now()->toDateTimeString(),
+            'read' => $read
         ]);
 
         $response = $client->send($message);
