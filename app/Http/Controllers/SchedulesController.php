@@ -284,7 +284,11 @@ class SchedulesController extends Controller
                 ->take($limit);
         }
 
-        $schedule = $schedule->orderBy('created_at', 'desc');
+        if($filters->has('orderBy')) {
+            $schedule = $schedule->orderBy($filters->orderBy, 'desc');
+        } else {
+            $schedule = $schedule->orderBy('created_at', 'desc');
+        }
 
         return Response::json($schedule->get(), 200);
     }
