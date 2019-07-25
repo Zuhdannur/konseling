@@ -170,7 +170,8 @@ class UsersController extends Controller
         ]);
 
         if (Auth::user()->role == 'siswa') {
-            $kelasId = \App\Kelas::where('nama_kelas', $request->nama_kelas)->first()->id;
+            $kelasId = \App\Kelas::where('nama_kelas', $request->nama_kelas)->first();
+            dd($kelasId);
             if ($update && $kelasId) {
                 $update_detail = \App\DetailUser::where('id_user', Auth::user()->id)->update([
                     'address' => $request->address,
