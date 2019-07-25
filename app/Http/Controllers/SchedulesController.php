@@ -180,12 +180,12 @@ class SchedulesController extends Controller
                         
                         Helper::sendNotificationToSingle($result);
 
-                        $data['requester_id'] = $schedule['requester_id'];
-                        $data['title'] = 'Pengajuanmu telah diterima.';
-                        $data['body'] = 'Pengajuan '.$schedule['title']. ' telah diterima oleh '. $schedule['consultant']['name'];
-                        $data['id_user'] = $schedule['requester_id'];
-                        $data['type'] = 'accept';
-                        Helper::storeDataNotification($data);
+                        // $data['requester_id'] = $schedule['requester_id'];
+                        // $data['title'] = 'Pengajuanmu telah diterima.';
+                        // $data['body'] = 'Pengajuan '.$schedule['title']. ' telah diterima oleh '. $schedule['consultant']['name'];
+                        // $data['id_user'] = $schedule['requester_id'];
+                        // $data['type'] = 'accept';
+                        // Helper::storeDataNotification($data);
 
                         return Response::json($result, 200);
                     } else {
@@ -461,12 +461,12 @@ class SchedulesController extends Controller
             
             Helper::sendNotificationToSingle($result);
 
-            $data['requester_id'] = $schedule['requester_id'];
-            $data['title'] = 'Pengajuanmu telah dibatalkan.';
-            $data['body'] = 'Pengajuan '.$schedule['title']. ' telah dibatalkan oleh '. $schedule['consultant']['name'];
-            $data['id_user'] = $schedule['requester_id'];
-            $data['type'] = 'cancel';
-            Helper::storeDataNotification($data);
+            // $data['requester_id'] = $schedule['requester_id'];
+            // $data['title'] = 'Pengajuanmu telah dibatalkan.';
+            // $data['body'] = 'Pengajuan '.$schedule['title']. ' telah dibatalkan oleh '. $schedule['consultant']['name'];
+            // $data['id_user'] = $schedule['requester_id'];
+            // $data['type'] = 'cancel';
+            // Helper::storeDataNotification($data);
 
             if($schedule->delete()) {
                  return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);

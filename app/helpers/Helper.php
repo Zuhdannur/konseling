@@ -94,25 +94,9 @@ class Helper
         $message->setPriority('normal');
         $message->addRecipient(new Device($firebase_token));
         $message->setNotification(new Notification($result['title'], $result['body']));
-
-        $response = $client->send($message);
-        return \response()->json($response);
-    }
-
-    public static function storeDataNotification($notification)
-    {
-        $client = new Client();
-        $client->setApiKey(self::$API_ACCESS_KEY);
-        $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
-
-        $firebase_token = \App\User::where('id', $notification['requester_id'])->first()->firebase_token;
-
-        $message = new Message();
-        $message->setPriority('normal');
-        $message->addRecipient(new Device($firebase_token));
         //LocalBroadcast
-        $title = $notification['title'];
-        $body = $notification['body'];
+        $title = $result['title'];
+        $body = $result['body'];
 
         $notif = new \App\Notification;
         $notif->id_user = $notification['id_user'];
@@ -132,4 +116,38 @@ class Helper
         $response = $client->send($message);
         return \response()->json($response);
     }
+
+    // public static function storeDataNotification($notification)
+    // {
+    //     $client = new Client();
+    //     $client->setApiKey(self::$API_ACCESS_KEY);
+    //     $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
+
+    //     $firebase_token = \App\User::where('id', $notification['requester_id'])->first()->firebase_token;
+
+    //     $message = new Message();
+    //     $message->setPriority('normal');
+    //     $message->addRecipient(new Device($firebase_token));
+    //     //LocalBroadcast
+    //     $title = $notification['title'];
+    //     $body = $notification['body'];
+
+    //     $notif = new \App\Notification;
+    //     $notif->id_user = $notification['id_user'];
+    //     $notif->title = $title;
+    //     $notif->body = $body;
+    //     $notif->type = $notification['type'];
+    //     $notif->save();
+
+    //     $message->setData([
+    //         'title' => $notif->title,
+    //         'body' =>  $notif->$body,
+    //         'type' => $notif->type,
+    //         'created_at' => Carbon::now()->toDateTimeString(),
+    //         'updated_at' => Carbon::now()->toDateTimeString()
+    //     ]);
+
+    //     $response = $client->send($message);
+    //     return \response()->json($response);
+    // }
 }
