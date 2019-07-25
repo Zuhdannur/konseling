@@ -487,7 +487,8 @@ class SchedulesController extends Controller
             // $data['type'] = 'cancel';
             // Helper::storeDataNotification($data);
             $schedule = $schedule->update([
-                'canceled' => 1
+                'canceled' => 1,
+                'status' => 0
             ]);
 
             if($schedule) {
