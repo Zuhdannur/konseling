@@ -300,7 +300,7 @@ class SchedulesController extends Controller
         }
 
         if ($filters->has('status2')) {
-            $schedule = $schedule->where('status', $filters->status2);
+            $schedule = $schedule->orWhere('status', $filters->status2);
         }
 
         if ($filters->has('type_schedule')) {
