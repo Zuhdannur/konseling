@@ -30,7 +30,7 @@ class NotifikasisController extends Controller
 
     public function removeAll(Request $request)
     {
-        $app = \App\Notification::truncate();
+        $app = \App\Notification::where('id_user', Auth::user()->id)->delete();
         if ($app) {
             return Response::json(["message" => 'Berhasil menghapus semua data.'], 200);
         } else {
