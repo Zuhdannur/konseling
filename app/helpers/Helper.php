@@ -99,10 +99,10 @@ class Helper
         $body = $result['body'];
 
         $notif = new \App\Notification;
-        $notif->id_user = $notification['id_user'];
+        $notif->id_user = $result['id_user'];
         $notif->title = $title;
         $notif->body = $body;
-        $notif->type = $notification['type'];
+        $notif->type = $result['type'];
         $notif->save();
 
         $message->setData([
