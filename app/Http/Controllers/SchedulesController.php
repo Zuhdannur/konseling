@@ -237,8 +237,7 @@ class SchedulesController extends Controller
             if ($row->type_schedule != "daring") {
                 if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
                     $row->update([
-                        'exp'=> 1,
-                        'ended'=> 1
+                        'exp'=> 1
                     ]);
                 }
             }
@@ -466,7 +465,7 @@ class SchedulesController extends Controller
         }
     }
 
-    public function removeByGuru($id, $requester_id, $status) {
+    public function canceledByGuru($id, $requester_id, $status) {
         $schedule = \App\Schedule::where('id', $id)->where('requester_id', $requester_id)->where('status', 1)->first();
         if($schedule) {
 
@@ -487,8 +486,11 @@ class SchedulesController extends Controller
             // $data['id_user'] = $schedule['requester_id'];
             // $data['type'] = 'cancel';
             // Helper::storeDataNotification($data);
+            $schedule = $schedule->update([
+                'canceled' => 1
+            ]);
 
-            if($schedule->delete()) {
+            if($schedule) {
                  return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
             } else {
                 return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
