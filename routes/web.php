@@ -124,7 +124,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->delete('notifikasi', 'NotifikasisController@removeAll');
         $router->get('notifikasiPageCount', 'NotifikasisController@notifikasiCount');
         
-        $router->post('updateRead/{id}', 'NotifikasisController@read');
+        $router->post('updateRead', 'NotifikasisController@read');
             
         //Favorite Artikels
         $router->post('favorit', 'ArtikelsController@storeFavorite');
