@@ -258,7 +258,7 @@ class SchedulesController extends Controller
 
             if($filters->pengajuan == 'riwayat') {
                 //Saat fetch data jika pengajuannya riwayat
-                $schedule->where(function ($query){
+                $schedule = $schedule->where(function ($query){
                     //Selesai Pengajuannya
                     $query->where('status', 1)
                             ->where('ended', 1);
