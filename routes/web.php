@@ -130,6 +130,15 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('notifikasiPageCount', 'NotifikasisController@notifikasiCount');
         
         $router->post('updateRead', 'NotifikasisController@read');
+
+        /**
+         * Routes for resource riwayat
+         */
+        $router->get('riwayat', 'RiwayatsController@all');
+        $router->get('riwayat/{id}', 'RiwayatsController@get');
+        $router->post('riwayat', 'RiwayatsController@add');
+        $router->put('riwayat/{id}', 'RiwayatsController@put');
+        $router->delete('riwayat/{id}', 'RiwayatsController@remove');
             
         //Favorite Artikels
         $router->post('favorit', 'ArtikelsController@storeFavorite');
@@ -138,11 +147,3 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('favorit/{id}', 'ArtikelsController@removeMyFavorit');
     });
 });
-/**
- * Routes for resource riwayat
- */
-$app->get('riwayat', 'RiwayatsController@all');
-$app->get('riwayat/{id}', 'RiwayatsController@get');
-$app->post('riwayat', 'RiwayatsController@add');
-$app->put('riwayat/{id}', 'RiwayatsController@put');
-$app->delete('riwayat/{id}', 'RiwayatsController@remove');
