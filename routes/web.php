@@ -89,6 +89,10 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->delete('schedule/{id}', 'SchedulesController@remove');
         $router->get('schedulePageCount', 'SchedulesController@count');
 
+        $router->get('scheduleSiswaAktif', 'SchedulesController@aktif');
+        $router->get('scheduleSiswaPending', 'SchedulesController@pending');
+        $router->get('scheduleSiswaRiwayat', 'SchedulesController@riwayat');
+
         $router->get('scheduleReceive', 'SchedulesController@receive');
         $router->get('scheduleReceiveCount', 'SchedulesController@receiveCount');
         $router->post('scheduleAccept', 'SchedulesController@accept');

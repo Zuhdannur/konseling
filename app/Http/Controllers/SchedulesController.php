@@ -233,6 +233,76 @@ class SchedulesController extends Controller
         $schedule = new \App\Schedule;
         $schedule = $schedule->where('requester_id', Auth::user()->id);
 
+        if($filters->has('pengajuan')) {
+            if($filters->pengajuan == 'pending') {
+
+                foreach ($schedule->get() as $key => $row) {
+                    if ($row->type_schedule != "daring") {
+                        if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+                            $row->update([
+                                'exp'=> 1
+                            ]);
+                        }
+                    }
+                }
+                
+            }
+        }
+        
+        $schedule = $schedule->with('request', 'consultant');
+        
+        if ($filters->has('status')) {
+            $schedule = $schedule->where('status', $filters->status);
+        }
+
+        if ($filters->has('canceled')) {
+            $schedule = $schedule->where('canceled', $filters->canceled);
+        }
+
+        if ($filters->has('type_schedule')) {
+            if(!empty($filters->type_schedule)) {
+                $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+            }
+        }
+
+        if ($filters->has('exp')) {
+            $schedule = $schedule->where('exp', $filters->exp);
+        }
+
+        if ($filters->has('upcoming')) {
+            if($filters->upcoming == 'true') {
+                $schedule = $schedule->where('time', ">" ,Carbon::now());
+            }
+        }
+
+        if($filters->has('ended')) {
+            $schedule = $schedule->where('ended', $filters->ended);
+        }
+
+        if($filters->has('limit') && $filters->has('page')) {
+            $limit = $filters->limit;
+
+            if (empty($filters->page)) $skip = 0;
+            else $skip = $limit * $filters->page;
+
+            $schedule = $schedule
+                ->skip($skip)
+                ->take($limit);
+        }
+
+        if($filters->has('orderBy')) {
+            $schedule = $schedule->orderBy($filters->orderBy, 'desc');
+        } else {
+            $schedule = $schedule->orderBy('created_at', 'desc');
+        }
+
+        return Response::json($schedule->get(), 200);
+    }
+
+    public function pending(Request $filters) {
+        $schedule = new \App\Schedule;
+        $schedule = $schedule->where('requester_id', Auth::user()->id);
+
         foreach ($schedule->get() as $key => $row) {
             if ($row->type_schedule != "daring") {
                 if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
