@@ -237,6 +237,13 @@ class SchedulesController extends Controller
 
             if($filters->pengajuan == 'pending') {
                 //Saat fetch data jika pengajuannya pending & time < sekarang, update expired ke 1
+                $schedule = $schedule->where([
+                    ['status', '=', 0],
+                    ['ended', '=', 0],
+                    ['canceled', '=', 0],
+                    ['exp', '=', 0]
+                ]);
+
                 foreach ($schedule->get() as $key => $row) {
                     if ($row->type_schedule != "daring") {
                         if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
@@ -323,19 +330,26 @@ class SchedulesController extends Controller
         if($filters->has('pengajuan')) {
 
             //NO NEED TO COUNT THIS QUERY
-            // if($filters->pengajuan == 'pending') {
-            //     //Saat fetch data jika pengajuannya pending & time < sekarang, update expired ke 1
-            //     foreach ($schedule->get() as $key => $row) {
-            //         if ($row->type_schedule != "daring") {
-            //             if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
-            //                 $row->update([
-            //                     'exp'=> 1
-            //                 ]);
-            //             }
-            //         }
-            //     }
-                
-            // }
+            if($filters->pengajuan == 'pending') {
+
+                $schedule = $schedule->where([
+                    ['status', '=', 0],
+                    ['ended', '=', 0],
+                    ['canceled', '=', 0],
+                    ['exp', '=', 0]
+                ]);
+
+                //Saat fetch data jika pengajuannya pending & time < sekarang, update expired ke 1
+                // foreach ($schedule->get() as $key => $row) {
+                //     if ($row->type_schedule != "daring") {
+                //         if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+                //             $row->update([
+                //                 'exp'=> 1
+                //             ]);
+                //         }
+                //     }
+                // }
+            }
 
             if($filters->pengajuan == 'riwayat') {
                 //Saat fetch data jika pengajuannya riwayat
@@ -379,16 +393,6 @@ class SchedulesController extends Controller
             if($filters->upcoming == 'true') {
                 $schedule = $schedule->where('time', Carbon::now());
             }
-        }
-
-        if($filters->has('forHistory')) {
-            if($filters->forHistory == 'true') $schedule->where(function ($query){
-                $query->where('status', 1)
-                        ->where('ended', 1);
-            })->orWhere(function ($query){
-                $query->where('status', 1)
-                        ->where('canceled', 1);
-            });
         }
 
         if($filters->has('limit') && $filters->has('page')) {
