@@ -256,6 +256,18 @@ class SchedulesController extends Controller
                 
             }
 
+            if($filters->pengajuan == 'direct') {
+                foreach ($schedule->get() as $key => $row) {
+                    if ($row->type_schedule != "daring") {
+                        if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+                            $row->update([
+                                'outdated'=> 1
+                            ]);
+                        }
+                    }
+                }
+            }
+
             if($filters->pengajuan == 'riwayat') {
                 //Saat fetch data jika pengajuannya riwayat
                 $schedule = $schedule->where(function ($query){
