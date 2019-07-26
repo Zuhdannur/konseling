@@ -270,6 +270,12 @@ class SchedulesController extends Controller
                     //Di cancel sama siswa
                     $query->where('status', 0)
                             ->where('canceled', 1);
+                })->orWhere(function ($query){
+                    //Kadaluarsa
+                    $query->where('status', 0)
+                            ->where('canceled', 0)
+                            ->where('exp', 1)
+                            ->where('ended', 0);
                 });
             }
         }
