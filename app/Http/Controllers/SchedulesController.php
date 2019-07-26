@@ -75,15 +75,47 @@ class SchedulesController extends Controller
                 });
             });
 
-            foreach ($query->get() as $key => $row) {
-                if ($row->type_schedule != "daring") {
-                    if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
-                        $row->update([
-                            'exp'=> 1
-                        ]);
+            if($filters->has('pengajuan')) {
+                if($filters->pengajuan == 'daring') {
+
+                }
+                if($filters->pengajuan == 'realtime') {
+                    foreach ($query->get() as $key => $row) {
+                        if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+                            if($row->exp == 0) {
+                                $row->update([
+                                    'exp'=> 1
+                                ]);
+                            }
+                        }
+                    }
+                }
+                if($filters->pengajuan == 'direct') {
+                    foreach ($query->get() as $key => $row) {
+                        if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+                            if($row->exp == 0) {
+                                $row->update([
+                                    'exp'=> 1
+                                ]);
+                            }
+                        }
+                    }
+                }
+
+                if($filters->pengajuan == 'acceptedDirect') {
+                    foreach ($query->get() as $key => $row) {
+                        if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+                            if($row->ended == 0){
+                                $row->update([
+                                    'ended' => 1
+                                ]);
+                            }
+                        }
                     }
                 }
             }
+
+            
             if($filters->has('type_schedule')) $query->where('type_schedule', $filters->type_schedule);
             
 
@@ -218,7 +250,6 @@ class SchedulesController extends Controller
         $message->setPriority('normal');
         $pattern = "guru".Auth::user()->detail->id_sekolah."pengajuan";
 
-//        $message->addRecipient(new Device("cQlOvwQ3lu4:APA91bHZiKXMaRYNmsSEx6LojxNrAUzJPKp1LsRJMUaIfxsZ3hu59P8CWhoZWaSz-fnCmETuP34o87whE9NnhFkPGZBnyLt4s8MDT4pk_mrMhdzli95gsjJ3v-_jIyR04Zw2S6KFu4Tm"));
         $message->addRecipient(new Topic($pattern));
         $message->setData([
             'title' => $senderName." menerima pengajuanmu."
