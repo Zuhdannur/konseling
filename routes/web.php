@@ -86,6 +86,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('schedule', 'SchedulesController@all');
         $router->get('schedule/{id}', 'SchedulesController@get');
         $router->put('schedule', 'SchedulesController@put');
+        $router->post('scheduleCancel', 'SchedulesController@cancel');
         $router->delete('schedule/{id}', 'SchedulesController@remove');
         $router->get('schedulePageCount', 'SchedulesController@count');
 
@@ -96,7 +97,6 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('scheduleReceive', 'SchedulesController@receive');
         $router->get('scheduleReceiveCount', 'SchedulesController@receiveCount');
         $router->post('scheduleAccept', 'SchedulesController@accept');
-        $router->delete('schedule/{id}/{requester_id}/{status}', 'SchedulesController@canceledByGuru');
 
         /**
          * Routes for resource diary
