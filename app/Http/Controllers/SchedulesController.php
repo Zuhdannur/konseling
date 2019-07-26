@@ -105,9 +105,9 @@ class SchedulesController extends Controller
                 if($filters->pengajuan == 'acceptedDirect') {
                     foreach ($query->get() as $key => $row) {
                         if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
-                            if($row->ended == 0){
+                            if($row->outdated == 0){
                                 $row->update([
-                                    'ended' => 1
+                                    'outdated' => 1
                                 ]);
                             }
                         }
