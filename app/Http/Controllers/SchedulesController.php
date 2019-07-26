@@ -77,7 +77,7 @@ class SchedulesController extends Controller
 
             if($filters->has('pengajuan')) {
                 if($filters->pengajuan == 'daring') {
-
+    
                 }
                 if($filters->pengajuan == 'realtime') {
                     foreach ($query->get() as $key => $row) {
@@ -101,7 +101,7 @@ class SchedulesController extends Controller
                         }
                     }
                 }
-
+    
                 if($filters->pengajuan == 'acceptedDirect') {
                     foreach ($query->get() as $key => $row) {
                         if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
@@ -114,19 +114,18 @@ class SchedulesController extends Controller
                     }
                 }
             }
-
-            
-            if($filters->has('type_schedule')) $query->where('type_schedule', $filters->type_schedule);
-            
-
-            if($filters->has('status')) $query->where('status', $filters->status);
-
-            if($filters->has('ended')) $query->where('ended', $filters->ended);
-
-            if($filters->has('upcoming')) if ($filters->upcoming == "true") {
-                $query->where('time', '>', Carbon::now());
-            }
         })->with('request')->with('consultant')->orderBy('id', 'desc');
+
+        
+        if($filters->has('type_schedule')) $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+        
+        if($filters->has('status')) $schedule = $schedule->where('status', $filters->status);
+
+        if($filters->has('ended')) $schedule = $schedule->where('ended', $filters->ended);
+
+        if($filters->has('upcoming')) if ($filters->upcoming == "true") {
+            $schedule = $schedule->where('time', '>', Carbon::now());
+        }
 
         $limit = $filters->limit;
 
