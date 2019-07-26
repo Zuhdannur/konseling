@@ -344,10 +344,16 @@ class SchedulesController extends Controller
 
         if($filters->has('forHistory')) {
             if($filters->forHistory == 'true') $schedule->where(function ($query){
+                //Selesai Pengajuannya
                 $query->where('status', 1)
                         ->where('ended', 1);
             })->orWhere(function ($query){
+                //Di accept tapi di cancel sama guru
                 $query->where('status', 1)
+                        ->where('canceled', 1);
+            })->orWhere(function ($query){
+                //Di cancel sama siswa
+                $query->where('status', 0)
                         ->where('canceled', 1);
             });
         }
