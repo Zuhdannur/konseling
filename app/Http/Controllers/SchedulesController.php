@@ -120,7 +120,8 @@ class SchedulesController extends Controller
             
 
             if($filters->has('status')) $query->where('status', $filters->status);
-            
+
+            if($filters->has('ended')) $query->where('ended', $filters->ended);
 
             if($filters->has('upcoming')) if ($filters->upcoming == "true") {
                 $query->where('time', '>', Carbon::now());
