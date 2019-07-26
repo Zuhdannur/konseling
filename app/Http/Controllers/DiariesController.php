@@ -52,6 +52,7 @@ class DiariesController extends Controller
         $data = $datas
         ->skip($skip)
         ->take($limit)
+        ->orderBy('created_at', 'desc')
         ->get();
 
         return \Illuminate\Support\Facades\Response::json(
