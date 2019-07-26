@@ -16,12 +16,10 @@ class CreateTblDiary extends Migration
         Schema::create('tbl_diary', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('id_user')->unsigned();
-            $table->string('title',200);
+            $table->string('title', 200);
             $table->text('body');
             $table->date('tgl');
-            $table->date('created_at');
-            $table->date('updated_at');
-            // $table->timestamps();
+            $table->timestamps();
         });
     }
 
