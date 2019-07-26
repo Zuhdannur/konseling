@@ -79,8 +79,7 @@ class SchedulesController extends Controller
                 if ($row->type_schedule != "daring") {
                     if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
                         $row->update([
-                            'exp'=> 1,
-                            'ended' => 1
+                            'exp'=> 1
                         ]);
                     }
                 }
@@ -343,6 +342,16 @@ class SchedulesController extends Controller
             $schedule = $schedule->where('ended', $filters->ended);
         }
 
+        if($filters->has('forHistory')) {
+            if($filters->forHistory == 'true') $schedule->where(function ($query){
+                $query->where('status', 1)
+                        ->where('ended', 1);
+            })->orWhere(function ($query){
+                $query->where('status', 1)
+                        ->where('canceled', 1);
+            });
+        }
+
         if($filters->has('limit') && $filters->has('page')) {
             $limit = $filters->limit;
 
@@ -392,6 +401,16 @@ class SchedulesController extends Controller
             if($filters->upcoming == 'true') {
                 $schedule = $schedule->where('time', Carbon::now());
             }
+        }
+
+        if($filters->has('forHistory')) {
+            if($filters->forHistory == 'true') $schedule->where(function ($query){
+                $query->where('status', 1)
+                        ->where('ended', 1);
+            })->orWhere(function ($query){
+                $query->where('status', 1)
+                        ->where('canceled', 1);
+            });
         }
 
         if($filters->has('limit') && $filters->has('page')) {
