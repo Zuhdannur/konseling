@@ -138,3 +138,11 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('favorit/{id}', 'ArtikelsController@removeMyFavorit');
     });
 });
+/**
+ * Routes for resource riwayat
+ */
+$app->get('riwayat', 'RiwayatsController@all');
+$app->get('riwayat/{id}', 'RiwayatsController@get');
+$app->post('riwayat', 'RiwayatsController@add');
+$app->put('riwayat/{id}', 'RiwayatsController@put');
+$app->delete('riwayat/{id}', 'RiwayatsController@remove');
