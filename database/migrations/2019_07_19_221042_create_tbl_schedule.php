@@ -25,6 +25,7 @@ class CreateTblSchedule extends Migration
             $table->integer('exp')->default(0);
             $table->integer('ended')->default(0);
             $table->integer('canceled')->default(0);
+            $table->integer('outdated')->default(0);
 
             $table->integer('consultant_id')->unsigned()->default(0);
             $table->string('time')->nullable();
