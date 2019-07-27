@@ -259,6 +259,7 @@ class SchedulesController extends Controller
                         $senderName = \App\User::where('id', $schedule['consultant_id'])->first()->name;
                         
                         $result['type'] = "accept";
+                        $result['schedule_id'] = $schedule['schedule_id'];
                         $result['requester_id'] = $schedule['requester_id'];
                         $result['consultant_id'] = $schedule['consultant_id'];
                         $result['title'] = 'Pengajuanmu telah diterima';
