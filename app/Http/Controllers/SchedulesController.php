@@ -143,11 +143,11 @@ class SchedulesController extends Controller
     public function finish(Request $request) {
         if (Auth::user()->role == 'guru') {
             $schedule = \App\Schedule::where('id', $request->id)->where('ended', 0)->first();
+            dd($schedule->id);
             if($schedule) {
                 $schedule = $schedule->update([
                     'ended' => 1
                 ]);
-                dd($schedule->id);
                 if($schedule) {
                     //Simpan riwayat untuk guru
                     $data['user_id'] = Auth::user()->id;
