@@ -144,12 +144,12 @@ class SchedulesController extends Controller
         if (Auth::user()->role == 'guru') {
             $schedule = \App\Schedule::where('id', $request->id)->where('ended', 0)->first();
             if($schedule) {
+                dd($schedule->id);
                 $schedule = $schedule->update([
                     'ended' => 1
                 ]);
                 if($schedule) {
                     //Simpan riwayat untuk guru
-                    dd($schedule->id);
                     $data['user_id'] = Auth::user()->id;
                     $data['schedule_id'] = $schedule->id;
                     $this->saveToRiwayat($data);
