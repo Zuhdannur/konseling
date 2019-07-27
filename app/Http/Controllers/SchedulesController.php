@@ -291,7 +291,7 @@ class SchedulesController extends Controller
                 ], 201);
             }
         } else {
-            return Response::json(["message" => "Pengajuan tidak ditemukan"], 201);
+            return Response::json(["message" => "Pengajuan ini telah dibatalkan."], 201);
         }
     }
 
