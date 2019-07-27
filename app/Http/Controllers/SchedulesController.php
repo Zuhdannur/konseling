@@ -679,7 +679,7 @@ class SchedulesController extends Controller
                 // $data['type'] = 'cancel';
                 // Helper::storeDataNotification($data);
                 $data['user_id'] = Auth::user()->id;
-                $data['schedule_id'] = $schedule->schedule_id;
+                $data['schedule_id'] = $schedule->id;
                 $this->saveToRiwayat($data);
                 
                 $schedule = $schedule->update([
