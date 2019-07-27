@@ -46,7 +46,13 @@ class RiwayatsController extends Controller
         return Response::json(['total_page' => $count], 200);
     }
 
-    public function get($id)
+    public function remove($id)
     {
+        $data = \App\Riwayat::where('id', $id)->where('user_id', Auth::user()->id)->delete();
+        if ($data) {
+            return Response::json(['message' => 'Berhasil menghapus pengajuan.'], 200);
+        } else {
+            return Response::json(['message' => 'Gagal menghapus pengajuan.'], 201);
+        }
     }
 }
