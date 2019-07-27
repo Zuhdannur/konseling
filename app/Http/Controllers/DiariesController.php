@@ -45,7 +45,7 @@ class DiariesController extends Controller
         if ($request->page == "") {
             $skip = 1;
         } else {
-            $skip = $limit * $request->page;
+            $skip = $limit * $request->page+1;
         }
 
         $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
