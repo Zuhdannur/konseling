@@ -232,10 +232,12 @@ class SchedulesController extends Controller
     //Helpers
 
     public function accept(Request $request) {
+
+        $schedule = \App\Schedule::where('id', $request->schedule_id)->first();
         
-        if(\App\Schedule::where('id', $request->schedule_id)->first()->canceled == 0) {
-            if (\App\Schedule::where('id', $request->schedule_id)->first()->status == 0) {
-                if (\App\Schedule::where('id', $request->schedule_id)->first()->exp == 0) {
+        if($schedule->canceled == 0) {
+            if ($schedule->status == 0) {
+                if ($schedule->exp == 0) {
                     $update = \App\Schedule::where('id', $request->schedule_id)->update([
                         'status' => 1,
                         'tgl_pengajuan' => $request->date,
@@ -259,7 +261,7 @@ class SchedulesController extends Controller
                         $senderName = \App\User::where('id', $schedule['consultant_id'])->first()->name;
                         
                         $result['type'] = "accept";
-                        $result['schedule_id'] = $schedule['schedule_id'];
+                        $result['schedule_id'] = $schedule['id'];
                         $result['requester_id'] = $schedule['requester_id'];
                         $result['consultant_id'] = $schedule['consultant_id'];
                         $result['title'] = 'Pengajuanmu telah diterima';
