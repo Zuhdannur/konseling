@@ -223,6 +223,16 @@ class SchedulesController extends Controller
 
                     if ($update) {
                         $schedule = \App\Schedule::where('id', $request->schedule_id)->with('consultant')->first();
+                        
+                        //Simpan riwayat untuk guru
+                        $data['user_id'] = Auth::user()->id;
+                        $data['schedule_id'] = $schedule->id;
+                        $this->saveToRiwayat($data);
+
+                        //Simpan riwayat untuk siswa
+                        $data['user_id'] =$schedule->requester_id;
+                        $data['schedule_id'] = $schedule->id;
+                        $this->saveToRiwayat($data);
 
                         // if($schedule->type_schedule == 'direct') {
                         //     $this->sendNotificationToDirect();
