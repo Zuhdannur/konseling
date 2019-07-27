@@ -329,19 +329,21 @@ class SchedulesController extends Controller
                 // $data['id_user'] = $schedule['requester_id'];
                 // $data['type'] = 'cancel';
                 // Helper::storeDataNotification($data);
-                $data['user_id'] = Auth::user()->id;
-                $data['schedule_id'] = $schedule->id;
-                $this->saveToRiwayat($data);
-
-                $data['user_id'] = $schedule->requester_id;
-                $data['schedule_id'] = $schedule->id;
-                $this->saveToRiwayat($data);
+                
 
                 $schedule = $schedule->update([
                     'canceled' => 1
                 ]);
 
                 if($schedule) {
+                    $data['user_id'] = Auth::user()->id;
+                    $data['schedule_id'] = $schedule->id;
+                    $this->saveToRiwayat($data);
+
+                    $data['user_id'] = $schedule->requester_id;
+                    $data['schedule_id'] = $schedule->id;
+                    $this->saveToRiwayat($data);
+
                     return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
                 } else {
                     return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
@@ -371,9 +373,7 @@ class SchedulesController extends Controller
                 // $data['id_user'] = $schedule['requester_id'];
                 // $data['type'] = 'cancel';
                 // Helper::storeDataNotification($data);
-                $data['user_id'] = Auth::user()->id;
-                $data['schedule_id'] = $schedule->id;
-                $this->saveToRiwayat($data);
+                
                 
                 //Tandai bahwa pengajuan telah dicancel.
                 $schedule = $schedule->update([
@@ -381,6 +381,10 @@ class SchedulesController extends Controller
                 ]);
 
                 if($schedule) {
+                    $data['user_id'] = Auth::user()->id;
+                    $data['schedule_id'] = $schedule->id;
+                    $this->saveToRiwayat($data);
+
                     return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
                 } else {
                     return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
