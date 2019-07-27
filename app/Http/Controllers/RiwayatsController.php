@@ -18,6 +18,11 @@ class RiwayatsController extends Controller
         $datas = \App\Riwayat::where('user_id', Auth::user()->id);
         $datas->with('schedule')->with('user');
 
+        if($request->has('orderBy'))
+        {
+            $datas = $request->where($request->orderBy, 'desc');
+        }
+
         $data = $datas
             ->skip($skip)
             ->take($limit)
