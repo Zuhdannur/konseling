@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     protected $fillable = [
-        'id','requester_id','consultant_id','type_schedule','time','exp','ended','canceled','status','outdated'
+        'requester_id','consultant_id','type_schedule','time','exp','ended','canceled','status','outdated'
     ];
 
     protected $dates = [

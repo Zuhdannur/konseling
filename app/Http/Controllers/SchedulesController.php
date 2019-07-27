@@ -151,7 +151,6 @@ class SchedulesController extends Controller
     public function finish(Request $request) {
         if (Auth::user()->role == 'guru') {
             $schedule = \App\Schedule::where('id', $request->schedule_id)->first();
-            dd($schedule);
             if($schedule) {
                 $update = $schedule->update([
                     'ended' => 1
