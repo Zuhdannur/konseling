@@ -43,7 +43,7 @@ class DiariesController extends Controller
         $limit = $request->limit;
 
         if ($request->page == "") {
-            $skip = 1;
+            $skip = 0;
         } else {
             $skip = $limit * $request->page;
         }
@@ -51,10 +51,10 @@ class DiariesController extends Controller
         $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
 
         $data = $datas
-        ->skip($skip+1)
-        ->take($limit)
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->skip($skip+1)
+            ->take($limit)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return \Illuminate\Support\Facades\Response::json(
             $data,
