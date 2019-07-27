@@ -92,13 +92,13 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         // $router->get('scheduleSiswaAktif', 'SchedulesController@aktif');
         // $router->get('scheduleSiswaPending', 'SchedulesController@pending');
         // $router->get('scheduleSiswaRiwayat', 'SchedulesController@riwayat');
-        $router->post('scheduleCancel', 'SchedulesController@cancel');
 
         $router->get('scheduleReceive', 'SchedulesController@receive');
         $router->get('scheduleReceiveCount', 'SchedulesController@receiveCount');
-        $router->post('scheduleAccept', 'SchedulesController@accept');
 
+        $router->post('scheduleAccept', 'SchedulesController@accept');
         $router->put('scheduleFinish', 'SchedulesController@finish');
+        $router->post('scheduleCancel/{id}/{status}', 'SchedulesController@cancel');
         /**
          * Routes for resource diary
          */

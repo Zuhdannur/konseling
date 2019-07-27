@@ -230,6 +230,8 @@ class SchedulesController extends Controller
         ], 200);
     }
 
+    //Helpers
+
     public function accept(Request $request) {
         
         if(\App\Schedule::where('id', $request->schedule_id)->exists()) {
@@ -292,6 +294,103 @@ class SchedulesController extends Controller
         } else {
             return Response::json(["message" => "Pengajuan tidak ditemukan"], 201);
         }
+    }
+
+    public function remove($id)
+    {
+        if (Auth::user()->role == 'siswa') {
+            $delete = \App\Schedule::where('id', $id)->where('requester_id', Auth::user()->id)->delete();
+            if ($delete) {
+                return \Illuminate\Support\Facades\Response::json(["message" => "success"], 200);
+            } else {
+                return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan telah diterima oleh guru."], 201);
+            }
+        }
+    }
+
+    public function cancel($id, $status) {
+        if(Auth::user()->role == 'guru') {
+            $schedule = \App\Schedule::where('id', $id)->where('status', 1)->first();
+            if($schedule) {
+
+                $senderName = \App\User::where('id', $schedule['consultant_id'])->first()->name;
+
+                $result['type'] = 'cancel';
+                $result['requester_id'] = $schedule['requester_id'];
+                $result['consultant_id'] = $schedule['consultant_id'];
+                $result['title'] = 'Pengajuanmu telah dibatalkan.';
+                $result['body'] = "Pengajuan ". $schedule['title'] ." telah dibatalkan oleh ".$senderName;
+                $result['read'] = 0;
+                
+                Helper::sendNotificationToSingle($result);
+
+                // $data['requester_id'] = $schedule['requester_id'];
+                // $data['title'] = 'Pengajuanmu telah dibatalkan.';
+                // $data['body'] = 'Pengajuan '.$schedule['title']. ' telah dibatalkan oleh '. $schedule['consultant']['name'];
+                // $data['id_user'] = $schedule['requester_id'];
+                // $data['type'] = 'cancel';
+                // Helper::storeDataNotification($data);
+                $data['user_id'] = Auth::user()->id;
+                $data['schedule_id'] = $schedule->id;
+                $this->saveToRiwayat($data);
+
+                $data['user_id'] = $schedule->requester_id;
+                $data['schedule_id'] = $schedule->id;
+                $this->saveToRiwayat($data);
+
+                $schedule = $schedule->update([
+                    'canceled' => 1
+                ]);
+
+                if($schedule) {
+                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
+                } else {
+                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
+                }
+            } else {
+                return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan telah dibatalkan oleh siswa."], 201);
+            }
+        } else {
+            //Role Siswa
+            $schedule = \App\Schedule::where('id', $id)->where('status', $status)->first();
+            if($schedule) {
+
+                // $senderName = \App\User::where('id', $schedule['requester_id'])->first()->name;
+
+                // $result['type'] = 'cancel';
+                // $result['requester_id'] = $schedule['requester_id'];
+                // $result['consultant_id'] = $schedule['consultant_id'];
+                // $result['title'] = 'Pengajuanmu telah dibatalkan.';
+                // $result['body'] = "Pengajuan ". $schedule['title'] ." telah dibatalkan oleh ".$senderName;
+                // $result['read'] = 0;
+                
+                // Helper::sendNotificationToSingle($result);
+
+                // $data['requester_id'] = $schedule['requester_id'];
+                // $data['title'] = 'Pengajuanmu telah dibatalkan.';
+                // $data['body'] = 'Pengajuan '.$schedule['title']. ' telah dibatalkan oleh '. $schedule['consultant']['name'];
+                // $data['id_user'] = $schedule['requester_id'];
+                // $data['type'] = 'cancel';
+                // Helper::storeDataNotification($data);
+                $data['user_id'] = Auth::user()->id;
+                $data['schedule_id'] = $schedule->id;
+                $this->saveToRiwayat($data);
+                
+                //Tandai bahwa pengajuan telah dicancel.
+                $schedule = $schedule->update([
+                    'canceled' => 1
+                ]);
+
+                if($schedule) {
+                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
+                } else {
+                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
+                }
+            } else {
+                return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan telah dibatalkan oleh guru."], 201);
+            }
+        }
+        
     }
 
     private function sendNotificationToDirect() {
@@ -630,101 +729,7 @@ class SchedulesController extends Controller
         return false;
     }
 
-    public function remove($id)
-    {
-        if (Auth::user()->role == 'siswa') {
-            $delete = \App\Schedule::where('id', $id)->where('requester_id', Auth::user()->id)->delete();
-            if ($delete) {
-                return \Illuminate\Support\Facades\Response::json(["message" => "success"], 200);
-            } else {
-                return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan telah diterima oleh guru."], 201);
-            }
-        }
-    }
-
-    public function cancel(Request $request) {
-        if(Auth::user()->role == 'guru') {
-            $schedule = \App\Schedule::where('id', $request->id)->where('status', 1)->first();
-            if($schedule) {
-
-                $senderName = \App\User::where('id', $schedule['consultant_id'])->first()->name;
-
-                $result['type'] = 'cancel';
-                $result['requester_id'] = $schedule['requester_id'];
-                $result['consultant_id'] = $schedule['consultant_id'];
-                $result['title'] = 'Pengajuanmu telah dibatalkan.';
-                $result['body'] = "Pengajuan ". $schedule['title'] ." telah dibatalkan oleh ".$senderName;
-                $result['read'] = 0;
-                
-                Helper::sendNotificationToSingle($result);
-
-                // $data['requester_id'] = $schedule['requester_id'];
-                // $data['title'] = 'Pengajuanmu telah dibatalkan.';
-                // $data['body'] = 'Pengajuan '.$schedule['title']. ' telah dibatalkan oleh '. $schedule['consultant']['name'];
-                // $data['id_user'] = $schedule['requester_id'];
-                // $data['type'] = 'cancel';
-                // Helper::storeDataNotification($data);
-                $data['user_id'] = Auth::user()->id;
-                $data['schedule_id'] = $schedule->id;
-                $this->saveToRiwayat($data);
-
-                $data['user_id'] = $schedule->requester_id;
-                $data['schedule_id'] = $schedule->id;
-                $this->saveToRiwayat($data);
-
-                $schedule = $schedule->update([
-                    'canceled' => 1
-                ]);
-
-                if($schedule) {
-                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
-                } else {
-                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
-                }
-            } else {
-                return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan telah dibatalkan oleh siswa."], 201);
-            }
-        } else {
-            //Role Siswa
-            $schedule = \App\Schedule::where('id', $request->id)->where('status', $request->status)->first();
-            if($schedule) {
-
-                // $senderName = \App\User::where('id', $schedule['requester_id'])->first()->name;
-
-                // $result['type'] = 'cancel';
-                // $result['requester_id'] = $schedule['requester_id'];
-                // $result['consultant_id'] = $schedule['consultant_id'];
-                // $result['title'] = 'Pengajuanmu telah dibatalkan.';
-                // $result['body'] = "Pengajuan ". $schedule['title'] ." telah dibatalkan oleh ".$senderName;
-                // $result['read'] = 0;
-                
-                // Helper::sendNotificationToSingle($result);
-
-                // $data['requester_id'] = $schedule['requester_id'];
-                // $data['title'] = 'Pengajuanmu telah dibatalkan.';
-                // $data['body'] = 'Pengajuan '.$schedule['title']. ' telah dibatalkan oleh '. $schedule['consultant']['name'];
-                // $data['id_user'] = $schedule['requester_id'];
-                // $data['type'] = 'cancel';
-                // Helper::storeDataNotification($data);
-                $data['user_id'] = Auth::user()->id;
-                $data['schedule_id'] = $schedule->id;
-                $this->saveToRiwayat($data);
-                
-                $schedule = $schedule->update([
-                    'canceled' => 1
-                ]);
-
-                if($schedule) {
-                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
-                } else {
-                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
-                }
-            } else {
-                return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan telah dibatalkan oleh guru."], 201);
-            }
-        }
-        
-    }
+    
 
     private function saveToRiwayat($data) {
         $riwayat = new \App\Riwayat;
