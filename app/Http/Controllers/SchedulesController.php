@@ -147,6 +147,7 @@ class SchedulesController extends Controller
                 $schedule = $schedule->update([
                     'ended' => 1
                 ]);
+                dd($schedule->id);
                 if($schedule) {
                     //Simpan riwayat untuk guru
                     $data['user_id'] = Auth::user()->id;
@@ -638,8 +639,6 @@ class SchedulesController extends Controller
         $insert->time = $request->time;
         $insert->title = $request->title;
         $insert->desc = $request->desc;
-        $insert->exp  = 0;
-        $insert->status  = 0;
         $insert->type_schedule = 'realtime';
         $insert->save();
         return $insert;
@@ -664,8 +663,6 @@ class SchedulesController extends Controller
         $insert->title = $request->title;
         $insert->desc = $request->desc;
         $insert->type_schedule = 'direct';
-        $insert->exp  = 0;
-        $insert->status  = 0;
         $insert->time = $request->time;
         $insert->location = $request->location;
         $insert->save();
