@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Riwayat extends Model {
-
+class Riwayat extends Model
+{
     protected $fillable = [];
 
     protected $dates = [];
@@ -13,5 +13,8 @@ class Riwayat extends Model {
     ];
 
     // Relationships
-
+    public function schedule()
+    {
+        return $this->hasOne('\App\Schedule', 'id', 'schedule_id');
+    }
 }
