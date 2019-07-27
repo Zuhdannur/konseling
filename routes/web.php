@@ -98,7 +98,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('scheduleReceiveCount', 'SchedulesController@receiveCount');
 
         $router->post('scheduleAccept', 'SchedulesController@accept');
-        $router->put('scheduleFinish', 'SchedulesController@finish');
+        $router->post('scheduleFinish', 'SchedulesController@finish');
         $router->post('scheduleCancel/{id}/{status}', 'SchedulesController@cancel');
         /**
          * Routes for resource diary
