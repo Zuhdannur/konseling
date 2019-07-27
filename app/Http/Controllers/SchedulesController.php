@@ -354,7 +354,7 @@ class SchedulesController extends Controller
         } else {
             //Role Siswa
             $schedule = \App\Schedule::where('id', $id)->where('status', $status)->first();
-            if($schedule->exists()) {
+            if($schedule != null) {
 
                 // $senderName = \App\User::where('id', $schedule['requester_id'])->first()->name;
 
@@ -390,7 +390,7 @@ class SchedulesController extends Controller
                     return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
                 }
             } else {
-                return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan telah dibatalkan oleh guru."], 201);
+                return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan telah diterimas oleh guru."], 201);
             }
         }
         
