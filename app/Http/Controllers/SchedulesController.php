@@ -148,7 +148,6 @@ class SchedulesController extends Controller
                     'ended' => 1
                 ]);
                 if($update) {
-                    dd("Excuse me ". $schedule->id);
                     //Simpan riwayat untuk guru
                     $data['user_id'] = Auth::user()->id;
                     $data['schedule_id'] = $schedule->id;
