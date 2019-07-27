@@ -43,7 +43,7 @@ class DiariesController extends Controller
         $limit = $request->limit;
 
         if ($request->page == "") {
-            $skip = 1;
+            $skip = 0;
         } else {
             $skip = $limit * $request->page;
         }
