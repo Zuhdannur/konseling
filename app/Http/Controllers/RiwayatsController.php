@@ -8,20 +8,21 @@ class RiwayatsController extends Controller
 {
     public function all(Request $filters)
     {
-        $data = \App\Riwayat::where('user_id', Auth::user()->id);
-        $data->with('schedule')->with('user');
-
-        if ($filters->has('orderBy')) {
-            $data = $data->orderBy($filters->orderBy, 'desc');
-        }
-
         $limit = $filters->limit;
         if (empty($filters->page)) {
             $skip = 0;
         } else {
             $skip = $limit * $filters->page;
         }
-        $datas = $data
+
+        $datas = \App\Riwayat::where('user_id', Auth::user()->id);
+        $datas = $datas->with('schedule')->with('user');
+
+        if ($filters->has('orderBy')) {
+            // $data = $data->orderBy($filters->orderBy, 'desc');
+        }
+
+        $datas = $datas
             ->skip($skip)
             ->take($limit)
             ->get();
