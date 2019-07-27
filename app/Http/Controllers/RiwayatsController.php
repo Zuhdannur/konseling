@@ -9,7 +9,7 @@ class RiwayatsController extends Controller
     public function all(Request $filters)
     {
         $data = \App\Riwayat::where('user_id', Auth::user()->id);
-        $data->with('schedule')->with('user')->get();
+        $data->with('schedule')->with('user');
 
         if ($filters->has('orderBy')) {
             $data = $data->orderBy($filters->orderBy, 'desc');
@@ -23,7 +23,8 @@ class RiwayatsController extends Controller
         }
         $datas = $data
             ->skip($skip)
-            ->take($limit);
+            ->take($limit)
+            ->get();
 
         return Response::json($datas, 200);
     }
