@@ -92,6 +92,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         // $router->get('scheduleSiswaAktif', 'SchedulesController@aktif');
         // $router->get('scheduleSiswaPending', 'SchedulesController@pending');
         // $router->get('scheduleSiswaRiwayat', 'SchedulesController@riwayat');
+        $router->get('get', 'SchedulesController@take');
 
         $router->get('scheduleReceive', 'SchedulesController@receive');
         $router->get('scheduleReceiveCount', 'SchedulesController@receiveCount');
