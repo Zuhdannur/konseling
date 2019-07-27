@@ -21,4 +21,9 @@ class Riwayat extends Model
     {
         return $this->hasOne('\App\Schedule', 'id', 'schedule_id');
     }
+
+    public function user()
+    {
+        return $this->hasOne('\App\User', 'id', 'user_id');
+    }
 }
