@@ -17,6 +17,7 @@ class RiwayatsController extends Controller
 
         $datas = \App\Riwayat::where('user_id', Auth::user()->id);
         // $datas = $datas->with('schedule')->with('user');
+        dd("Skip ".$skip." Take ".$limit);
 
         $data = $datas
             ->skip($skip)
