@@ -166,7 +166,7 @@ class SchedulesController extends Controller
                 return Response::json(['message' => 'Telah diselesaikan oleh siswa.'], 201);
             }
         } else {
-            $schedule = \App\Schedule::where('id', $request->id)->where('requester_id', $request->requester_id)->where('ended', 0)->first();
+            $schedule = \App\Schedule::where('id', $request->id)->where('ended', 0)->first();
             if($schedule) {
                 $schedule = $schedule->update([
                     'ended' => 1
