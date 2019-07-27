@@ -116,9 +116,10 @@ class SchedulesController extends Controller
             }
         })->with('request')->with('consultant')->orderBy('id', 'desc');
 
-        
         if($filters->has('type_schedule')) $schedule = $schedule->where('type_schedule', $filters->type_schedule);
         
+        if($filters->has('canceled')) $schedule = $schedule->where('canceled', $filters->canceled);
+        if($filters->has('exp')) $schedule = $schedule->where('exp', $filters->exp);
         if($filters->has('status')) $schedule = $schedule->where('status', $filters->status);
 
         if($filters->has('ended')) $schedule = $schedule->where('ended', $filters->ended);
@@ -310,7 +311,7 @@ class SchedulesController extends Controller
 
     public function cancel($id, $status) {
         if(Auth::user()->role == 'guru') {
-            $schedule = \App\Schedule::where('id', $id)->where('status', 1)->first();
+            $schedule = \App\Schedule::where('id', $id)->where('status', $status)->first();
             if($schedule) {
 
                 $senderName = \App\User::where('id', $schedule['consultant_id'])->first()->name;
