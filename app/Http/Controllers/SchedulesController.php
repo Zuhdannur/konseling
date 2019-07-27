@@ -121,7 +121,6 @@ class SchedulesController extends Controller
         if($filters->has('canceled')) $schedule = $schedule->where('canceled', $filters->canceled);
         if($filters->has('exp')) $schedule = $schedule->where('exp', $filters->exp);
         if($filters->has('status')) $schedule = $schedule->where('status', $filters->status);
-
         if($filters->has('ended')) $schedule = $schedule->where('ended', $filters->ended);
 
         if($filters->has('upcoming')) if ($filters->upcoming == "true") {
