@@ -644,7 +644,7 @@ class SchedulesController extends Controller
 
     public function cancel(Request $request) {
         if(Auth::user()->role == 'guru') {
-            $schedule = \App\Schedule::where('id', $request->id)->where('requester_id', $request->requester_id)->where('status', 1)->first();
+            $schedule = \App\Schedule::where('id', $request->id)->where('status', 1)->first();
             if($schedule) {
 
                 $senderName = \App\User::where('id', $schedule['consultant_id'])->first()->name;
@@ -686,7 +686,7 @@ class SchedulesController extends Controller
             }
         } else {
             //Role Siswa
-            $schedule = \App\Schedule::where('id', $request->id)->where('requester_id', Auth::user()->id)->where('status', $request->status)->first();
+            $schedule = \App\Schedule::where('id', $request->id)->where('status', $request->status)->first();
             if($schedule) {
 
                 // $senderName = \App\User::where('id', $schedule['requester_id'])->first()->name;
