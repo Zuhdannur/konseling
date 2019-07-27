@@ -50,7 +50,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
 
     //For Develpment Purposes
     $router->get('user', 'UsersController@all');
-
+   
     $router->group(['middleware' => 'auth'], function () use ($router) {
         
         //Message

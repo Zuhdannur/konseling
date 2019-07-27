@@ -2,22 +2,21 @@
 
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Lumen\Http\Request;
+use Illuminate\Http\Request;
 
 class RiwayatsController extends Controller
 {
-    public function all(Request $filters)
+    public function all(Request $request)
     {
-        $limit = $filters->limit;
-        if (empty($filters->page)) {
+        $limit = $request->limit;
+        if (empty($request->page)) {
             $skip = 0;
         } else {
-            $skip = $limit * $filters->page;
+            $skip = $limit * $request->page;
         }
 
         $datas = \App\Riwayat::where('user_id', Auth::user()->id);
-        // $datas = $datas->with('schedule')->with('user');
-        dd("Skip ".$skip." Take ".$limit);
+        $datas->with('schedule')->with('user');
 
         $data = $datas
             ->skip($skip)
