@@ -699,9 +699,10 @@ class SchedulesController extends Controller
     }
 
     private function saveToRiwayat($data) {
-        $riwayat = \App\Riwayat::updateOrReplace([
+        $riwayat = \App\Riwayat::updateOrCreate([
             'schedule_id' => $data['schedule_id']
         ], [
+            'schedule_id' => $data['schedule_id'],
             'user_id' => $data['user_id']
         ]);
         return $riwayat;
