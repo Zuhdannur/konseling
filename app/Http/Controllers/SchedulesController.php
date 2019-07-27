@@ -148,6 +148,16 @@ class SchedulesController extends Controller
                     'ended' => 1
                 ]);
                 if($schedule) {
+                    //Simpan riwayat untuk guru
+                    $data['user_id'] = Auth::user()->id;
+                    $data['schedule_id'] = $schedule->id;
+                    $this->saveToRiwayat($data);
+
+                    //Simpan riwayat untuk siswa
+                    $data['user_id'] =$schedule->requester_id;
+                    $data['schedule_id'] = $schedule->id;
+                    $this->saveToRiwayat($data);
+
                     return Response::json(['message' => 'Pengajuan telah selesai.'], 200);
                 } else {
                     return Response::json(['message' => 'Gagal menyelesaikan pengajuan.'], 201);
@@ -162,6 +172,16 @@ class SchedulesController extends Controller
                     'ended' => 1
                 ]);
                 if($schedule) {
+                    //Simpan riwayat untuk guru
+                    $data['user_id'] = $schedule->consultant_id;
+                    $data['schedule_id'] = $schedule->id;
+                    $this->saveToRiwayat($data);
+
+                    //Simpan riwayat untuk siswa
+                    $data['user_id'] = Auth::user()->id;
+                    $data['schedule_id'] = $schedule->id;
+                    $this->saveToRiwayat($data);
+
                     return Response::json(['message' => 'Pengajuan telah selesai.'], 200);
                 } else {
                     return Response::json(['message' => 'Gagal menyelesaikan pengajuan.'], 201);
@@ -224,16 +244,6 @@ class SchedulesController extends Controller
                     if ($update) {
                         $schedule = \App\Schedule::where('id', $request->schedule_id)->with('consultant')->first();
                         
-                        //Simpan riwayat untuk guru
-                        $data['user_id'] = Auth::user()->id;
-                        $data['schedule_id'] = $schedule->id;
-                        $this->saveToRiwayat($data);
-
-                        //Simpan riwayat untuk siswa
-                        $data['user_id'] =$schedule->requester_id;
-                        $data['schedule_id'] = $schedule->id;
-                        $this->saveToRiwayat($data);
-
                         // if($schedule->type_schedule == 'direct') {
                         //     $this->sendNotificationToDirect();
                         // }
