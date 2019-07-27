@@ -9,4 +9,10 @@ class RiwayatsController extends Controller
         $data = \App\Riwayat::all();
         return Response::json($data, 200);
     }
+
+    public function get($id)
+    {
+        $data = \App\Riwayat::where('user_id', Auth::user()->id)->get();
+        return Response::json($data, 200);
+    }
 }
