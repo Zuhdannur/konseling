@@ -19,7 +19,7 @@ class RiwayatsController extends Controller
         $datas->with('schedule')->with('user');
 
         if ($request->has('orderBy')) {
-            $datas = $datas->where($request->orderBy, 'desc');
+            $datas = $datas->orderBy($request->orderBy, 'desc');
         }
 
         $data = $datas
