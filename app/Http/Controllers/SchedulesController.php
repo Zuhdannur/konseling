@@ -233,7 +233,7 @@ class SchedulesController extends Controller
 
     public function accept(Request $request) {
         
-        if(\App\Schedule::where('id', $request->schedule_id)->exists()) {
+        if(\App\Schedule::where('id', $request->schedule_id)->first()->canceled == 0) {
             if (\App\Schedule::where('id', $request->schedule_id)->first()->status == 0) {
                 if (\App\Schedule::where('id', $request->schedule_id)->first()->exp == 0) {
                     $update = \App\Schedule::where('id', $request->schedule_id)->update([
