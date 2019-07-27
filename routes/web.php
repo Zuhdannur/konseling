@@ -50,6 +50,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
 
     //For Develpment Purposes
     $router->get('user', 'UsersController@all');
+    $router->get('riwayat', 'RiwayatsController@all');
 
     $router->group(['middleware' => 'auth'], function () use ($router) {
         
@@ -134,7 +135,6 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         /**
          * Routes for resource riwayat
          */
-        $router->get('riwayat', 'RiwayatsController@all');
         $router->get('riwayat/{id}', 'RiwayatsController@get');
         $router->post('riwayat', 'RiwayatsController@add');
         $router->put('riwayat/{id}', 'RiwayatsController@put');

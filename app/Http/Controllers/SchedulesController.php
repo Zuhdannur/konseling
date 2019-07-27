@@ -678,6 +678,10 @@ class SchedulesController extends Controller
                 // $data['id_user'] = $schedule['requester_id'];
                 // $data['type'] = 'cancel';
                 // Helper::storeDataNotification($data);
+                $data['user_id'] = Auth::user()->id;
+                $data['schedule_id'] = $schedule->schedule_id;
+                $this->saveToRiwayat($data);
+                
                 $schedule = $schedule->update([
                     'canceled' => 1
                 ]);
@@ -692,6 +696,14 @@ class SchedulesController extends Controller
             }
         }
         
+    }
+
+    private function saveToRiwayat($data) {
+        $riwayat = \App\Riwayat::updateOrReplace([
+            'schedule_id' => $data['schedule_id']
+        ], [
+            'user_id' => $data['user_id']
+        ]);
     }
 
     public function send(Request $request)
