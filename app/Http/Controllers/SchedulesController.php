@@ -472,6 +472,18 @@ class SchedulesController extends Controller
                             ->where('ended', 0);
                 });
             }
+
+            if($filters->pengajuan == 'acceptedDirect') {
+                foreach ($schedule->get() as $key => $row) {
+                    if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+                        if($row->outdated == 0){
+                            $row->update([
+                                'outdated' => 1
+                            ]);
+                        }
+                    }
+                }
+            }
         }
         
         if ($filters->has('status')) {
