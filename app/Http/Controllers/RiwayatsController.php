@@ -18,16 +18,12 @@ class RiwayatsController extends Controller
         $datas = \App\Riwayat::where('user_id', Auth::user()->id);
         // $datas = $datas->with('schedule')->with('user');
 
-        if ($filters->has('orderBy')) {
-            // $data = $data->orderBy($filters->orderBy, 'desc');
-        }
-
-        $datas = $datas
+        $data = $datas
             ->skip($skip)
             ->take($limit)
             ->get();
 
-        return Response::json($datas, 200);
+        return Response::json($data, 200);
     }
 
     public function count(Request $filters)
