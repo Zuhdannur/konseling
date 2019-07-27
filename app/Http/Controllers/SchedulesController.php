@@ -220,7 +220,6 @@ class SchedulesController extends Controller
         if (empty($filters->page)) $skip = 0;
         else $skip = $limit * $filters->page;
 
-
         $count = $schedule
         ->paginate($skip)
         ->lastPage($limit);
