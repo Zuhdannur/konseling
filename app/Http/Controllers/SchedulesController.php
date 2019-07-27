@@ -168,10 +168,10 @@ class SchedulesController extends Controller
         } else {
             $schedule = \App\Schedule::where('id', $request->id)->where('ended', 0)->first();
             if($schedule) {
-                $schedule = $schedule->update([
+                $update = $schedule->update([
                     'ended' => 1
                 ]);
-                if($schedule) {
+                if($update) {
                     //Simpan riwayat untuk guru
                     $data['user_id'] = $schedule->consultant_id;
                     $data['schedule_id'] = $schedule->id;
