@@ -658,6 +658,10 @@ class SchedulesController extends Controller
                 $data['schedule_id'] = $schedule->id;
                 $this->saveToRiwayat($data);
 
+                $data['user_id'] = $schedule->requester_id;
+                $data['schedule_id'] = $schedule->id;
+                $this->saveToRiwayat($data);
+
                 $schedule = $schedule->update([
                     'canceled' => 1
                 ]);
