@@ -354,8 +354,7 @@ class SchedulesController extends Controller
         } else {
             //Role Siswa
             $schedule = \App\Schedule::where('id', $id)->where('status', $status)->first();
-            dd($schedule);
-            if($schedule) {
+            if($schedule->exists()) {
 
                 // $senderName = \App\User::where('id', $schedule['requester_id'])->first()->name;
 
