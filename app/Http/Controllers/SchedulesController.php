@@ -731,6 +731,8 @@ class SchedulesController extends Controller
         $riwayat->schedule_id = $data['schedule_id'];
         $riwayat->user_id = $data['user_id'];
         $riwayat->save();
+
+        return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan telah disimpan di riwayat."], 200);
     }
 
     public function send(Request $request)
