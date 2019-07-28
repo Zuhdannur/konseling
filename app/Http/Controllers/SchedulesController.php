@@ -87,22 +87,26 @@ class SchedulesController extends Controller
                 }
                 if($filters->pengajuan == 'realtime') {
                     foreach ($query->get() as $key => $row) {
-                        if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
-                            if($row->exp == 0) {
-                                $row->update([
-                                    'exp'=> 1
-                                ]);
+                        if ($row->type_schedule != "daring") {
+                            if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+                                if($row->exp == 0) {
+                                    $row->update([
+                                        'exp'=> 1
+                                    ]);
+                                }
                             }
                         }
                     }
                 }
                 if($filters->pengajuan == 'direct') {
                     foreach ($query->get() as $key => $row) {
-                        if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
-                            if($row->exp == 0) {
-                                $row->update([
-                                    'exp'=> 1
-                                ]);
+                        if ($row->type_schedule != "daring") {
+                            if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+                                if($row->exp == 0) {
+                                    $row->update([
+                                        'exp'=> 1
+                                    ]);
+                                }
                             }
                         }
                     }
@@ -495,7 +499,7 @@ class SchedulesController extends Controller
                             if ($row->outdated == 0) {
                                 $row->update([
                                 'outdated' => 1
-                            ]);
+                                ]);
                             }
                         }
                     }
