@@ -214,18 +214,19 @@ class SchedulesController extends Controller
                     $sql->where('id_sekolah', $user->detail->id_sekolah);
                 });
             });
-            if($filters->has('type_schedule')) {
-                $query->where('type_schedule', $filters->type_schedule);
-            }
-
-            if($filters->has('status')) {
-                $query->where('status', $filters->status);
-            }
-
-            if($filters->has('upcoming')) {
-                if ($filters->upcoming == "true") $query->where('time', '>', Carbon::now());
-            }
         })->with('request')->with('consultant')->orderBy('id', 'desc');
+
+        if($filters->has('type_schedule')) {
+            $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+        }
+
+        if($filters->has('status')) {
+            $schedule = $schedule->where('status', $filters->status);
+        }
+
+        if($filters->has('upcoming')) {
+            if ($filters->upcoming == "true") $schedule = $schedule->where('time', '>', Carbon::now());
+        }
 
         $limit = $filters->limit;
 
@@ -455,18 +456,6 @@ class SchedulesController extends Controller
                     }
                 }
                 
-            }
-
-            if($filters->pengajuan == 'direct') {
-                foreach ($schedule->get() as $key => $row) {
-                    if ($row->type_schedule != "daring" && $row->type_schedule != "realtime") {
-                        if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
-                            $row->update([
-                                'outdated'=> 1
-                            ]);
-                        }
-                    }
-                }
             }
 
             if($filters->pengajuan == 'riwayat') {
