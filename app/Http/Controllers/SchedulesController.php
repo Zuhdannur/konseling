@@ -170,16 +170,15 @@ class SchedulesController extends Controller
             });
         })->with('request')->with('consultant')->orderBy('id', 'desc');
 
-        if($filters->has('type_schedule')) {
-            $schedule = $schedule->where('type_schedule', $filters->type_schedule);
-        }
+        if($filters->has('type_schedule')) $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+        
+        if($filters->has('canceled')) $schedule = $schedule->where('canceled', $filters->canceled);
+        if($filters->has('exp')) $schedule = $schedule->where('exp', $filters->exp);
+        if($filters->has('status')) $schedule = $schedule->where('status', $filters->status);
+        if($filters->has('ended')) $schedule = $schedule->where('ended', $filters->ended);
 
-        if($filters->has('status')) {
-            $schedule = $schedule->where('status', $filters->status);
-        }
-
-        if($filters->has('upcoming')) {
-            if ($filters->upcoming == "true") $schedule = $schedule->where('time', '>', Carbon::now());
+        if($filters->has('upcoming')) if ($filters->upcoming == "true") {
+            $schedule = $schedule->where('time', '>', Carbon::now());
         }
 
         $limit = $filters->limit;
