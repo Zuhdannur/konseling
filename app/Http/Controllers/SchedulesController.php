@@ -148,8 +148,52 @@ class SchedulesController extends Controller
             ->skip($skip)
             ->take($limit)
             ->get();
+
+         $count = $schedule
+            ->paginate($skip)
+            ->lastPage($limit);
             
-        return Response::json($datas, 200);
+        return Response::json([
+            "data" => $datas,
+            "count" => $count
+        ], 200);
+    }
+
+    public function receiveCount(Request $filters) {
+        $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
+
+        $schedule = \App\Schedule::where(function ($query) use ($user, $filters) {
+            $query->whereHas('request', function($q) use ($user) {
+                $q->whereHas('detail', function($sql) use ($user) {
+                    $sql->where('id_sekolah', $user->detail->id_sekolah);
+                });
+            });
+        })->with('request')->with('consultant')->orderBy('id', 'desc');
+
+        if($filters->has('type_schedule')) {
+            $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+        }
+
+        if($filters->has('status')) {
+            $schedule = $schedule->where('status', $filters->status);
+        }
+
+        if($filters->has('upcoming')) {
+            if ($filters->upcoming == "true") $schedule = $schedule->where('time', '>', Carbon::now());
+        }
+
+        $limit = $filters->limit;
+
+        if (empty($filters->page)) $skip = 0;
+        else $skip = $limit * $filters->page;
+
+        $count = $schedule
+        ->paginate($skip)
+        ->lastPage($limit);
+            
+        return Response::json([
+            'total_page' => $count
+        ], 200);
     }
 
     public function finish(Request $request) {
@@ -203,43 +247,6 @@ class SchedulesController extends Controller
             }
         }
         
-    }
-
-    public function receiveCount(Request $filters) {
-        $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
-
-        $schedule = \App\Schedule::where(function ($query) use ($user, $filters) {
-            $query->whereHas('request', function($q) use ($user) {
-                $q->whereHas('detail', function($sql) use ($user) {
-                    $sql->where('id_sekolah', $user->detail->id_sekolah);
-                });
-            });
-        })->with('request')->with('consultant')->orderBy('id', 'desc');
-
-        if($filters->has('type_schedule')) {
-            $schedule = $schedule->where('type_schedule', $filters->type_schedule);
-        }
-
-        if($filters->has('status')) {
-            $schedule = $schedule->where('status', $filters->status);
-        }
-
-        if($filters->has('upcoming')) {
-            if ($filters->upcoming == "true") $schedule = $schedule->where('time', '>', Carbon::now());
-        }
-
-        $limit = $filters->limit;
-
-        if (empty($filters->page)) $skip = 0;
-        else $skip = $limit * $filters->page;
-
-        $count = $schedule
-        ->paginate($skip)
-        ->lastPage($limit);
-            
-        return Response::json([
-            'total_page' => $count
-        ], 200);
     }
 
     //Helpers
