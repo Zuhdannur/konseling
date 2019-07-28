@@ -114,12 +114,12 @@ class SchedulesController extends Controller
     
                 if($filters->pengajuan == 'acceptedDirect') {
                     foreach ($query->get() as $key => $row) {
-                        if ($row->type_schedule != "daring") {
+                        if ($row->type_schedule != "daring" && $row->type_schedule != "realtime") {
                             if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
                                 if ($row->outdated == 0) {
                                     $row->update([
-                                    'outdated' => 1
-                                ]);
+                                        'outdated' => 1
+                                    ]);
                                 }
                             }
                         }
@@ -459,7 +459,7 @@ class SchedulesController extends Controller
 
             if($filters->pengajuan == 'direct') {
                 foreach ($schedule->get() as $key => $row) {
-                    if ($row->type_schedule != "daring") {
+                    if ($row->type_schedule != "daring" && $row->type_schedule != "realtime") {
                         if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
                             $row->update([
                                 'outdated'=> 1
@@ -494,11 +494,11 @@ class SchedulesController extends Controller
 
             if($filters->pengajuan == 'acceptedDirect') {
                 foreach ($schedule->get() as $key => $row) {
-                    if ($row->type_schedule != "daring") {
+                    if ($row->type_schedule != "daring" && $row->type_schedule != "realtime") {
                         if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
                             if ($row->outdated == 0) {
                                 $row->update([
-                                'outdated' => 1
+                                    'outdated' => 1
                                 ]);
                             }
                         }
