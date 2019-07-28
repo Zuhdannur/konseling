@@ -149,14 +149,7 @@ class SchedulesController extends Controller
             ->take($limit)
             ->get();
 
-         $count = $schedule
-            ->paginate($skip)
-            ->lastPage($limit);
-            
-        return Response::json([
-            "data" => $datas,
-            "count" => $count
-        ], 200);
+        return Response::json($datas, 200);
     }
 
     public function receiveCount(Request $filters) {
