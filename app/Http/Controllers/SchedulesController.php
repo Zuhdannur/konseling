@@ -276,7 +276,7 @@ class SchedulesController extends Controller
                         $result['body'] = "Pengajuan ".$schedule['title']." telah diterima oleh ".$senderName;
                         $result['read'] = 0;
                         
-                        Helper::sendNotificationToSingle($schedule);
+                        Helper::sendNotificationToSingle($result);
 
                         // $data['requester_id'] = $schedule['requester_id'];
                         // $data['title'] = 'Pengajuanmu telah diterima.';
@@ -285,7 +285,7 @@ class SchedulesController extends Controller
                         // $data['type'] = 'accept';
                         // Helper::storeDataNotification($data);
 
-                        return Response::json($result, 200);
+                        return Response::json($schedule, 200);
                     } else {
                         return Response::json([
                             "message" => "Gagal menerima."
