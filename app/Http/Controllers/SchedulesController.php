@@ -87,22 +87,26 @@ class SchedulesController extends Controller
                 }
                 if($filters->pengajuan == 'realtime') {
                     foreach ($query->get() as $key => $row) {
-                        if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
-                            if($row->exp == 0) {
-                                $row->update([
-                                    'exp'=> 1
-                                ]);
+                        if ($row->type_schedule != "daring") {
+                            if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+                                if($row->exp == 0) {
+                                    $row->update([
+                                        'exp'=> 1
+                                    ]);
+                                }
                             }
                         }
                     }
                 }
                 if($filters->pengajuan == 'direct') {
                     foreach ($query->get() as $key => $row) {
-                        if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
-                            if($row->exp == 0) {
-                                $row->update([
-                                    'exp'=> 1
-                                ]);
+                        if ($row->type_schedule != "daring") {
+                            if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+                                if($row->exp == 0) {
+                                    $row->update([
+                                        'exp'=> 1
+                                    ]);
+                                }
                             }
                         }
                     }
@@ -110,12 +114,12 @@ class SchedulesController extends Controller
     
                 if($filters->pengajuan == 'acceptedDirect') {
                     foreach ($query->get() as $key => $row) {
-                        if ($row->type_schedule != "daring") {
+                        if ($row->type_schedule != "daring" && $row->type_schedule != "realtime") {
                             if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
                                 if ($row->outdated == 0) {
                                     $row->update([
-                                    'outdated' => 1
-                                ]);
+                                        'outdated' => 1
+                                    ]);
                                 }
                             }
                         }
@@ -144,8 +148,44 @@ class SchedulesController extends Controller
             ->skip($skip)
             ->take($limit)
             ->get();
-            
+
         return Response::json($datas, 200);
+    }
+
+    public function receiveCount(Request $filters) {
+        $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
+
+        $schedule = \App\Schedule::where(function ($query) use ($user, $filters) {
+            $query->whereHas('request', function($q) use ($user) {
+                $q->whereHas('detail', function($sql) use ($user) {
+                    $sql->where('id_sekolah', $user->detail->id_sekolah);
+                });
+            });
+        })->with('request')->with('consultant')->orderBy('id', 'desc');
+
+        if($filters->has('type_schedule')) $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+        
+        if($filters->has('canceled')) $schedule = $schedule->where('canceled', $filters->canceled);
+        if($filters->has('exp')) $schedule = $schedule->where('exp', $filters->exp);
+        if($filters->has('status')) $schedule = $schedule->where('status', $filters->status);
+        if($filters->has('ended')) $schedule = $schedule->where('ended', $filters->ended);
+
+        if($filters->has('upcoming')) if ($filters->upcoming == "true") {
+            $schedule = $schedule->where('time', '>', Carbon::now());
+        }
+
+        $limit = $filters->limit;
+
+        if (empty($filters->page)) $skip = 0;
+        else $skip = $limit * $filters->page;
+
+        $count = $schedule
+        ->paginate($skip)
+        ->lastPage($limit);
+            
+        return Response::json([
+            'total_page' => $count
+        ], 200);
     }
 
     public function finish(Request $request) {
@@ -199,42 +239,6 @@ class SchedulesController extends Controller
             }
         }
         
-    }
-
-    public function receiveCount(Request $filters) {
-        $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
-
-        $schedule = \App\Schedule::where(function ($query) use ($user, $filters) {
-            $query->whereHas('request', function($q) use ($user) {
-                $q->whereHas('detail', function($sql) use ($user) {
-                    $sql->where('id_sekolah', $user->detail->id_sekolah);
-                });
-            });
-            if($filters->has('type_schedule')) {
-                $query->where('type_schedule', $filters->type_schedule);
-            }
-
-            if($filters->has('status')) {
-                $query->where('status', $filters->status);
-            }
-
-            if($filters->has('upcoming')) {
-                if ($filters->upcoming == "true") $query->where('time', '>', Carbon::now());
-            }
-        })->with('request')->with('consultant')->orderBy('id', 'desc');
-
-        $limit = $filters->limit;
-
-        if (empty($filters->page)) $skip = 0;
-        else $skip = $limit * $filters->page;
-
-        $count = $schedule
-        ->paginate($skip)
-        ->lastPage($limit);
-            
-        return Response::json([
-            'total_page' => $count
-        ], 200);
     }
 
     //Helpers
@@ -453,18 +457,6 @@ class SchedulesController extends Controller
                 
             }
 
-            if($filters->pengajuan == 'direct') {
-                foreach ($schedule->get() as $key => $row) {
-                    if ($row->type_schedule != "daring") {
-                        if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
-                            $row->update([
-                                'outdated'=> 1
-                            ]);
-                        }
-                    }
-                }
-            }
-
             if($filters->pengajuan == 'riwayat') {
                 //Saat fetch data jika pengajuannya riwayat
                 $schedule = $schedule->where(function ($query){
@@ -490,12 +482,12 @@ class SchedulesController extends Controller
 
             if($filters->pengajuan == 'acceptedDirect') {
                 foreach ($schedule->get() as $key => $row) {
-                    if ($row->type_schedule != "daring") {
+                    if ($row->type_schedule != "daring" && $row->type_schedule != "realtime") {
                         if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
                             if ($row->outdated == 0) {
                                 $row->update([
-                                'outdated' => 1
-                            ]);
+                                    'outdated' => 1
+                                ]);
                             }
                         }
                     }
