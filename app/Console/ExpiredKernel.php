@@ -13,7 +13,7 @@ class ExpiredKernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\ExpiredReminder::class
     ];
 
     /**
@@ -22,10 +22,14 @@ class ExpiredKernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
+    protected function commands()
+    {
+        require base_path('routes/console.php');
+    }
+
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            DB::table('schedule')->whereRaw('time > now()')->update(['exp' => 1]);
-        })->daily();
+        $schedule->command('monthly:reminder')
+                ->monthly();
     }
 }

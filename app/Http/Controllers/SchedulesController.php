@@ -343,7 +343,7 @@ class SchedulesController extends Controller
                 // $data['body'] = 'Pengajuan '.$schedule['title']. ' telah dibatalkan oleh '. $schedule['consultant']['name'];
                 // $data['id_user'] = $schedule['requester_id'];
                 // $data['type'] = 'cancel';
-                // Helper::storeDataNotification($data);
+                // Helper::Notification($data);
                 
 
                 $schedule = $schedule->update([

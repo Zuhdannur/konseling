@@ -9,7 +9,7 @@ class ExpiredReminder extends Command
     *
     * @var string
     */
-   protected $signature = 'expired:reminder';
+   protected $signature = 'monthly:reminder';
    /**
     * The console command description.
     *
@@ -32,6 +32,7 @@ class ExpiredReminder extends Command
     */
    public function handle()
    {
-       
+       $kelas = Kelas::all();
+       $this->info('Mantap pake eko');
    }
 }
