@@ -245,7 +245,7 @@ class SchedulesController extends Controller
     {
         $schedule = \App\Schedule::where('id', $request->id)->first();
         $update = $schedule->update([
-            'channel_url' => $request->channel_url
+            'channel_url' => 'test'
         ]);
         if($update) return Response::json(['message' => 'Berhasil update channel url.'], 200);
         else return Response::json(['message' => 'Gagal mengupdate.'], 201);
