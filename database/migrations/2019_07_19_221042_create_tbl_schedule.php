@@ -20,6 +20,7 @@ class CreateTblSchedule extends Migration
             $table->date('tgl_pengajuan')->nullable();
             $table->text('desc');
             $table->string('type_schedule');
+            $table->string('channel_url')->nullable();
 
             $table->integer('status')->default(0);
             $table->integer('exp')->default(0);
