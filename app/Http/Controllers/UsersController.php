@@ -28,7 +28,7 @@ class UsersController extends Controller
                     'firebase_token' => $request->firebase_token
                 ]);
 
-                if (Auth::user()->role == 'siswa') {
+                if ($user->role == 'siswa') {
                     $data = \App\User::where('api_token', $apiKey)->with('detail', 'detail.kelas', 'detail.sekolah')->first();
                 } else {
                     $data = \App\User::where('api_token', $apiKey)->with('detail', 'detail.sekolah')->first();
