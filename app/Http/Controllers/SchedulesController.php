@@ -545,7 +545,9 @@ class SchedulesController extends Controller
         }
 
         if($filters->has('orderBy')) {
-            $schedule = $schedule->orderBy($filters->orderBy, 'desc');
+            if(!empty($filters->has('orderBy'))) {
+                $schedule = $schedule->orderBy($filters->orderBy, 'desc');
+            }
         } else {
             $schedule = $schedule->orderBy('created_at', 'desc');
         }
