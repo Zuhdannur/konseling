@@ -27,10 +27,20 @@ class UsersController extends Controller
                     'api_token' => $apiKey,
                     'firebase_token' => $request->firebase_token
                 ]);
+
+                if (Auth::user()->role == 'siswa') {
+                    $data = \App\User::where('api_token', $apiKey)->with('detail', 'detail.kelas', 'detail.sekolah')->first();
+                } else {
+                    $data = \App\User::where('api_token', $apiKey)->with('detail', 'detail.sekolah')->first();
+                    $this->addTopic($data);
+                }
+
+
                 return Response::json([
                     "message"   => 'success',
                     "api_token" => $apiKey,
                     "role"      => $user->role,
+                    "data"      => $data
                 ], 200);
             } else {
                 return Response::json([
