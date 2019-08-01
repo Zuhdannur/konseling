@@ -241,6 +241,16 @@ class SchedulesController extends Controller
         
     }
 
+    public function updateChannelUrl(Request $request)
+    {
+        $schedule = \App\Schedule::where('id', $request->id)->first();
+        $update = $schedule->update([
+            'channel_url' => $request->channel_url
+        ]);
+        if($update) return Response::json(['message' => 'Berhasil update channel url.'], 200);
+        else return Response::json(['message' => 'Gagal mengupdate.'], 201);
+    }
+
     //Helpers
 
     public function accept(Request $request) {
@@ -535,7 +545,11 @@ class SchedulesController extends Controller
         }
 
         if($filters->has('orderBy')) {
-            $schedule = $schedule->orderBy($filters->orderBy, 'desc');
+            if($filters->has('orderBy') == '') {
+                $schedule = $schedule->orderBy('created_at', 'desc');
+            } else {
+                $schedule = $schedule->orderBy($filters->orderBy, 'desc');
+            }
         } else {
             $schedule = $schedule->orderBy('created_at', 'desc');
         }

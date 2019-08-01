@@ -27,10 +27,20 @@ class UsersController extends Controller
                     'api_token' => $apiKey,
                     'firebase_token' => $request->firebase_token
                 ]);
+
+                if ($user->role == 'siswa') {
+                    $data = \App\User::where('api_token', $apiKey)->with('detail', 'detail.kelas', 'detail.sekolah')->first();
+                } else {
+                    $data = \App\User::where('api_token', $apiKey)->with('detail', 'detail.sekolah')->first();
+                    $this->addTopic($data);
+                }
+
+
                 return Response::json([
                     "message"   => 'success',
                     "api_token" => $apiKey,
                     "role"      => $user->role,
+                    "data"      => $data
                 ], 200);
             } else {
                 return Response::json([
@@ -133,19 +143,19 @@ class UsersController extends Controller
 
     private function addTopic($data)
     {
-        $client = new Client();
-        $client->setApiKey(self::$API_ACCESS_KEY);
-        $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
+        // $client = new Client();
+        // $client->setApiKey(self::$API_ACCESS_KEY);
+        // $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
-        $query = \App\User::where('role', 'guru')->withAndWhereHas('detail', function ($query) {
-            $query->where('id_sekolah', Auth::user()->detail->id_sekolah);
-        })->get();
+        // $query = \App\User::where('role', 'guru')->withAndWhereHas('detail', function ($query) {
+        //     $query->where('id_sekolah', Auth::user()->detail->id_sekolah);
+        // })->get();
 
-        $pattern = "guru";
+        // $pattern = "guru";
 
-        foreach ($query as $value) {
-            $client->addTopicSubscription($pattern.$value['detail']['id_sekolah']."pengajuan", $value['firebase_token']);
-        }
+        // foreach ($query as $value) {
+        //     $client->addTopicSubscription($pattern.$value['detail']['id_sekolah']."pengajuan", $value['firebase_token']);
+        // }
     }
     
     public function all()
