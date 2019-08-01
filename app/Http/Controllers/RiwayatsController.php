@@ -14,7 +14,7 @@ class RiwayatsController extends Controller
             $q->whereHas('detail', function ($query) use ($user) {
                 $query->where('id_sekolah', $user->id_sekolah);
             });
-        })->with('schedule.consultant')->with('schedule.request')->orderBy('id', 'desc');
+        })->with('schedule.consultant')->with('schedule.request');
 
         if ($request->has('isToday')) {
             if ($request->isToday == 'true') {
@@ -24,7 +24,7 @@ class RiwayatsController extends Controller
             }
         }
 
-        $data = $riwayat->take($request->limit)->get();
+        $data = $riwayat->orderBy('created_at', 'desc')->take($request->limit)->get();
         return Response::json($data, 200);
     }
 
