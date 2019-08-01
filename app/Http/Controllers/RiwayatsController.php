@@ -6,6 +6,19 @@ use Illuminate\Http\Request;
 
 class RiwayatsController extends Controller
 {
+    public function view(Request $request)
+    {
+        $user = \App\User::with('detail')->where('id', Auth::user()->id)->first()->detail;
+        $riwayat = \App\Riwayat::whereHas('user', function ($q) use ($user) {
+            $q->whereHas('detail', function ($query) use ($user) {
+                $query->where('id_sekolah', $user->id_sekolah);
+            });
+        })->with('user')->with('user.detail')->orderBy('id', 'desc');
+
+        $data = $riwayat->take($request->limit)->get();
+        return Response::json($data, 200);
+    }
+
     public function all(Request $request)
     {
         $limit = $request->limit;

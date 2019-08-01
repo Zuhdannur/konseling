@@ -135,6 +135,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         /**
          * Routes for resource riwayat
          */
+        $router->get('viewRiwayat', 'RiwayatsController@view');
         $router->get('riwayat', 'RiwayatsController@all');
         $router->get('riwayatCount', 'RiwayatsController@count');
         $router->get('riwayat/{id}', 'RiwayatsController@get');
