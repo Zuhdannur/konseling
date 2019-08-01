@@ -15,6 +15,14 @@ class RiwayatsController extends Controller
             });
         })->with('user')->with('user.detail')->orderBy('id', 'desc');
 
+        if ($request->has('isToday')) {
+            if ($request->isToday == 'true') {
+                $riwayat = $riwayat->where('created_at', Carbon::today());
+            } else {
+                $riwayat = $riwayat->where('created_at', '<', Carbon::today());
+            }
+        }
+
         $data = $riwayat->take($request->limit)->get();
         return Response::json($data, 200);
     }
