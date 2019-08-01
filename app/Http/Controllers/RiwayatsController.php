@@ -24,7 +24,7 @@ class RiwayatsController extends Controller
             }
         }
 
-        $data = $riwayat->orderBy('created_at', 'asc')->take($request->limit)->get();
+        $data = $riwayat->take($request->limit)->get();
         return Response::json($data, 200);
     }
 
