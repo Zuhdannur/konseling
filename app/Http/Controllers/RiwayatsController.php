@@ -10,22 +10,23 @@ class RiwayatsController extends Controller
     public function view(Request $request)
     {
         $user = \App\User::with('detail')->where('id', Auth::user()->id)->first()->detail;
-        $riwayat = \App\Riwayat::whereHas('user', function ($q) use ($user) {
-            $q->whereHas('detail', function ($query) use ($user) {
-                $query->where('id_sekolah', $user->id_sekolah);
-            });
-        })->with('schedule.consultant')->with('schedule.request');
+        $riwayat = \App\Riwayat::all()->groupBy('schedule_id')->get();
+        // $riwayat = \App\Riwayat::whereHas('user', function ($q) use ($user) {
+        //     $q->whereHas('detail', function ($query) use ($user) {
+        //         $query->where('id_sekolah', $user->id_sekolah);
+        //     });
+        // })->with('schedule.consultant')->with('schedule.request');
 
-        if ($request->has('isToday')) {
-            if ($request->isToday == 'true') {
-                $riwayat = $riwayat->where('created_at', Carbon::today());
-            } else {
-                $riwayat = $riwayat->where('created_at', '<', Carbon::today());
-            }
-        }
+        // if ($request->has('isToday')) {
+        //     if ($request->isToday == 'true') {
+        //         $riwayat = $riwayat->where('created_at', Carbon::today());
+        //     } else {
+        //         $riwayat = $riwayat->where('created_at', '<', Carbon::today());
+        //     }
+        // }
 
-        $data = $riwayat->take($request->limit)->get();
-        return Response::json($data, 200);
+        // $data = $riwayat->take($request->limit)->get();
+        return Response::json($riwayat, 200);
     }
 
     public function all(Request $request)
