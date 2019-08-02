@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class Riwayat extends Model
 {
     protected $fillable = [
-        'id','user_id','schedule_id'
+        'user_id','schedule_id'
     ];
 
     protected $dates = [];
