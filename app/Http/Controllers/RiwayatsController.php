@@ -10,7 +10,7 @@ class RiwayatsController extends Controller
     public function view(Request $request)
     {
         $user = \App\User::with('detail')->where('id', Auth::user()->id)->first()->detail;
-        $riwayat = \App\Riwayat::whereHas('user', function ($q) use ($user) {
+        $riwayat = \App\Riwayat::groupBy('schedule_id')->whereHas('user', function ($q) use ($user) {
             $q->whereHas('detail', function ($query) use ($user) {
                 $query->where('id_sekolah', $user->id_sekolah);
             });
@@ -24,7 +24,7 @@ class RiwayatsController extends Controller
             }
         }
 
-        $data = $riwayat->groupBy('schedule_id')->get();
+        $data = $riwayat->take($request->limit)->get();
         return Response::json($data, 200);
     }
 
