@@ -19,7 +19,7 @@ class RiwayatsController extends Controller
 
         if ($request->has('isToday')) {
             if ($request->isToday == 'true') {
-                $riwayat = $riwayat->where('created_at', '>', Carbon::today());
+                $riwayat = $riwayat->where('created_at', '>=', Carbon::today());
             } else {
                 $riwayat = $riwayat->where('created_at', '<', Carbon::today());
             }
