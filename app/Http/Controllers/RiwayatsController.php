@@ -26,7 +26,7 @@ class RiwayatsController extends Controller
         // }
 
         // $data = $riwayat->take($request->limit)->get();
-        return Response::json([ 'data' => $riwayat], 200);
+        return Response::json($riwayat, 200);
     }
 
     public function all(Request $request)
