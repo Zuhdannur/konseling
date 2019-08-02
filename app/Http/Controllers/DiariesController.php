@@ -96,10 +96,11 @@ class DiariesController extends Controller
             });
         })->with('user')->with('user.detail')->orderBy('id', 'desc');
 
-        $data = $diaries
-        ->skip($skip)
-        ->take($limit)
-        ->get();
+        $data = $diaries->paginate($request->limit);
+        // $data = $diaries
+        // ->skip($skip)
+        // ->take($limit)
+        // ->get();
 
         return \Illuminate\Support\Facades\Response::json($data, 200);
     }
