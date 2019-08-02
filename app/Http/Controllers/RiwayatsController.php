@@ -15,17 +15,17 @@ class RiwayatsController extends Controller
             $q->whereHas('detail', function ($query) use ($user) {
                 $query->where('id_sekolah', $user->id_sekolah);
             });
-        })->with('schedule.consultant')->with('schedule.request')->get()->groupBy('schedule_id')->values();
+        })->with('schedule.consultant')->with('schedule.request');
 
-        // if ($request->has('isToday')) {
-        //     if ($request->isToday == 'true') {
-        //         $riwayat = $riwayat->where('created_at', Carbon::today());
-        //     } else {
-        //         $riwayat = $riwayat->where('created_at', '<', Carbon::today());
-        //     }
-        // }
+        if ($request->has('isToday')) {
+            if ($request->isToday == 'true') {
+                $riwayat = $riwayat->where('created_at', Carbon::today());
+            } else {
+                $riwayat = $riwayat->where('created_at', '<', Carbon::today());
+            }
+        }
 
-        // $data = $riwayat->take($request->limit)->get();
+        $data = $riwayat->take($request->limit)->get()->groupBy('schedule_id')->values();
         return Response::json($riwayat, 200);
     }
 
