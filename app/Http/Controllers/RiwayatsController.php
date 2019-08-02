@@ -17,13 +17,13 @@ class RiwayatsController extends Controller
             });
         })->with('schedule.consultant')->with('schedule.request');
 
-        if ($request->has('isToday')) {
-            if ($request->isToday == 'true') {
-                $riwayat = $riwayat->where('created_at', Carbon::today());
-            } else {
-                $riwayat = $riwayat->where('created_at', '<', Carbon::today());
-            }
-        }
+        // if ($request->has('isToday')) {
+        //     if ($request->isToday == 'true') {
+        //         $riwayat = $riwayat->where('created_at', Carbon::today());
+        //     } else {
+        //         $riwayat = $riwayat->where('created_at', '<', Carbon::today());
+        //     }
+        // }
 
         $datas = $riwayat->take($request->limit)->get()->groupBy('schedule_id')->values();
         return Response::json($datas, 200);
