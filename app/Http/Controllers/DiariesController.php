@@ -50,11 +50,13 @@ class DiariesController extends Controller
 
         $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
 
-        $data = $datas
-            ->skip($skip)
-            ->take($limit)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $data = $datas->orderBy('created_at','desc')->paginate($request->limit1);
+
+        // $data = $datas
+            // ->skip($skip)
+            // ->take($limit)
+            // ->orderBy('created_at', 'desc')
+            // ->get();
 
         return \Illuminate\Support\Facades\Response::json($data, 200);
     }
@@ -96,11 +98,10 @@ class DiariesController extends Controller
             });
         })->with('user')->with('user.detail')->orderBy('id', 'desc');
 
-        $data = $diaries->paginate($request->limit);
-        // $data = $diaries
-        // ->skip($skip)
-        // ->take($limit)
-        // ->get();
+        $data = $diaries
+        ->skip($skip)
+        ->take($limit)
+        ->get();
 
         return \Illuminate\Support\Facades\Response::json($data, 200);
     }
