@@ -45,10 +45,12 @@ class RiwayatsController extends Controller
             $datas = $datas->orderBy($request->orderBy, 'desc');
         }
 
-        $data = $datas
-            ->skip($skip)
-            ->take($limit)
-            ->get();
+        $data = $datas->paginate(10);
+
+        // $data = $datas
+        //     ->skip($skip)
+        //     ->take($limit)
+        //     ->get();
 
         return Response::json($data, 200);
     }
