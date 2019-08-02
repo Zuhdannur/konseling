@@ -15,7 +15,7 @@ class RiwayatsController extends Controller
             $q->whereHas('detail', function ($query) use ($user) {
                 $query->where('id_sekolah', $user->id_sekolah);
             });
-        })->with('schedule.consultant')->with('schedule.request')->get()->groupBy('schedule_id')->values();
+        })->with('schedule.consultant')->with('schedule.request')->first()->groupBy('schedule_id')->values();
 
         // if ($request->has('isToday')) {
         //     if ($request->isToday == 'true') {
