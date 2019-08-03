@@ -25,7 +25,7 @@ class RiwayatsController extends Controller
             }
         }
 
-        $datas = $riwayat->get()->groupBy('schedule_id')->values()->first();
+        $datas = $riwayat->get()->groupBy('schedule_id');
         return Response::json($datas, 200);
     }
 
