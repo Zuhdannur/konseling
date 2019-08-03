@@ -9,7 +9,7 @@ class RiwayatsController extends Controller
 {
     public function view(Request $request)
     {
-        $user = \App\User::with('detail')->where('id', Auth::user()->id)->first()->detail;
+        $user = \App\User::with('detail')->where('id', 1)->first()->detail;
         // $riwayat = \App\Riwayat::all()->groupBy('schedule_id');
         $riwayat = \App\Riwayat::whereHas('user', function ($q) use ($user) {
             $q->whereHas('detail', function ($query) use ($user) {
@@ -25,7 +25,7 @@ class RiwayatsController extends Controller
             }
         }
 
-        $datas = $riwayat->get()->groupBy('schedule_id')->values()->paginate($request->limit);
+        $datas = $riwayat->get()->groupBy('schedule_id')->values()->first();
         return Response::json($datas, 200);
     }
 
