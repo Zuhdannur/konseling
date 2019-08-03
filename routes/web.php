@@ -50,7 +50,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
 
     //For Develpment Purposes
     $router->get('user', 'UsersController@all');
-    $router->get('viewRiwayat', 'RiwayatsController@view');
+    // $router->get('viewRiwayat', 'RiwayatsController@view');
    
     $router->group(['middleware' => 'auth'], function () use ($router) {
         
@@ -144,6 +144,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->post('riwayat', 'RiwayatsController@add');
         $router->put('riwayat/{id}', 'RiwayatsController@put');
         $router->delete('riwayat/{id}', 'RiwayatsController@remove');
+        $router->get('viewRiwayat', 'RiwayatsController@view');
             
         //Favorite Artikels
         $router->post('favorit', 'ArtikelsController@storeFavorite');
