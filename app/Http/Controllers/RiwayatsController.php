@@ -25,7 +25,7 @@ class RiwayatsController extends Controller
             }
         }
 
-        $datas = $riwayat->take($request->limit)->get()->groupBy('schedule_id')->values();
+        $datas = $riwayat->paginate($request->limit)->groupBy('schedule_id')->values();
         return Response::json($datas, 200);
     }
 
