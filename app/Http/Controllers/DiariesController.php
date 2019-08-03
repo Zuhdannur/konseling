@@ -48,6 +48,8 @@ class DiariesController extends Controller
             $skip = $limit * $request->page;
         }
 
+        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
+
         $data = $datas
             ->skip($skip)
             ->take($limit)
