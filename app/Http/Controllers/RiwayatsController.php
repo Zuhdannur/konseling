@@ -49,6 +49,16 @@ class RiwayatsController extends Controller
             $datas = $datas->orderBy($request->orderBy, 'desc');
         }
 
+        if($request->has('status')) {
+            if($request->status == 'selesai') {
+                $datas = $datas->where('ended', 1);
+            }
+
+            if($request->status == 'dibatalkan') {
+                $datas = $datas->where('canceled', 1);
+            }
+        }
+
         if (Auth::user()->role == 'guru') {
             $data = $datas->paginate($request->limit);
         } else {

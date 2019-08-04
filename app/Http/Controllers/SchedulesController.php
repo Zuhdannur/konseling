@@ -410,6 +410,10 @@ class SchedulesController extends Controller
                     $data['schedule_id'] = $schedule->id;
                     $this->saveToRiwayat($data);
 
+                    $data['user_id'] = $schedule->requester_id;
+                    $data['schedule_id'] = $schedule->id;
+                    $this->saveToRiwayat($data);
+
                     return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
                 } else {
                     return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
