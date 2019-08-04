@@ -49,12 +49,12 @@ class RiwayatsController extends Controller
             $datas = $datas->orderBy($request->orderBy, 'desc');
         }
 
-        if($request->has('status')) {
-            if($request->status == 'selesai') {
+        if ($request->has('status')) {
+            if ($request->status == 'selesai') {
                 $datas = $datas->where('ended', 1);
             }
 
-            if($request->status == 'dibatalkan') {
+            if ($request->status == 'dibatalkan') {
                 $datas = $datas->where('canceled', 1);
             }
         }
@@ -81,6 +81,17 @@ class RiwayatsController extends Controller
         } else {
             $skip = $limit * $filters->page;
         }
+
+        if ($filters->has('status')) {
+            if ($filters->status == 'selesai') {
+                $data = $data->where('ended', 1);
+            }
+
+            if ($filters->status == 'dibatalkan') {
+                $data = $data->where('canceled', 1);
+            }
+        }
+
         $count = $data
             ->paginate($skip)
             ->lastPage($limit);
