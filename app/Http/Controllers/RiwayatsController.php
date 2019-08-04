@@ -25,7 +25,7 @@ class RiwayatsController extends Controller
             }
         }
 
-        $datas = $riwayat->paginate($request->limit);
+        $datas = $riwayat->where('schedule.ended', 1)->paginate($request->limit);
         return Response::json($datas, 200);
     }
 
