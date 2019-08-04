@@ -15,7 +15,11 @@ class RiwayatsController extends Controller
             $q->whereHas('detail', function ($query) use ($user) {
                 $query->where('id_sekolah', $user->id_sekolah);
             });
-        })->with('schedule.consultant')->with('schedule.request')->where('schedule.ended', 1)->orderBy('created_at', 'desc');
+        })->with('schedule.consultant')->with('schedule.request')->orderBy('created_at', 'desc');
+
+        $riwayat = $riwayat->whereHas('schedule', function ($q) {
+            $q->where('ended', 1);
+        });
 
         if ($request->has('isToday')) {
             if ($request->isToday == 'true') {
