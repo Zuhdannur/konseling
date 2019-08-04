@@ -49,12 +49,14 @@ class RiwayatsController extends Controller
             $datas = $datas->orderBy($request->orderBy, 'desc');
         }
 
-        $data = $datas->paginate($request->limit);
-
-        // $data = $datas
-        //     ->skip($skip)
-        //     ->take($limit)
-        //     ->get();
+        if (Auth::user()->role == 'guru') {
+            $data = $datas->paginate($request->limit);
+        } else {
+            $data = $datas
+            ->skip($skip)
+            ->take($limit)
+            ->get();
+        }
 
         return Response::json($data, 200);
     }
