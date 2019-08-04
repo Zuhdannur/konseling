@@ -49,14 +49,17 @@ class RiwayatsController extends Controller
             $datas = $datas->orderBy($request->orderBy, 'desc');
         }
 
-        if ($request->has('status')) {
-            if ($request->status == 'selesai') {
-                $datas = $datas->where('schedule.ended', 1);
-            }
 
-            if ($request->status == 'dibatalkan') {
-                $datas = $datas->where('schedule.canceled', 1);
-            }
+        if ($request->has('status')) {
+            $datas = $datas->whereHas('schedule', function ($query) use ($request, $datas) {
+                if ($request->status == 'selesai') {
+                    $query->where('ended', 1);
+                }
+        
+                if ($request->status == 'dibatalkan') {
+                    $query->where('canceled', 1);
+                }
+            });
         }
 
         if (Auth::user()->role == 'guru') {
@@ -83,13 +86,15 @@ class RiwayatsController extends Controller
         }
 
         if ($filters->has('status')) {
-            if ($filters->status == 'selesai') {
-                $data = $data->where('schedule.ended', 1);
-            }
-
-            if ($filters->status == 'dibatalkan') {
-                $data = $data->where('schedule.canceled', 1);
-            }
+            $datas = $data->whereHas('schedule', function ($query) use ($filters, $data) {
+                if ($filters->status == 'selesai') {
+                    $query->where('ended', 1);
+                }
+    
+                if ($filters->status == 'dibatalkan') {
+                    $query->where('canceled', 1);
+                }
+            });
         }
 
         $count = $data
