@@ -495,6 +495,10 @@ class SchedulesController extends Controller
             }
 
             if($filters->pengajuan == 'acceptedDirect') {
+                if ($filters->has('outdated')) {
+                    $schedule = $schedule->where('outdated', $filters->outdated);
+                }
+
                 foreach ($schedule->get() as $key => $row) {
                     if ($row->type_schedule != "daring" && $row->type_schedule != "realtime") {
                         if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
@@ -525,14 +529,6 @@ class SchedulesController extends Controller
 
         if ($filters->has('exp')) {
             $schedule = $schedule->where('exp', $filters->exp);
-        }
-
-        if ($filters->has('outdated')) {
-            if($filters->outdated == 'true') {
-                $schedule = $schedule->where('outdated', 1);
-            } else if($filters->outdated == 'false') {
-                $schedule = $schedule->where('outdated', 0);
-            }
         }
 
         if($filters->has('ended')) {
@@ -593,6 +589,10 @@ class SchedulesController extends Controller
             }
 
             if($filters->pengajuan == 'riwayat') {
+                if ($filters->has('outdated')) {
+                    $schedule = $schedule->where('outdated', $filters->outdated);
+                }
+
                 //Saat fetch data jika pengajuannya riwayat
                 $schedule = $schedule->where(function ($query){
                     //Selesai Pengajuannya
@@ -628,14 +628,6 @@ class SchedulesController extends Controller
 
         if ($filters->has('ended')) {
             $schedule = $schedule->where('ended', $filters->ended);
-        }
-
-        if ($filters->has('outdated')) {
-            if($filters->outdated == 'true') {
-                $schedule = $schedule->where('outdated', 1);
-            } else if($filters->outdated == 'false') {
-                $schedule = $schedule->where('outdated', 0);
-            }
         }
 
         if($filters->has('limit') && $filters->has('page')) {
