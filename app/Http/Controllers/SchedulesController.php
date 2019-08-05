@@ -528,7 +528,11 @@ class SchedulesController extends Controller
         }
 
         if ($filters->has('outdated')) {
-            $schedule = $schedule->where('outdated', $filters->outdated);
+            if($filters->outdated == 'true') {
+                $schedule = $schedule->where('outdated', 1);
+            } else {
+                $schedule = $schedule->where('outdated', 0);
+            }
         }
 
         if($filters->has('ended')) {
@@ -627,7 +631,11 @@ class SchedulesController extends Controller
         }
 
         if ($filters->has('outdated')) {
-            $schedule = $schedule->where('outdated', $filters->outdated);
+            if($filters->outdated == 'true') {
+                $schedule = $schedule->where('outdated', 1);
+            } else {
+                $schedule = $schedule->where('outdated', 0);
+            }
         }
 
         if($filters->has('limit') && $filters->has('page')) {
