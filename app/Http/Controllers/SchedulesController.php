@@ -530,7 +530,7 @@ class SchedulesController extends Controller
         if ($filters->has('outdated')) {
             if($filters->outdated == 'true') {
                 $schedule = $schedule->where('outdated', 1);
-            } else {
+            } else if($filters->outdated == 'false') {
                 $schedule = $schedule->where('outdated', 0);
             }
         }
@@ -633,7 +633,7 @@ class SchedulesController extends Controller
         if ($filters->has('outdated')) {
             if($filters->outdated == 'true') {
                 $schedule = $schedule->where('outdated', 1);
-            } else {
+            } else if($filters->outdated == 'false') {
                 $schedule = $schedule->where('outdated', 0);
             }
         }
