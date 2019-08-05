@@ -496,7 +496,9 @@ class SchedulesController extends Controller
 
             if($filters->pengajuan == 'acceptedDirect') {
                 if ($filters->has('outdated')) {
-                    $schedule = $schedule->where('outdated', $filters->outdated);
+                    if(!empty($filters->outdated)) {
+                        $schedule = $schedule->where('outdated', $filters->outdated);
+                    }
                 }
 
                 foreach ($schedule->get() as $key => $row) {
@@ -589,10 +591,7 @@ class SchedulesController extends Controller
             }
 
             if($filters->pengajuan == 'riwayat') {
-                if ($filters->has('outdated')) {
-                    $schedule = $schedule->where('outdated', $filters->outdated);
-                }
-
+         
                 //Saat fetch data jika pengajuannya riwayat
                 $schedule = $schedule->where(function ($query){
                     //Selesai Pengajuannya
@@ -620,6 +619,12 @@ class SchedulesController extends Controller
 
         if ($filters->has('type_schedule')) {
             $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+        }
+
+        if ($filters->has('outdated')) {
+            if(!empty($filters->outdated)) {
+                $schedule = $schedule->where('outdated', $filters->outdated);
+            }
         }
 
         if ($filters->has('exp')) {
