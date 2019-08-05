@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class CatatanKonseling extends Model
 {
     protected $fillable = [
-        'user_id','schedule_id'
+        'schedule_id'
     ];
 
     protected $dates = [];
