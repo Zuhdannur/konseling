@@ -151,5 +151,14 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('favorit', 'ArtikelsController@getMyFavorite');
         $router->get('favoritCount', 'ArtikelsController@getMyFavoriteCount');
         $router->get('favorit/{id}', 'ArtikelsController@removeMyFavorit');
+
+        /**
+         * Routes for resource catatan-konseling
+         */
+        $router->get('catatan-konseling', 'CatatanKonselingsController@all');
+        $router->get('catatan-konseling/{id}', 'CatatanKonselingsController@get');
+        $router->post('catatan-konseling', 'CatatanKonselingsController@add');
+        $router->put('catatan-konseling/{id}', 'CatatanKonselingsController@put');
+        $router->delete('catatan-konseling/{id}', 'CatatanKonselingsController@remove');
     });
 });

@@ -766,6 +766,11 @@ class SchedulesController extends Controller
     
 
     private function saveToRiwayat($data) {
+        $catatan = new \App\CatatanKonseling;
+        $catatan->updateOrCreate([
+            'schedule_id' => $data['schedule_id']
+        ]);
+
         $riwayat = new \App\Riwayat;
         $riwayat->schedule_id = $data['schedule_id'];
         $riwayat->user_id = $data['user_id'];
