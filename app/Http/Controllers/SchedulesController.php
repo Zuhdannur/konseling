@@ -496,8 +496,10 @@ class SchedulesController extends Controller
 
             if($filters->pengajuan == 'acceptedDirect') {
                 if ($filters->has('outdated')) {
-                    if($filters->outdated == 0 || $filters->outdated == 1) {
-                        $schedule = $schedule->where('outdated', $filters->outdated);
+                    if($filters->outdated != '') {
+                        if($filters->outdated == 0 || $filters->outdated == 1) {
+                            $schedule = $schedule->where('outdated', $filters->outdated);
+                        }
                     }
                 }
 
