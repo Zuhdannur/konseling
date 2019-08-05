@@ -527,10 +527,8 @@ class SchedulesController extends Controller
             $schedule = $schedule->where('exp', $filters->exp);
         }
 
-        if ($filters->has('upcoming')) {
-            if($filters->upcoming == 'true') {
-                $schedule = $schedule->where('time', ">" ,Carbon::now());
-            }
+        if ($filters->has('outdated')) {
+            $schedule = $schedule->where('outdated', $filters->outdated);
         }
 
         if($filters->has('ended')) {
@@ -628,10 +626,8 @@ class SchedulesController extends Controller
             $schedule = $schedule->where('ended', $filters->ended);
         }
 
-        if ($filters->has('upcoming')) {
-            if($filters->upcoming == 'true') {
-                $schedule = $schedule->where('time', Carbon::now());
-            }
+        if ($filters->has('outdated')) {
+            $schedule = $schedule->where('outdated', $filters->outdated);
         }
 
         if($filters->has('limit') && $filters->has('page')) {
