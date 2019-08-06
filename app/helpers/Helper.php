@@ -74,16 +74,16 @@ class Helper
         $message->setPriority('normal');
         $pattern = "guru".Auth::user()->detail->id_sekolah."pengajuan";
 
-//        $message->addRecipient(new Device("cQlOvwQ3lu4:APA91bHZiKXMaRYNmsSEx6LojxNrAUzJPKp1LsRJMUaIfxsZ3hu59P8CWhoZWaSz-fnCmETuP34o87whE9NnhFkPGZBnyLt4s8MDT4pk_mrMhdzli95gsjJ3v-_jIyR04Zw2S6KFu4Tm"));
+        $title = 'Kamu mendapatkan pengajuan baru';
+        $body = "Pengajuan dari siswa bernama ".Auth::user()->name;
+
         $message->addRecipient(new Topic($pattern));
-        $message->setNotification(new Notification('Kamu mendapatkan pengajuan baru', "Pengajuan dari siswa bernama ".Auth::user()->name));
+        $message->setNotification(new Notification($title, $body));
         $message->setData([
             'title' => $title,
             'body' =>  $body,
-            'type' => $type,
             'created_at' => Carbon::now()->toDateTimeString(),
-            'updated_at' => Carbon::now()->toDateTimeString(),
-            'read' => $read
+            'updated_at' => Carbon::now()->toDateTimeString()
         ]);
         
         $response = $client->send($message);
