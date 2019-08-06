@@ -17,7 +17,7 @@ class Helper
         return true;
     }
 
-    public static function sendNotificationTopic($desc)
+    public static function sendNotificationTopic($request)
     {
 //        $API_ACCSESS_KEY = 'AAAA_vRurwA:APA91bH6PpT6Uv6xEY1Z_3FC1vQefwYH6QbjQQ5l5kjxsZJOxzmZeakfR-9YbY-7-lCuBxx6neXph7zf_gxVxXDepW3pETJTpTGucualxk6e2k_evTRlqr2E3EEpm63Eaa7IgZVyEZ0O';
 //        $msg = array
@@ -83,7 +83,8 @@ class Helper
             'title' => $title,
             'body' =>  $body,
             'created_at' => Carbon::now()->toDateTimeString(),
-            'updated_at' => Carbon::now()->toDateTimeString()
+            'updated_at' => Carbon::now()->toDateTimeString(),
+            'type' => $request->type_schedule
         ]);
         
         $response = $client->send($message);
