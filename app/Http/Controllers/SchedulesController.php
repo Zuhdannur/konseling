@@ -797,7 +797,7 @@ class SchedulesController extends Controller
 
             if ($insert) {
                 //Mengirim Dari siswa ke Semua Guru berdasarkan Sekolah
-                Helper::sendNotificationTopic($request);
+                Helper::sendNotificationTopic($request->type_schedule);
                 return \Illuminate\Support\Facades\Response::json([
                     "message" => 'success create schedule'
                 ], 200);
