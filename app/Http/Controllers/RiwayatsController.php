@@ -15,7 +15,11 @@ class RiwayatsController extends Controller
             $q->whereHas('detail', function ($query) use ($user) {
                 $query->where('id_sekolah', $user->id_sekolah);
             });
-        })->with('schedule.consultant')->with('schedule.request')->orderBy('created_at','desc');
+        })->with('schedule.consultant')->with('schedule.request')->orderBy('created_at', 'desc');
+
+        $riwayat = $riwayat->whereHas('schedule', function ($q) {
+            $q->where('ended', 1);
+        });
 
         if ($request->has('isToday')) {
             if ($request->isToday == 'true') {
@@ -45,12 +49,27 @@ class RiwayatsController extends Controller
             $datas = $datas->orderBy($request->orderBy, 'desc');
         }
 
-        $data = $datas->paginate($request->limit);
 
-        // $data = $datas
-        //     ->skip($skip)
-        //     ->take($limit)
-        //     ->get();
+        if ($request->has('status')) {
+            $datas = $datas->whereHas('schedule', function ($query) use ($request, $datas) {
+                if ($request->status == 'selesai') {
+                    $query->where('ended', 1);
+                }
+        
+                if ($request->status == 'dibatalkan') {
+                    $query->where('canceled', 1);
+                }
+            });
+        }
+
+        if (Auth::user()->role == 'guru') {
+            $data = $datas->paginate($request->limit);
+        } else {
+            $data = $datas
+            ->skip($skip)
+            ->take($limit)
+            ->get();
+        }
 
         return Response::json($data, 200);
     }
@@ -65,6 +84,19 @@ class RiwayatsController extends Controller
         } else {
             $skip = $limit * $filters->page;
         }
+
+        if ($filters->has('status')) {
+            $datas = $data->whereHas('schedule', function ($query) use ($filters, $data) {
+                if ($filters->status == 'selesai') {
+                    $query->where('ended', 1);
+                }
+    
+                if ($filters->status == 'dibatalkan') {
+                    $query->where('canceled', 1);
+                }
+            });
+        }
+
         $count = $data
             ->paginate($skip)
             ->lastPage($limit);

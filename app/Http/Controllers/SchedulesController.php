@@ -356,11 +356,11 @@ class SchedulesController extends Controller
                 // Helper::Notification($data);
                 
 
-                $schedule = $schedule->update([
+                $update = $schedule->update([
                     'canceled' => 1
                 ]);
 
-                if($schedule) {
+                if($update) {
                     $data['user_id'] = Auth::user()->id;
                     $data['schedule_id'] = $schedule->id;
                     $this->saveToRiwayat($data);
@@ -407,6 +407,10 @@ class SchedulesController extends Controller
 
                 if($update) {
                     $data['user_id'] = Auth::user()->id;
+                    $data['schedule_id'] = $schedule->id;
+                    $this->saveToRiwayat($data);
+
+                    $data['user_id'] = $schedule->consultant_id;
                     $data['schedule_id'] = $schedule->id;
                     $this->saveToRiwayat($data);
 
@@ -491,6 +495,14 @@ class SchedulesController extends Controller
             }
 
             if($filters->pengajuan == 'acceptedDirect') {
+                if ($filters->has('outdated')) {
+                    if($filters->outdated != '') {
+                        if($filters->outdated == 0 || $filters->outdated == 1) {
+                            $schedule = $schedule->where('outdated', $filters->outdated);
+                        }
+                    }
+                }
+
                 foreach ($schedule->get() as $key => $row) {
                     if ($row->type_schedule != "daring" && $row->type_schedule != "realtime") {
                         if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
@@ -521,12 +533,6 @@ class SchedulesController extends Controller
 
         if ($filters->has('exp')) {
             $schedule = $schedule->where('exp', $filters->exp);
-        }
-
-        if ($filters->has('upcoming')) {
-            if($filters->upcoming == 'true') {
-                $schedule = $schedule->where('time', ">" ,Carbon::now());
-            }
         }
 
         if($filters->has('ended')) {
@@ -587,6 +593,7 @@ class SchedulesController extends Controller
             }
 
             if($filters->pengajuan == 'riwayat') {
+         
                 //Saat fetch data jika pengajuannya riwayat
                 $schedule = $schedule->where(function ($query){
                     //Selesai Pengajuannya
@@ -616,18 +623,18 @@ class SchedulesController extends Controller
             $schedule = $schedule->where('type_schedule', $filters->type_schedule);
         }
 
+        if ($filters->has('outdated')) {
+            if(!empty($filters->outdated)) {
+                $schedule = $schedule->where('outdated', $filters->outdated);
+            }
+        }
+
         if ($filters->has('exp')) {
             $schedule = $schedule->where('exp', $filters->exp);
         }
 
         if ($filters->has('ended')) {
             $schedule = $schedule->where('ended', $filters->ended);
-        }
-
-        if ($filters->has('upcoming')) {
-            if($filters->upcoming == 'true') {
-                $schedule = $schedule->where('time', Carbon::now());
-            }
         }
 
         if($filters->has('limit') && $filters->has('page')) {
@@ -762,6 +769,11 @@ class SchedulesController extends Controller
     
 
     private function saveToRiwayat($data) {
+        $catatan = new \App\CatatanKonseling;
+        $catatan->updateOrCreate([
+            'schedule_id' => $data['schedule_id']
+        ]);
+
         $riwayat = new \App\Riwayat;
         $riwayat->schedule_id = $data['schedule_id'];
         $riwayat->user_id = $data['user_id'];
