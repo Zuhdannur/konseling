@@ -84,7 +84,7 @@ class Helper
             'body' =>  $body,
             'created_at' => Carbon::now()->toDateTimeString(),
             'updated_at' => Carbon::now()->toDateTimeString(),
-            'type' => $request->type_schedule
+            'type' => $request['type_schedule']
         ]);
         
         $response = $client->send($message);
