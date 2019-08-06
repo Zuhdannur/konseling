@@ -86,7 +86,6 @@ class Helper
             'updated_at' => Carbon::now()->toDateTimeString(),
             'type' => $type
         ]);
-        dd($type);
         
         $response = $client->send($message);
         return \response()->json($response);
