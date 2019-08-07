@@ -49,7 +49,6 @@ class RiwayatsController extends Controller
             $datas = $datas->orderBy($request->orderBy, 'desc');
         }
 
-
         if ($request->has('status')) {
             $datas = $datas->whereHas('schedule', function ($query) use ($request, $datas) {
                 if ($request->status == 'selesai') {
@@ -62,16 +61,19 @@ class RiwayatsController extends Controller
             });
         }
 
-        if (Auth::user()->role == 'guru') {
-            $data = $datas->paginate($request->limit);
-        } else {
-            $data = $datas
+        $data = $datas
             ->skip($skip)
             ->take($limit)
             ->get();
-        }
 
-        return Response::json($data, 200);
+        $count = $data
+            ->paginate($skip)
+            ->lastPage($limit);
+
+        return Response::json([
+            'total_page' => $count,
+            'data' => $data
+        ], 200);
     }
 
     public function count(Request $filters)
