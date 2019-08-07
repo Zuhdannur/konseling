@@ -61,14 +61,14 @@ class RiwayatsController extends Controller
             });
         }
 
+        $count = $datas
+            ->paginate($skip)
+            ->lastPage($limit);
+
         $data = $datas
             ->skip($skip)
             ->take($limit)
             ->get();
-
-        $count = $data
-            ->paginate($skip)
-            ->lastPage($limit);
 
         return Response::json([
             'total_page' => $count,
