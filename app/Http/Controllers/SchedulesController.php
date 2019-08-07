@@ -75,6 +75,7 @@ class SchedulesController extends Controller
         $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
 
         $schedule = \App\Schedule::where(function ($query) use ($user, $filters) {
+            $query->where('consultant_id', Auth::user()->id);
             $query->whereHas('request', function($q) use ($user) {
                 $q->whereHas('detail', function($sql) use ($user) {
                     $sql->where('id_sekolah', $user->detail->id_sekolah);
