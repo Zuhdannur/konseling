@@ -49,7 +49,7 @@ class RiwayatsController extends Controller
             $datas = $datas->orderBy($request->orderBy, 'desc');
         }
 
-        if ($request->has('status')) {
+        if ($request->has('status') && $request->status != '') {
             $datas = $datas->whereHas('schedule', function ($query) use ($request, $datas) {
                 if ($request->status == 'selesai') {
                     $query->where('ended', 1);
