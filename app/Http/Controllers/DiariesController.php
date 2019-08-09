@@ -59,7 +59,7 @@ class DiariesController extends Controller
             ->take($limit)
             ->get();
 
-        return Response::json([
+        return \Illuminate\Support\Facades\Response::json([
             'total_page' => $count,
             'data' => $data
         ], 200);
