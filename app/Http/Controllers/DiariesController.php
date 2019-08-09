@@ -29,11 +29,11 @@ class DiariesController extends Controller
         $data = \App\Diary::where('id', $id)->where('id_user', Auth::user()->id)->delete();
         if ($data) {
             return \Illuminate\Support\Facades\Response::json([
-                "message" => "success",
+                "message" => "Berhasil menghapus data.",
             ], 200);
         } else {
             return \Illuminate\Support\Facades\Response::json([
-                "message" => 'failed'
+                "message" => 'Gagal menghapus data.'
             ], 201);
         }
     }
