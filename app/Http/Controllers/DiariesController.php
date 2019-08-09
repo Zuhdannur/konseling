@@ -50,13 +50,19 @@ class DiariesController extends Controller
 
         $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
 
+        $count = $datas
+            ->paginate($skip)
+            ->lastPage($limit);
+
         $data = $datas
             ->skip($skip)
             ->take($limit)
-            ->orderBy('created_at', 'desc')
             ->get();
 
-        return \Illuminate\Support\Facades\Response::json($data, 200);
+        return Response::json([
+            'total_page' => $count,
+            'data' => $data
+        ], 200);
     }
 
     public function diaryCount(Request $request)
