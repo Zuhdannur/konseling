@@ -92,7 +92,7 @@ class UsersController extends Controller
             $insertDetail->address = $request->address;
             $insertDetail->phone_number = $request->phone;
 
-            $insertDetail->id_kelas = $request->id_kelas;
+            $insertDetail->kelas = $request->kelas;
             $insertDetail->id_sekolah = $request->id_sekolah;
             
             $insertDetail->save();

@@ -19,10 +19,10 @@ class CreateTblDetailUser extends Migration
             $table->string('gender', 25);
             $table->text('address');
             $table->string('phone_number', 12);
+            $table->string('kelas');
             // $table->integer('id_kelas')->length(11)->unsigned()->nullable();
             // $table->string('kelas')->nullable();
             $table->integer('id_sekolah')->length(11)->unsigned();
-            $table->integer('id_kelas')->nullable()->unsigned();
             $table->timestamps();
         });
     }
