@@ -44,12 +44,12 @@ class UsersController extends Controller
                 ], 200);
             } else {
                 return Response::json([
-                    "message" => 'wrong password',
+                    "message" => 'Username atau kata sandi salah.',
                 ], 201);
             }
         } else {
             return Response::json([
-                'message' => 'Username Not Found'
+                'message' => 'Akun tidak ditemukan.'
             ], 201);
         }
     }
