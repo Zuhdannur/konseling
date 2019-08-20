@@ -497,10 +497,8 @@ class SchedulesController extends Controller
 
             if($filters->pengajuan == 'acceptedDirect') {
                 if ($filters->has('outdated')) {
-                    if($filters->outdated != '') {
-                        if($filters->outdated == 0 || $filters->outdated == 1) {
-                            $schedule = $schedule->where('outdated', $filters->outdated);
-                        }
+                    if($filters->outdated == 0 || $filters->outdated == 1) {
+                        $schedule = $schedule->where('outdated', $filters->outdated);
                     }
                 }
 
@@ -540,17 +538,6 @@ class SchedulesController extends Controller
             $schedule = $schedule->where('ended', $filters->ended);
         }
 
-        if($filters->has('limit') && $filters->has('page')) {
-            $limit = $filters->limit;
-
-            if (empty($filters->page)) $skip = 0;
-            else $skip = $limit * $filters->page;
-
-            $schedule = $schedule
-                ->skip($skip)
-                ->take($limit);
-        }
-
         if($filters->has('orderBy')) {
             if($filters->has('orderBy') == '') {
                 $schedule = $schedule->orderBy('created_at', 'desc');
@@ -561,7 +548,24 @@ class SchedulesController extends Controller
             $schedule = $schedule->orderBy('created_at', 'desc');
         }
 
-        return Response::json($schedule->get(), 200);
+        $limit = $filters->limit;
+
+        if (empty($filters->page)) $skip = 0;
+        else $skip = $limit * $filters->page;
+
+        $count = $schedule
+            ->paginate($skip)
+            ->lastPage($limit);
+
+        $data = $schedule
+            ->skip($skip)
+            ->take($limit)
+            ->get();
+
+        return Response::json([
+            'total_page' => $count,
+            'data' => $data
+        ], 200);
     }
 
     public function count(Request $filters) {

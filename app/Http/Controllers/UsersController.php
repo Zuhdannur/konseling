@@ -44,12 +44,12 @@ class UsersController extends Controller
                 ], 200);
             } else {
                 return Response::json([
-                    "message" => 'wrong password',
+                    "message" => 'Username atau kata sandi salah.',
                 ], 201);
             }
         } else {
             return Response::json([
-                'message' => 'Username Not Found'
+                'message' => 'Akun tidak ditemukan.'
             ], 201);
         }
     }
@@ -92,7 +92,7 @@ class UsersController extends Controller
             $insertDetail->address = $request->address;
             $insertDetail->phone_number = $request->phone;
 
-            $insertDetail->id_kelas = $request->id_kelas;
+            $insertDetail->kelas = $request->kelas;
             $insertDetail->id_sekolah = $request->id_sekolah;
             
             $insertDetail->save();

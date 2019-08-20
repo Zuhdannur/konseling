@@ -110,9 +110,9 @@ class RiwayatsController extends Controller
     {
         $data = \App\Riwayat::where('id', $id)->where('user_id', Auth::user()->id)->delete();
         if ($data) {
-            return Response::json(['message' => 'Berhasil menghapus pengajuan.'], 200);
+            return Response::json(['message' => 'Berhasil menghapus riwayat.'], 200);
         } else {
-            return Response::json(['message' => 'Gagal menghapus pengajuan.'], 201);
+            return Response::json(['message' => 'Gagal menghapus riwayat.'], 201);
         }
     }
 }

@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class DetailUser extends Model
 {
     protected $fillable = [
-        'id_user','gender','address','phone_number','id_sekolah','id_kelas'
+        'id_user','gender','address','phone_number','id_sekolah','kelas'
     ];
 
     protected $dates = [];
@@ -21,10 +21,6 @@ class DetailUser extends Model
     ];
 
     // Relationships
-    public function kelas()
-    {
-        return $this->hasOne('\App\Kelas', 'id', 'id_kelas');
-    }
 
     public function sekolah()
     {
