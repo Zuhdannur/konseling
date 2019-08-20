@@ -40,29 +40,19 @@ class DiariesController extends Controller
 
     public function all(Request $request)
     {
-        $limit = $request->limit;
+        // $limit = $request->limit;
 
-        if ($request->page == "") {
-            $skip = 0;
-        } else {
-            $skip = $limit * $request->page;
-        }
+        // if ($request->page == "") {
+        //     $skip = 0;
+        // } else {
+        //     $skip = $limit * $request->page;
+        // }
 
         $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
 
-        $count = $datas
-            ->paginate($skip)
-            ->lastPage($limit);
+        $result = $datas->simplePaginate($request->pageSize);
 
-        $data = $datas
-            ->skip($skip)
-            ->take($limit)
-            ->get();
-
-        return \Illuminate\Support\Facades\Response::json([
-            'total_page' => $count,
-            'data' => $data
-        ], 200);
+        return \Illuminate\Support\Facades\Response::json($result, 200);
     }
 
     public function diaryCount(Request $request)
