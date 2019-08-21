@@ -40,7 +40,22 @@ class DiariesController extends Controller
 
     public function all(Request $request)
     {
-        // $limit = $request->limit;
+
+        // $limit = $request->per_page;
+        // $skip = $limit * $request->per_page
+
+        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
+        
+        $paginate = $datas->paginate($request->per_page);
+        $total_count = $paginate->lastPage();
+
+        // $count = $datas->paginate($limit)->lastPage();
+
+        // $data = $datas
+        // ->skip($skip)
+        // ->take($limit)
+        // ->get();
+
 
         // if ($request->page == "") {
         //     $skip = 0;
@@ -48,11 +63,13 @@ class DiariesController extends Controller
         //     $skip = $limit * $request->page;
         // }
 
-        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
 
-        $result = $datas->simplePaginate($request->pageSize);
+        // $result = $datas->simplePaginate($request->pageSize);
 
-        return \Illuminate\Support\Facades\Response::json($result, 200);
+        return \Illuminate\Support\Facades\Response::json([
+            'total_count' => $total_count,
+            'items' => $paginate
+        ], 200);
     }
 
     public function diaryCount(Request $request)
