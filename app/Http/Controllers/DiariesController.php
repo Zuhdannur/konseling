@@ -68,10 +68,7 @@ class DiariesController extends Controller
 
         // $result = $datas->simplePaginate($request->pageSize);
 
-        return \Illuminate\Support\Facades\Response::json([
-            'total_count' => $total_count,
-            'items' => $paginate
-        ], 200);
+        return \Illuminate\Support\Facades\Response::json($paginate, 200);
     }
 
     public function diaryCount(Request $request)
