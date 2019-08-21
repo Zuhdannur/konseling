@@ -70,7 +70,7 @@ class DiariesController extends Controller
 
         return \Illuminate\Support\Facades\Response::json([
             'total_count' => $total_count,
-            'items' => $items
+            'items' => $paginate
         ], 200);
     }
 
