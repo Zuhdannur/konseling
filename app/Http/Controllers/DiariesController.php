@@ -46,7 +46,7 @@ class DiariesController extends Controller
 
         $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
         
-        $paginate = $datas->paginate($request->per_page);
+        $paginate = $datas->paginate($request->per_page)->data();
         $total_count = $paginate->lastPage();
 
         // $count = $datas->paginate($limit)->lastPage();
