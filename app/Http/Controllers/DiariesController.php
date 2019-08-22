@@ -147,9 +147,7 @@ class DiariesController extends Controller
         $update = \App\Diary::where('id', $request->id)->where('id_user', Auth::user()->id)->update([
             'title' => $request->title,
             'body' => $request->body,
-            'tgl' => $request->tgl,
-            'created_at' => $request->created_at,
-            'updated_at' => $request->updated_at
+            'tgl' => $request->tgl
         ]);
 
         if ($update) {
