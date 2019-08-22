@@ -54,29 +54,35 @@ class DiariesController extends Controller
 
     public function all(Request $request)
     {
-        $limit = $request->limit;
 
-        if ($request->page == "") {
-            $skip = 0;
-        } else {
-            $skip = $limit * $request->page;
-        }
+        // $limit = $request->per_page;
+        // $skip = $limit * $request->per_page
 
         $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
+        
+        $paginate = $datas->paginate($request->per_page);
 
-        $count = $datas
-            ->paginate($skip)
-            ->lastPage($limit);
+        $items = $paginate->items();
+        $total_count = $paginate->lastPage();
 
-        $data = $datas
-            ->skip($skip)
-            ->take($limit)
-            ->get();
+        // $count = $datas->paginate($limit)->lastPage();
 
-        return \Illuminate\Support\Facades\Response::json([
-            'total_page' => $count,
-            'data' => $data
-        ], 200);
+        // $data = $datas
+        // ->skip($skip)
+        // ->take($limit)
+        // ->get();
+
+
+        // if ($request->page == "") {
+        //     $skip = 0;
+        // } else {
+        //     $skip = $limit * $request->page;
+        // }
+
+
+        // $result = $datas->simplePaginate($request->pageSize);
+
+        return \Illuminate\Support\Facades\Response::json($paginate, 200);
     }
 
     public function diaryCount(Request $request)
@@ -155,9 +161,7 @@ class DiariesController extends Controller
         $update = \App\Diary::where('id', $request->id)->where('id_user', Auth::user()->id)->update([
             'title' => $request->title,
             'body' => $request->body,
-            'tgl' => $request->tgl,
-            'created_at' => $request->created_at,
-            'updated_at' => $request->updated_at
+            'tgl' => $request->tgl
         ]);
 
         if ($update) {
