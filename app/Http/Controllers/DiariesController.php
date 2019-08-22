@@ -38,6 +38,20 @@ class DiariesController extends Controller
         }
     }
 
+    public function removeAll()
+    {
+        $delete = \App\Diary::where('id_user', Auth::user()->id)->truncate();
+        if ($delete) {
+            return \Illuminate\Support\Facades\Response::json([
+                "message" => "Berhasil menghapus data.",
+            ], 200);
+        } else {
+            return \Illuminate\Support\Facades\Response::json([
+                "message" => 'Gagal menghapus data.'
+            ], 201);
+        }
+    }
+
     public function all(Request $request)
     {
         $limit = $request->limit;

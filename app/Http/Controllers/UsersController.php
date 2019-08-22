@@ -54,6 +54,10 @@ class UsersController extends Controller
         }
     }
 
+    public function hasRole($role, $userid) {
+        return \App\User::where('role', $role)->where('id', $userid)->first();
+    }
+
     public function register(Request $request)
     {
         if (!$this->checking($request->username)) {
@@ -127,6 +131,11 @@ class UsersController extends Controller
         } else {
             return null;
         }
+    }
+
+    public function checkRole($role) {
+        $check = \App\User::where('username', $role)->first();
+        if($check) return $check 
     }
 
     public function get($id)
