@@ -54,7 +54,8 @@ class UsersController extends Controller
         }
     }
 
-    public function hasRole($role, $userid) {
+    public function hasRole($role, $userid)
+    {
         return \App\User::where('role', $role)->where('id', $userid)->first();
     }
 
@@ -133,9 +134,12 @@ class UsersController extends Controller
         }
     }
 
-    public function checkRole($role) {
+    public function checkRole($role)
+    {
         $check = \App\User::where('username', $role)->first();
-        if($check) return $check 
+        if ($check) {
+            return $check;
+        }
     }
 
     public function get($id)
