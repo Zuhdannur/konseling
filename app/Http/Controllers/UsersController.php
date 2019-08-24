@@ -29,7 +29,7 @@ class UsersController extends Controller
                 ]);
 
                 if ($user->role == 'siswa') {
-                    $data = \App\User::where('api_token', $apiKey)->with('detail', 'detail.kelas', 'detail.sekolah')->first();
+                    $data = \App\User::where('api_token', $apiKey)->with('detail', 'detail.sekolah')->first();
                 } else {
                     $data = \App\User::where('api_token', $apiKey)->with('detail', 'detail.sekolah')->first();
                     $this->addTopic($data);
