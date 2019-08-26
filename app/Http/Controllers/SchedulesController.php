@@ -655,6 +655,20 @@ class SchedulesController extends Controller
         return Response::json(["total_page" => $schedule], 200);
     }
 
+    public function removeAll()
+    {
+        $delete = \App\Schedule::where('requester_id', Auth::user()->id)->truncate();
+        if ($delete) {
+            return Response::json([
+                "message" => "Berhasil menghapus data."
+            ], 200);
+        } else {
+            return Response::json([
+                "message" => 'Gagal menghapus data.'
+            ], 201);
+        }
+    }
+
     public function add(Request $request) {
         if ($request->type_schedule == 'realtime') {
             $insert = $this->storeRealtime($request);
