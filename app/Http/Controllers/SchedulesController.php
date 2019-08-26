@@ -548,24 +548,23 @@ class SchedulesController extends Controller
             $schedule = $schedule->orderBy('created_at', 'desc');
         }
 
-        $limit = $filters->limit;
+        // $limit = $filters->limit;
 
-        if (empty($filters->page)) $skip = 0;
-        else $skip = $limit * $filters->page;
+        // if (empty($filters->page)) $skip = 0;
+        // else $skip = $limit * $filters->page;
 
-        $count = $schedule
-            ->paginate($skip)
-            ->lastPage($limit);
+        $paginate = $schedule->paginate($filters->per_page);
 
-        $data = $schedule
-            ->skip($skip)
-            ->take($limit)
-            ->get();
+        // $count = $schedule
+            // ->paginate($skip)
+            // ->lastPage($limit);
 
-        return Response::json([
-            'total_page' => $count,
-            'data' => $data
-        ], 200);
+        // $data = $schedule
+            // ->skip($skip)
+            // ->take($limit)
+            // ->get();
+
+        return Response::json($paginate, 200);
     }
 
     public function count(Request $filters) {

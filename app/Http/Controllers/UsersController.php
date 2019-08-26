@@ -29,7 +29,7 @@ class UsersController extends Controller
                 ]);
 
                 if ($user->role == 'siswa') {
-                    $data = \App\User::where('api_token', $apiKey)->with('detail', 'detail.kelas', 'detail.sekolah')->first();
+                    $data = \App\User::where('api_token', $apiKey)->with('detail', 'detail.sekolah')->first();
                 } else {
                     $data = \App\User::where('api_token', $apiKey)->with('detail', 'detail.sekolah')->first();
                     $this->addTopic($data);
@@ -52,6 +52,11 @@ class UsersController extends Controller
                 'message' => 'Akun tidak ditemukan.'
             ], 201);
         }
+    }
+
+    public function hasRole($role, $userid)
+    {
+        return \App\User::where('role', $role)->where('id', $userid)->first();
     }
 
     public function register(Request $request)
@@ -126,6 +131,14 @@ class UsersController extends Controller
             return $check;
         } else {
             return null;
+        }
+    }
+
+    public function checkRole($role)
+    {
+        $check = \App\User::where('username', $role)->first();
+        if ($check) {
+            return $check;
         }
     }
 
