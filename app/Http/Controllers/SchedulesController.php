@@ -370,7 +370,7 @@ class SchedulesController extends Controller
                     $data['schedule_id'] = $schedule->id;
                     $this->saveToRiwayat($data);
 
-                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
+                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan guru."], 201);
                 } else {
                     return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
                 }
@@ -379,7 +379,7 @@ class SchedulesController extends Controller
             }
         } else {
             //Role Siswa
-            $schedule = \App\Schedule::where('id', $id)->where('requester_id', Auth::user()->id)->where('status', $status)->first();
+            $schedule = \App\Schedule::where('id', $id)->where('requester_id', Auth::user)->where('status', $status)->first();
             if($schedule) {
 
                 // $senderName = \App\User::where('id', $schedule['requester_id'])->first()->name;
@@ -415,7 +415,7 @@ class SchedulesController extends Controller
                     $data['schedule_id'] = $schedule->id;
                     $this->saveToRiwayat($data);
 
-                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
+                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan sekolah."], 201);
                 } else {
                     return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
                 }
