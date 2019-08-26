@@ -370,7 +370,7 @@ class SchedulesController extends Controller
                     $data['schedule_id'] = $schedule->id;
                     $this->saveToRiwayat($data);
 
-                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan guru."], 201);
+                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
                 } else {
                     return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
                 }
@@ -415,7 +415,7 @@ class SchedulesController extends Controller
                     $data['schedule_id'] = $schedule->id;
                     $this->saveToRiwayat($data);
 
-                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan sekolah."], 201);
+                    return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan berhasil dibatalkan."], 200);
                 } else {
                     return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan gagal dibatalkan."], 201);
                 }
