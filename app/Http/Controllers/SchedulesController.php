@@ -502,6 +502,23 @@ class SchedulesController extends Controller
                     }
                 }
 
+                $schedule = $schedule->where([
+                    ['status', '=', 0],
+                    ['ended', '=', 0],
+                    ['canceled', '=', 0],
+                    ['exp', '=', 0]
+                ]);
+
+                foreach ($schedule->get() as $key => $row) {
+                    if ($row->type_schedule != "daring") {
+                        if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+                            $row->update([
+                                'exp'=> 1
+                            ]);
+                        }
+                    }
+                }
+
                 foreach ($schedule->get() as $key => $row) {
                     if ($row->type_schedule != "daring" && $row->type_schedule != "realtime") {
                         if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
