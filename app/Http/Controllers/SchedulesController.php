@@ -517,7 +517,7 @@ class SchedulesController extends Controller
         }
         
         if ($filters->has('status')) {
-            $schedule = $schedule->where('status', $filters->status);
+            if($filters->status == 0 || $filters->status == 1) $schedule = $schedule->where('status', $filters->status);
         }
 
         if ($filters->has('canceled')) {
