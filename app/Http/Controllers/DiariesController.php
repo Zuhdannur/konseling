@@ -43,7 +43,7 @@ class DiariesController extends Controller
         $delete = \App\Diary::where('id_user', Auth::user()->id)->truncate();
         if ($delete) {
             return \Illuminate\Support\Facades\Response::json([
-                "message" => "Berhasil menghapus data."
+                "message" => "Berremhasil menghapus data."
             ], 200);
         } else {
             return \Illuminate\Support\Facades\Response::json([
@@ -166,11 +166,11 @@ class DiariesController extends Controller
 
         if ($update) {
             return \Illuminate\Support\Facades\Response::json([
-                "message" => 'diary updated'
+                "message" => 'Berhasil menyunting catatan.'
             ], 200);
         } else {
             return \Illuminate\Support\Facades\Response::json([
-                "message" => 'failed to update'
+                "message" => 'Gagal menyunting catatan.'
             ], 201);
         }
         return $request;

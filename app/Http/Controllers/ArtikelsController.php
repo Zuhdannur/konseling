@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 class ArtikelsController extends Controller
 {
-
     public function getTitle()
     {
         $data = \App\Artikel::select('title', 'id')->get();
@@ -19,7 +18,6 @@ class ArtikelsController extends Controller
     public function create(Request $request)
     {
         $insert = new \App\Artikel;
-//        $insert->img = $request->file
         $insert->title = $request->title;
         $insert->desc = $request->desc;
         $insert->save();
@@ -40,8 +38,7 @@ class ArtikelsController extends Controller
 
         if ($request->page == "") {
             $skip = 0;
-        }
-        else {
+        } else {
             $skip = $limit * $request->page;
         }
 
@@ -67,8 +64,7 @@ class ArtikelsController extends Controller
 
         if ($request->page == "") {
             $skip = 0;
-        }
-        else {
+        } else {
             $skip = $limit * $request->page;
         }
 
@@ -83,12 +79,12 @@ class ArtikelsController extends Controller
 
         return \Illuminate\Support\Facades\Response::json([
             "total_page" => $count
-        ],200);
+        ], 200);
     }
 
     public function storeFavorite(Request $request)
     {
-        if($this->checkingArtikel($request->id_artikel)){
+        if ($this->checkingArtikel($request->id_artikel)) {
             return \response()->json([
                 "message" => "duplicate artikel"
             ], 202);
@@ -115,8 +111,7 @@ class ArtikelsController extends Controller
 
         if ($request->page == "") {
             $skip = 0;
-        }
-        else {
+        } else {
             $skip = $limit * $request->page;
         }
 
@@ -130,7 +125,7 @@ class ArtikelsController extends Controller
         foreach ($data as $key => $value) {
             $result[$key] = $value['artikel'];
             $result[$key]['id_favorit'] = $value->id_favorit;
-			$result[$key]['id_user'] = Auth::user()->id;
+            $result[$key]['id_user'] = Auth::user()->id;
         }
         $data['result'] = \response()->json($result, 200);
         return $data['result'];
@@ -142,8 +137,7 @@ class ArtikelsController extends Controller
 
         if ($request->page == "") {
             $skip = 0;
-        }
-        else {
+        } else {
             $skip = $limit * $request->page;
         }
         $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel');
@@ -154,14 +148,17 @@ class ArtikelsController extends Controller
 
         return \Illuminate\Support\Facades\Response::json([
             "total_page" => $count
-        ],200);
+        ], 200);
     }
 
     public function checkingArtikel($id)
     {
         $check = \App\Favorite::where([['id_user',Auth::user()->id],['id_favorit',$id]])->get();
-        if(count($check) > 0)return true;
-        else return false;
+        if (count($check) > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function removeMyFavorit($id)
