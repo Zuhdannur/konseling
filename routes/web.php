@@ -88,6 +88,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('schedule/{id}', 'SchedulesController@get');
         $router->put('schedule', 'SchedulesController@put');
         $router->delete('schedule/{id}', 'SchedulesController@remove');
+        $router->delete('schedule', 'SchedulesController@removeAll');
         $router->get('schedulePageCount', 'SchedulesController@count');
 
         $router->post('scheduleChannelUrl', 'SchedulesController@updateChannelUrl');
