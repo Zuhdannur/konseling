@@ -15,7 +15,6 @@ class CreateTblArtikel extends Migration
     {
         Schema::create('tbl_artikel', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('img')->nullable();
             $table->string('title');
             $table->string('desc');
             $table->timestamps();
