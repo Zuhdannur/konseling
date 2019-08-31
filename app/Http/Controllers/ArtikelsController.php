@@ -46,39 +46,38 @@ class ArtikelsController extends Controller
 
     public function getRelatedArtikel(Request $request)
     {
-        $limit = $request->limit;
-
-        if ($request->page == "") {
-            $skip = 0;
-        } else {
-            $skip = $limit * $request->page;
-        }
 
 //        $data = \App\Artikel::where('LOWER(`title`)','LIKE','%'.strtolower($request->title).'%')->get();
-        $datas = \App\Artikel::where(function ($q) use ($request) {
-            $q->whereRaw('LOWER(title) LIKE ? ', '%' . strtolower($request->title) . '%');
-        });
+        // $datas = \App\Artikel::where(function ($q) use ($request) {
+        //     $q->whereRaw('LOWER(title) LIKE ? ', '%' . strtolower($request->title) . '%');
+        // });
+
+        // $data = DB::select('SELECT exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = tbl_artikel.id and fav.id_user = tbl_user.id limit 1) as bookmarked');
+
 
         $data = DB::select("
-            SELECT 
-            exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as bookmarked
-            ,u.name
-            ,p.id
-            FROM
-            tbl_user u,
-            tbl_artikel p
-            WHERE
-            u.id :id
-            ORDER BY created_at DESC
-        ", [
-            'id' => Auth::user()->id]);
+        SELECT
+        exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark
+        ,u.name
+        ,p.id
+        FROM
+        tbl_user u,
+        tbl_artikel p WHERE u.id =:id AND p.title =:q ", ['id' => Auth::user()->id, 'q' => 'as']);
+        // ->whereRaw('tbl_user.id:=id', ['id' => 1]);
+        // ->whereRaw('tbl_artikel.title LIKE ? ', '%' . strtolower($request->title) . '%');
+        // WHERE
+        // u.id=:id AND
+        // p.title LIKE '%gurindam%'
+        // ORDER BY p.created_at DESC", ['id' => 1]);
 
-        $paginate = $data->paginate($request->per_page);
+        // $data = DB::select("SELECT * FROM tbl_user WHERE tbl_user.id =:id", ['id' => 1]);
 
-        $data = $datas
-        ->skip($skip)
-        ->take($limit)
-        ->get();
+        $paginate = $data;
+
+        // $data = $datas
+        // ->skip($skip)
+        // ->take($limit)
+        // ->get();
 
         return \Illuminate\Support\Facades\Response::json($paginate, 200);
     }
