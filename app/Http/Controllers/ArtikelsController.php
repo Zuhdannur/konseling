@@ -71,9 +71,7 @@ class ArtikelsController extends Controller
             u.id :id
             ORDER BY created_at DESC
         ", [
-            'id' => Auth::user()->id,
-            'query' => $request->query
-        ]);
+            'id' => Auth::user()->id]);
 
         $paginate = $data->paginate($request->per_page);
 
