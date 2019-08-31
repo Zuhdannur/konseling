@@ -6,6 +6,18 @@ use Illuminate\Http\Request;
 
 class ArtikelsController extends Controller
 {
+
+    public $searchQuery = "SELECT 
+                        exists(select 1 from `favorite` fav where fav.id_artikel = p.id_artikel and fav.id_user = u.id limit 1) as bookmarked
+                        , u.nama
+                        , p.id_artikel
+                        FROM
+                        user u,
+                        artikel p
+                        WHERE
+                        u.id = 2 AND
+                        p.nama_artikel LIKE '%GurindaM%'";
+
     public function getTitle()
     {
         $data = \App\Artikel::select('title', 'id')->get();
@@ -47,15 +59,31 @@ class ArtikelsController extends Controller
             $q->whereRaw('LOWER(title) LIKE ? ', '%' . strtolower($request->title) . '%');
         });
 
+        $data = DB::select("
+            SELECT 
+            exists(select 1 from `tbl_fav_artikel` fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as bookmarked
+            , u.name
+            , p.id
+            FROM
+            tbl_user u,
+            tbl_artikel p
+            WHERE
+            u.id :id AND
+            p.nama_artikel LIKE '%:query%'
+            ORDER BY created_at DESC
+        ", [
+            'id' => $request->Auth::user()->id,
+            'query' => $request->query
+        ]);
+
+        $paginate = $data->paginate($request->per_page);
+
         $data = $datas
         ->skip($skip)
         ->take($limit)
         ->get();
 
-        return \Illuminate\Support\Facades\Response::json([
-            "message" => 'success',
-            "result" => $data
-        ], 200);
+        return \Illuminate\Support\Facades\Response::json($paginate, 200);
     }
 
     public function getRelatedArtikelCount(Request $request)
@@ -72,6 +100,8 @@ class ArtikelsController extends Controller
         $datas = \App\Artikel::where(function ($q) use ($request) {
             $q->whereRaw('LOWER(title) LIKE ? ', '%' . strtolower($request->title) . '%');
         });
+
+        $datas = \App\Artikel::selectRaw('')
 
         $count = $datas
         ->paginate($limit)
