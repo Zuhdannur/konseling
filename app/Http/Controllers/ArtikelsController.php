@@ -72,7 +72,7 @@ class ArtikelsController extends Controller
             p.nama_artikel LIKE '%:query%'
             ORDER BY created_at DESC
         ", [
-            'id' => $request->Auth::user()->id,
+            'id' => Auth::user()->id,
             'query' => $request->query
         ]);
 
