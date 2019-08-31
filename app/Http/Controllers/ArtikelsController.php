@@ -62,14 +62,13 @@ class ArtikelsController extends Controller
         $data = DB::select("
             SELECT 
             exists(select 1 from `tbl_fav_artikel` fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as bookmarked
-            , u.name
-            , p.id
+            ,u.name
+            ,p.id
             FROM
             tbl_user u,
             tbl_artikel p
             WHERE
-            u.id :id AND
-            p.nama_artikel LIKE '%:query%'
+            u.id :id
             ORDER BY created_at DESC
         ", [
             'id' => Auth::user()->id,
