@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 class ArtikelsController extends Controller
 {
-
     public $searchQuery = "SELECT 
                         exists(select 1 from `favorite` fav where fav.id_artikel = p.id_artikel and fav.id_user = u.id limit 1) as bookmarked
                         , u.nama
@@ -86,31 +85,31 @@ class ArtikelsController extends Controller
         return \Illuminate\Support\Facades\Response::json($paginate, 200);
     }
 
-    public function getRelatedArtikelCount(Request $request)
-    {
-        $limit = $request->limit;
+//     public function getRelatedArtikelCount(Request $request)
+//     {
+//         $limit = $request->limit;
 
-        if ($request->page == "") {
-            $skip = 0;
-        } else {
-            $skip = $limit * $request->page;
-        }
+//         if ($request->page == "") {
+//             $skip = 0;
+//         } else {
+//             $skip = $limit * $request->page;
+//         }
 
-//        $data = \App\Artikel::where('LOWER(`title`)','LIKE','%'.strtolower($request->title).'%')->get();
-        $datas = \App\Artikel::where(function ($q) use ($request) {
-            $q->whereRaw('LOWER(title) LIKE ? ', '%' . strtolower($request->title) . '%');
-        });
+    // //        $data = \App\Artikel::where('LOWER(`title`)','LIKE','%'.strtolower($request->title).'%')->get();
+//         $datas = \App\Artikel::where(function ($q) use ($request) {
+//             $q->whereRaw('LOWER(title) LIKE ? ', '%' . strtolower($request->title) . '%');
+//         });
 
-        $datas = \App\Artikel::selectRaw('')
+//         $datas = \App\Artikel::selectRaw('')
 
-        $count = $datas
-        ->paginate($limit)
-        ->lastPage();
+//         $count = $datas
+//         ->paginate($limit)
+//         ->lastPage();
 
-        return \Illuminate\Support\Facades\Response::json([
-            "total_page" => $count
-        ], 200);
-    }
+//         return \Illuminate\Support\Facades\Response::json([
+//             "total_page" => $count
+//         ], 200);
+//     }
 
     public function storeFavorite(Request $request)
     {
