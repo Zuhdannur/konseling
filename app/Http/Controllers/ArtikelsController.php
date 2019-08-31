@@ -3,6 +3,7 @@
 use http\Env\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use DB;
 
 class ArtikelsController extends Controller
 {
