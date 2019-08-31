@@ -53,8 +53,15 @@ class ArtikelsController extends Controller
         //     $q->whereRaw('LOWER(title) LIKE ? ', '%' . strtolower($request->title) . '%');
         // });
 
-        // $data = DB::select('SELECT exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = tbl_artikel.id and fav.id_user = tbl_user.id limit 1) as bookmarked');
+        $bookmark = "exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark";
+        // $categorias = \App\Favorit::with(['artikel' => function($query) use ($bookmark){
+        //     $query->select($bookmark, 'tbl_user.name', 'tbl_artikel.title')
+        // }])->whereRaw('u.id =:id', ['id' => 1])->get();
 
+        // $data = DB::selectOne(
+        //     'SELECT exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = tbl_artikel.id and fav.id_user = tbl_user.id limit 1) as bookmarked FROM tbl_artikel, tbl_user'
+        // );
+        
         $data = DB::select("
             SELECT
             exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark
@@ -65,6 +72,7 @@ class ArtikelsController extends Controller
             FROM
             tbl_user u,
             tbl_artikel p WHERE u.id =:id AND p.title LIKE :q", ['id' => 1, 'q' => '%'.$request->title.'%']);
+
         // ->whereRaw('tbl_user.id:=id', ['id' => 1]);
         // ->whereRaw('tbl_artikel.title LIKE ? ', '%' . strtolower($request->title) . '%');
         // WHERE
@@ -74,14 +82,12 @@ class ArtikelsController extends Controller
 
         // $data = DB::select("SELECT * FROM tbl_user WHERE tbl_user.id =:id", ['id' => 1]);
 
-        $paginate =  new \Illuminate\Pagination\Paginator($data, $request->per_page);
-
         // $data = $datas
         // ->skip($skip)
         // ->take($limit)
         // ->get();
-
-        return \Illuminate\Support\Facades\Response::json($paginate, 200);
+        $pagination = new \Illuminate\Pagination\Paginator($data, $request->per_page);
+        return \Illuminate\Support\Facades\Response::json($pagination, 200);
     }
 
 //     public function getRelatedArtikelCount(Request $request)
