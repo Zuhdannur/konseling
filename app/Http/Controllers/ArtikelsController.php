@@ -2,6 +2,7 @@
 
 use http\Env\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Paginator;
 use Illuminate\Http\Request;
 use DB;
 
@@ -63,7 +64,7 @@ class ArtikelsController extends Controller
             ,p.desc
             FROM
             tbl_user u,
-            tbl_artikel p WHERE u.id =:id AND p.title =:q ", ['id' => Auth::user()->id, 'q' => $request->title]);
+            tbl_artikel p WHERE u.id =:id AND p.title =:q ", ['id' => 1, 'q' => $request->title]);
         // ->whereRaw('tbl_user.id:=id', ['id' => 1]);
         // ->whereRaw('tbl_artikel.title LIKE ? ', '%' . strtolower($request->title) . '%');
         // WHERE
@@ -73,7 +74,7 @@ class ArtikelsController extends Controller
 
         // $data = DB::select("SELECT * FROM tbl_user WHERE tbl_user.id =:id", ['id' => 1]);
 
-        $paginate = Paginator::make($data);
+        $paginate =  new \Illuminate\Pagination\Paginator($data, $request->per_page);
 
         // $data = $datas
         // ->skip($skip)
