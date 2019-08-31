@@ -54,17 +54,16 @@ class ArtikelsController extends Controller
 
         // $data = DB::select('SELECT exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = tbl_artikel.id and fav.id_user = tbl_user.id limit 1) as bookmarked');
 
-
         $data = DB::select("
-        SELECT
-        exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark
-        ,u.name
-        ,p.id
-        ,p.title
-        ,p.desc
-        FROM
-        tbl_user u,
-        tbl_artikel p WHERE u.id =:id AND p.title =:q ", ['id' => Auth::user()->id, 'q' => $request->title]);
+            SELECT
+            exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark
+            ,u.name
+            ,p.id
+            ,p.title
+            ,p.desc
+            FROM
+            tbl_user u,
+            tbl_artikel p WHERE u.id =:id AND p.title =:q ", ['id' => Auth::user()->id, 'q' => $request->title]);
         // ->whereRaw('tbl_user.id:=id', ['id' => 1]);
         // ->whereRaw('tbl_artikel.title LIKE ? ', '%' . strtolower($request->title) . '%');
         // WHERE
@@ -74,7 +73,7 @@ class ArtikelsController extends Controller
 
         // $data = DB::select("SELECT * FROM tbl_user WHERE tbl_user.id =:id", ['id' => 1]);
 
-        $paginate = $data;
+        $paginate = Paginator::make($data);
 
         // $data = $datas
         // ->skip($skip)
