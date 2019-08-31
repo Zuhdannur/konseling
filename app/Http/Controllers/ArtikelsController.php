@@ -62,7 +62,7 @@ class ArtikelsController extends Controller
         ,p.id
         FROM
         tbl_user u,
-        tbl_artikel p WHERE u.id =:id AND p.title =:q ", ['id' => Auth::user()->id, 'q' => 'as']);
+        tbl_artikel p WHERE u.id =:id AND p.title =:q ", ['id' => Auth::user()->id, 'q' => $request->title]);
         // ->whereRaw('tbl_user.id:=id', ['id' => 1]);
         // ->whereRaw('tbl_artikel.title LIKE ? ', '%' . strtolower($request->title) . '%');
         // WHERE
