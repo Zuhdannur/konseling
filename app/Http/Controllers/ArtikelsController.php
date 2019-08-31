@@ -86,8 +86,8 @@ class ArtikelsController extends Controller
         // ->skip($skip)
         // ->take($limit)
         // ->get();
-        $pagination = new \Illuminate\Pagination\Paginator($data, $request->per_page);
-        return \Illuminate\Support\Facades\Response::json($pagination, 200);
+        // $pagination = new \Illuminate\Pagination\Paginator($data, $request->per_page);
+        // return \Illuminate\Support\Facades\Response::json($pagination, 200);
     }
 
 //     public function getRelatedArtikelCount(Request $request)
