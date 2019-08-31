@@ -60,6 +60,8 @@ class ArtikelsController extends Controller
         exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark
         ,u.name
         ,p.id
+        ,p.title
+        ,p.desc
         FROM
         tbl_user u,
         tbl_artikel p WHERE u.id =:id AND p.title =:q ", ['id' => Auth::user()->id, 'q' => $request->title]);
