@@ -159,7 +159,7 @@ class ArtikelsController extends Controller
         if ($this->checkingArtikel($request->id_artikel)) {
             return \response()->json([
                 "message" => "duplicate artikel"
-            ], 202);
+            ], 201);
         }
         $insert = new \App\Favorite;
         $insert->id_artikel = $request->id_artikel;
@@ -173,7 +173,7 @@ class ArtikelsController extends Controller
         } else {
             return \response()->json([
                 "message" => "failed"
-            ], 200);
+            ], 201);
         }
     }
 
