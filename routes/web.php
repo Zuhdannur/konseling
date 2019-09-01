@@ -27,8 +27,6 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
 
     $router->get('title', 'ArtikelsController@getTitle');
     $router->post('artikel', 'ArtikelsController@create');
-    $router->post('related', 'ArtikelsController@getRelatedArtikel');
-    $router->post('relatedCount', 'ArtikelsController@getRelatedArtikelCount');
 
     /**
     * Routes for resource sekolah
@@ -153,6 +151,8 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('favorit', 'ArtikelsController@getMyFavorite');
         $router->get('favoritCount', 'ArtikelsController@getMyFavoriteCount');
         $router->get('favorit/{id}', 'ArtikelsController@removeMyFavorit');
+
+        $router->post('related', 'ArtikelsController@getRelatedArtikel');
 
         /**
          * Routes for resource catatan-konseling
