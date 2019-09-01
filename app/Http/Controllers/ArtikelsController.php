@@ -61,17 +61,42 @@ class ArtikelsController extends Controller
         // $data = DB::selectOne(
         //     'SELECT exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = tbl_artikel.id and fav.id_user = tbl_user.id limit 1) as bookmarked FROM tbl_artikel, tbl_user'
         // );
+        $data = \App\Favorite::with(['artikel','user'], function ($q) use ($request) {
+            $q->select(array(
+                DB::raw('exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = artikel.id and fav.id_user = user.id limit 1) as hasBookmark')
+                ,'user.name'
+                ,'artikel.title'
+            ))->whereRaw('tbl_user.id:=id', ['id' => 1])
+            ->whereRaw('tbl_artikel.title LIKE ? ', '%' . strtolower($request->title) . '%');
+        })->get();
+        // WHERE u.id =:id AND p.title LIKE :q", ['id' => 1, 'q' => '%'.$request->title.'%']);
+        // $data = DB::select(
+        //     "exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark",
+        //     "u.name",
+        //     "p.id",
+        //     "p.title",
+        //     "p.desc"
+        // )->from('tbl_user u', 'tbl_artikel p');
+
+        // $data = DB::table('tbl_artikel')
+        //     ->select(array(
+        //         DB::raw('exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = tbl_artikel.id and fav.id_user = tbl_user.id limit 1) as hasBookmark')
+        //         ,'tbl_user.name'
+        //         ,'tbl_artikel.title'
+        //     ))->from('tbl_user')->get();
+
         
-        $data = DB::select("
-            SELECT
-            exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark
-            ,u.name
-            ,p.id
-            ,p.title
-            ,p.desc
-            FROM
-            tbl_user u,
-            tbl_artikel p WHERE u.id =:id AND p.title LIKE :q", ['id' => 1, 'q' => '%'.$request->title.'%']);
+        
+        // $data = DB::select("
+        //     SELECT
+        //     exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark
+        //     ,u.name
+        //     ,p.id
+        //     ,p.title
+        //     ,p.desc
+        //     FROM
+        //     tbl_user u,
+        //     tbl_artikel p WHERE u.id =:id AND p.title LIKE :q", ['id' => 1, 'q' => '%'.$request->title.'%']);
 
         // ->whereRaw('tbl_user.id:=id', ['id' => 1]);
         // ->whereRaw('tbl_artikel.title LIKE ? ', '%' . strtolower($request->title) . '%');
@@ -87,7 +112,7 @@ class ArtikelsController extends Controller
         // ->take($limit)
         // ->get();
         // $pagination = new \Illuminate\Pagination\Paginator($data, $request->per_page);
-        // return \Illuminate\Support\Facades\Response::json($pagination, 200);
+        return \Illuminate\Support\Facades\Response::json($data, 200);
     }
 
 //     public function getRelatedArtikelCount(Request $request)
