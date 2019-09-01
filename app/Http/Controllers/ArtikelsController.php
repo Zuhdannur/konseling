@@ -105,7 +105,7 @@ class ArtikelsController extends Controller
 
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         // set limit
-        $perPage = 20;
+        $perPage = $request->per_page;
         // generate pagination
         $currentResults = $datas->slice(($currentPage - 1) * $perPage, $perPage)->all();
         $results = new LengthAwarePaginator($currentResults, $datas->count(), $perPage);
