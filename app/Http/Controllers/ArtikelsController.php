@@ -97,6 +97,7 @@ class ArtikelsController extends Controller
             ,p.id
             ,p.title
             ,p.desc
+            ,p.created_at
             FROM
             tbl_user u,
             tbl_artikel p WHERE u.id =:id AND LOWER(p.title) LIKE :q", ['id' => Auth::user()->id, 'q' => '%'.strtolower($request->title).'%']);
