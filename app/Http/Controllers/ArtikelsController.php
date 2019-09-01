@@ -61,14 +61,25 @@ class ArtikelsController extends Controller
         // $data = DB::selectOne(
         //     'SELECT exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = tbl_artikel.id and fav.id_user = tbl_user.id limit 1) as bookmarked FROM tbl_artikel, tbl_user'
         // );
-        $data = \App\Favorite::with(['artikel','user'], function ($q) use ($request) {
-            $q->select(array(
-                DB::raw('exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = artikel.id and fav.id_user = user.id limit 1) as hasBookmark')
-                ,'user.name'
-                ,'artikel.title'
-            ))->whereRaw('tbl_user.id:=id', ['id' => 1])
-            ->whereRaw('tbl_artikel.title LIKE ? ', '%' . strtolower($request->title) . '%');
-        })->get();
+
+        $data = DB::table('tbl_artikel')
+        ->leftJoin('tbl_fav_artikel', function ($join) {
+            $join->on('tbl_fav_artikel.id_artikel', '=', 'tbl_artikel.id')
+                ->where('tbl_fav_artikel.id_user', '=', 1);
+        })
+        // If you want you may select only some of the fields like so:
+        ->select('tbl_artikel.id as post_id', 'tbl_artikel.title', 'tbl_fav_artikel as did_i_like')
+        ->groupBy('tbl_artikel.id')
+        ->orderBy('tbl_artikel.id');
+
+        // $data = \App\Favorite::with(['artikel','user'], function ($q) use ($request) {
+        //     $q->select(array(
+        //         DB::raw('exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = artikel.id and fav.id_user = user.id limit 1) as hasBookmark')
+        //         ,'user.name'
+        //         ,'artikel.title'
+        //     ))->whereRaw('tbl_user.id:=id', ['id' => 1])
+        //     ->whereRaw('tbl_artikel.title LIKE ? ', '%' . strtolower($request->title) . '%');
+        // })->get();
         // WHERE u.id =:id AND p.title LIKE :q", ['id' => 1, 'q' => '%'.$request->title.'%']);
         // $data = DB::select(
         //     "exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark",

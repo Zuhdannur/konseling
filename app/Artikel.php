@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Artikel extends Model {
-
+class Artikel extends Model
+{
     protected $fillable = [
         'id','img','title','desc'
     ];
@@ -15,7 +15,7 @@ class Artikel extends Model {
     public static $rules = [
         // Validation rules
     ];
+    
 
     // Relationships
-
 }
