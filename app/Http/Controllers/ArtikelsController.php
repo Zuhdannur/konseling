@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Paginator;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ArtikelsController extends Controller
 {
@@ -62,15 +63,6 @@ class ArtikelsController extends Controller
         //     'SELECT exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = tbl_artikel.id and fav.id_user = tbl_user.id limit 1) as bookmarked FROM tbl_artikel, tbl_user'
         // );
 
-        $data = DB::table('tbl_artikel')
-        ->leftJoin('tbl_fav_artikel', function ($join) {
-            $join->on('tbl_fav_artikel.id_artikel', '=', 'tbl_artikel.id')
-                ->where('tbl_fav_artikel.id_user', '=', 1);
-        })
-        // If you want you may select only some of the fields like so:
-        ->select('tbl_artikel.id as post_id', 'tbl_artikel.title', 'tbl_fav_artikel as did_i_like')
-        ->groupBy('tbl_artikel.id')
-        ->orderBy('tbl_artikel.id');
 
         // $data = \App\Favorite::with(['artikel','user'], function ($q) use ($request) {
         //     $q->select(array(
@@ -98,16 +90,25 @@ class ArtikelsController extends Controller
 
         
         
-        // $data = DB::select("
-        //     SELECT
-        //     exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark
-        //     ,u.name
-        //     ,p.id
-        //     ,p.title
-        //     ,p.desc
-        //     FROM
-        //     tbl_user u,
-        //     tbl_artikel p WHERE u.id =:id AND p.title LIKE :q", ['id' => 1, 'q' => '%'.$request->title.'%']);
+        $data = DB::select("
+            SELECT
+            exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark
+            ,u.name
+            ,p.id
+            ,p.title
+            ,p.desc
+            FROM
+            tbl_user u,
+            tbl_artikel p WHERE u.id =:id AND p.title LIKE :q", ['id' => 1, 'q' => '%'.$request->title.'%']);
+
+        $datas = collect($data);
+
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        // set limit
+        $perPage = 20;
+        // generate pagination
+        $currentResults = $datas->slice(($currentPage - 1) * $perPage, $perPage)->all();
+        $results = new LengthAwarePaginator($currentResults, $datas->count(), $perPage);
 
         // ->whereRaw('tbl_user.id:=id', ['id' => 1]);
         // ->whereRaw('tbl_artikel.title LIKE ? ', '%' . strtolower($request->title) . '%');
@@ -123,7 +124,7 @@ class ArtikelsController extends Controller
         // ->take($limit)
         // ->get();
         // $pagination = new \Illuminate\Pagination\Paginator($data, $request->per_page);
-        return \Illuminate\Support\Facades\Response::json($data, 200);
+        return \Illuminate\Support\Facades\Response::json($results, 200);
     }
 
 //     public function getRelatedArtikelCount(Request $request)

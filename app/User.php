@@ -39,6 +39,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasOne('\App\DetailUser', 'id_user', 'id');
     }
 
+    public function favorite() {
+        return $this->belongsTo('\App\Favorite','id','id_user')
+    }
+
     public function scopeWithAndWhereHas($query, $relation, $constraint)
     {
         return $query->whereHas($relation, $constraint)
