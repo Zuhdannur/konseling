@@ -99,7 +99,7 @@ class ArtikelsController extends Controller
             ,p.desc
             FROM
             tbl_user u,
-            tbl_artikel p WHERE u.id =:id AND LOWER(p.title) LIKE :q", ['id' => 1, 'q' => '%'.strtolower($request->title).'%']);
+            tbl_artikel p WHERE u.id =:id AND LOWER(p.title) LIKE :q", ['id' => Auth::user()->id, 'q' => '%'.strtolower($request->title).'%']);
 
         $datas = collect($data);
 
