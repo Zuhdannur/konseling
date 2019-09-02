@@ -150,7 +150,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->post('favorit', 'ArtikelsController@storeFavorite');
         $router->get('favorit', 'ArtikelsController@getMyFavorite');
         $router->get('favoritCount', 'ArtikelsController@getMyFavoriteCount');
-        $router->get('favorit/{id}', 'ArtikelsController@removeMyFavorit');
+        $router->delete('favorit/{id}', 'ArtikelsController@removeMyFavorit');
 
         $router->post('related', 'ArtikelsController@getRelatedArtikel');
 
