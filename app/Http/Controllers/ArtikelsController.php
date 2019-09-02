@@ -177,6 +177,20 @@ class ArtikelsController extends Controller
         }
     }
 
+    public function removeMyFavorit($id)
+    {
+        $delete = \App\Favorite::where('id_artikel',$id)->delete();
+        if ($delete) {
+            return \response([
+                "message" => "succsess"
+            ], 200);
+        } else {
+            return \response([
+                "message" => "failed"
+            ], 201);
+        }
+    }
+
     public function getMyFavorite(Request $request)
     {
         $limit = $request->limit;
@@ -233,17 +247,4 @@ class ArtikelsController extends Controller
         }
     }
 
-    public function removeMyFavorit($id)
-    {
-        $delete = \App\Favorite::find($id)->delete();
-        if ($delete) {
-            return \response([
-                "message" => "succsess"
-            ], 200);
-        } else {
-            return \response([
-                "message" => "failed"
-            ], 201);
-        }
-    }
 }
