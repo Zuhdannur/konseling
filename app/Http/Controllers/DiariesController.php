@@ -62,9 +62,6 @@ class DiariesController extends Controller
         
         $paginate = $datas->paginate($request->per_page);
 
-        $items = $paginate->items();
-        $total_count = $paginate->lastPage();
-
         // $count = $datas->paginate($limit)->lastPage();
 
         // $data = $datas

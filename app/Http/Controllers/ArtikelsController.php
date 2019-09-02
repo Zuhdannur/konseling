@@ -202,7 +202,9 @@ class ArtikelsController extends Controller
             $skip = $limit * $request->page;
         }
 
-        $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel');
+        $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel')->with('user');
+        $paginate = $datas->paginate($request->per_page);
+
         $data = $datas
         ->skip($skip)
         ->take($limit)
