@@ -16,7 +16,7 @@ class CreateTblSekolah extends Migration
         Schema::create('tbl_sekolah', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nama_sekolah');
-            $table->string('alamat');
+            $table->text('alamat');
             $table->timestamps();
         });
     }

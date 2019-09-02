@@ -17,7 +17,7 @@ class CreateTblNotification extends Migration
             $table->bigIncrements('id');
             $table->integer('id_user')->unsigned();
             $table->string('title');
-            $table->string('body');
+            $table->text('body');
             $table->string('type');
             $table->integer('read')->default(0);
             $table->timestamps();
