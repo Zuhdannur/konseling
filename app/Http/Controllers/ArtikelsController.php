@@ -93,7 +93,7 @@ class ArtikelsController extends Controller
         $data = DB::select("
             SELECT
             exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark
-            ,u.id
+            ,u.id as user_id
             ,u.name
             ,p.id
             ,p.title
