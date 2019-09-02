@@ -194,30 +194,16 @@ class ArtikelsController extends Controller
 
     public function getMyFavorite(Request $request)
     {
-        $limit = $request->limit;
-
-        if ($request->page == "") {
-            $skip = 0;
-        } else {
-            $skip = $limit * $request->page;
-        }
-
         $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel')->with('user');
         $paginate = $datas->paginate($request->per_page);
 
-        $data = $datas
-        ->skip($skip)
-        ->take($limit)
-        ->get();
-
-        $result = [];
-        foreach ($data as $key => $value) {
-            $result[$key] = $value['artikel'];
-            $result[$key]['id_favorit'] = $value->id_favorit;
-            $result[$key]['id_user'] = Auth::user()->id;
-        }
-        $data['result'] = \response()->json($result, 200);
-        return $data['result'];
+        // $result = [];
+        // foreach ($data as $key => $value) {
+        //     $result[$key] = $value['artikel'];
+        //     $result[$key]['id_favorit'] = $value->id_favorit;
+        //     $result[$key]['id_user'] = Auth::user()->id;
+        // }
+        return \response()->json($paginate, 200);
     }
 
     public function getMyFavoriteCount(Request $request)
