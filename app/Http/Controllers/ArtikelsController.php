@@ -156,11 +156,11 @@ class ArtikelsController extends Controller
 
     public function storeFavorite(Request $request)
     {
-        if ($this->checkingArtikel($request->id_artikel)) {
-            return \response()->json([
-                "message" => "duplicate artikel"
-            ], 201);
-        }
+        // if ($this->checkingArtikel($request->id_artikel)) {
+        //     return \response()->json([
+        //         "message" => "duplicate artikel"
+        //     ], 201);
+        // }
         $insert = new \App\Favorite;
         $insert->id_artikel = $request->id_artikel;
         $insert->id_user = Auth::user()->id;
