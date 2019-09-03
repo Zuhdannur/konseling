@@ -100,7 +100,6 @@ class ArtikelsController extends Controller
             ,tbl_user.id as user_id
             ,tbl_fav_artikel.id_favorit
             FROM
-            tbl_fav_artikel,
             tbl_artikel,
             tbl_user
             WHERE tbl_user.id =:id AND LOWER(tbl_artikel.title) LIKE :q", ['id' => Auth::user()->id, 'q' => '%'.strtolower($request->title).'%']);
