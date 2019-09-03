@@ -94,7 +94,7 @@ class ArtikelsController extends Controller
             SELECT
             exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark
             ,u.id as user_id
-            ,tbl_fav_artikel.id as id_favorite
+            ,tbl_fav_artikel.id_favorit
             ,u.name
             ,p.id
             ,p.title
