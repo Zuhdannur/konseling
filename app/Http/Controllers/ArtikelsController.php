@@ -94,7 +94,7 @@ class ArtikelsController extends Controller
             SELECT
             exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark
             ,u.id as user_id
-            ,tbl_fav_artikel.id_artikel
+            ,tbl_fav_artikel.id as id_favorite
             ,u.name
             ,p.id
             ,p.title
@@ -104,7 +104,7 @@ class ArtikelsController extends Controller
             tbl_user u,
             tbl_artikel p,
             tbl_fav_artikel
-            WHERE u.id =:id AND where tbl_fav_artikel.id_artikel = p.id and fav.id_user = u.id AND LOWER(p.title) LIKE :q", ['id' => Auth::user()->id, 'q' => '%'.strtolower($request->title).'%']);
+            WHERE tbl_fav_artikel.id_artikel = tbl_artikel.id and fav.id_user = tbl_user.id AND u.id =:id AND LOWER(p.title) LIKE :q", ['id' => Auth::user()->id, 'q' => '%'.strtolower($request->title).'%']);
 
         $datas = collect($data);
 
