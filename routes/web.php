@@ -49,6 +49,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     //For Develpment Purposes
     $router->get('user', 'UsersController@all');
     // $router->get('viewRiwayat', 'RiwayatsController@view');
+    $router->post('related', 'ArtikelsController@getRelatedArtikel');
    
     $router->group(['middleware' => 'auth'], function () use ($router) {
         
@@ -152,7 +153,6 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('favoritCount', 'ArtikelsController@getMyFavoriteCount');
         $router->delete('favorit/{id}', 'ArtikelsController@removeMyFavorit');
 
-        $router->post('related', 'ArtikelsController@getRelatedArtikel');
 
         /**
          * Routes for resource catatan-konseling
