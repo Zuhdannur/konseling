@@ -102,7 +102,8 @@ class ArtikelsController extends Controller
             ,p.created_at
             FROM
             tbl_user u,
-            tbl_artikel p
+            tbl_artikel p,
+            tbl_fav_artikel
             WHERE u.id =:id AND LOWER(p.title) LIKE :q", ['id' => Auth::user()->id, 'q' => '%'.strtolower($request->title).'%']);
 
         $datas = collect($data);
