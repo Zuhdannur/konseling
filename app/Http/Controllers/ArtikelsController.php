@@ -54,7 +54,6 @@ class ArtikelsController extends Controller
         //     $q->whereRaw('LOWER(title) LIKE ? ', '%' . strtolower($request->title) . '%');
         // });
 
-        $bookmark = "exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark";
         // $categorias = \App\Favorit::with(['artikel' => function($query) use ($bookmark){
         //     $query->select($bookmark, 'tbl_user.name', 'tbl_artikel.title')
         // }])->whereRaw('u.id =:id', ['id' => 1])->get();
@@ -92,17 +91,15 @@ class ArtikelsController extends Controller
         
         $data = DB::select("
             SELECT
-            exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark
-            ,u.id as user_id
-            ,u.name
-            ,p.id
-            ,p.title
-            ,p.desc
-            ,p.created_at
+            exists(select 1 from tbl_fav_artikel where tbl_fav_artikel.id_artikel = tbl_artikel.id and tbl_fav_artikel.id_user = tbl_user.id limit 1) as hasBookmark
+            ,tbl_user.id as user_id
+            ,tbl_fav_artikel.id_favorit
+            ,tbl_user.name
             FROM
-            tbl_user u,
-            tbl_artikel p 
-            WHERE u.id =:id AND LOWER(p.title) LIKE :q", ['id' => Auth::user()->id, 'q' => '%'.strtolower($request->title).'%']);
+            tbl_user,
+            tbl_artikel,
+            tbl_fav_artikel
+            WHERE tbl_fav_artikel.id_artikel = tbl_artikel.id and tbl_fav_artikel.id_user = tbl_user.id AND tbl_user.id =:id AND LOWER(tbl_artikel.title) LIKE :q", ['id' => Auth::user()->id, 'q' => '%'.strtolower($request->title).'%']);
 
         $datas = collect($data);
 
