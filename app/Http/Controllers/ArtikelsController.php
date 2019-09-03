@@ -101,10 +101,9 @@ class ArtikelsController extends Controller
             ,tbl_fav_artikel.id_favorit
             FROM
             tbl_artikel
-            LEFT JOIN
-            tbl_user,
-            tbl_fav_artikel
-            WHERE tbl_fav_artikel.id_artikel = tbl_artikel.id and tbl_fav_artikel.id_user = tbl_user.id AND tbl_user.id =:id AND LOWER(tbl_artikel.title) LIKE :q", ['id' => Auth::user()->id, 'q' => '%'.strtolower($request->title).'%']);
+            LEFT JOIN tbl_artikel ON tbl_fav_artikel.id_artikel = tbl_artikel.id
+            LEFT JOIN tbl_fav_artikel.id_user = tbl_user.id
+            WHERE tbl_user.id =:id AND LOWER(tbl_artikel.title) LIKE :q", ['id' => Auth::user()->id, 'q' => '%'.strtolower($request->title).'%']);
 
         $datas = collect($data);
 
