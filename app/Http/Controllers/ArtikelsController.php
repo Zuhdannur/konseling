@@ -98,7 +98,6 @@ class ArtikelsController extends Controller
             ,tbl_artikel.desc
             ,tbl_artikel.created_at
             ,tbl_user.id as user_id
-            ,tbl_fav_artikel.id_favorit
             FROM
             tbl_artikel,
             tbl_user
