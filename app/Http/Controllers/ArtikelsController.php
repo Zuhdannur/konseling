@@ -179,9 +179,9 @@ class ArtikelsController extends Controller
         }
     }
 
-    public function removeMyFavorit($id)
+    public function removeMyFavorit($id, $id_favorit)
     {
-        $delete = \App\Favorite::where('id_artikel', $id)->delete();
+        $delete = \App\Favorite::where('id_artikel', $id)->where('id_favorit', $id_favorit)->delete();
         if ($delete) {
             return \response([
                 "message" => "succsess"
