@@ -94,6 +94,7 @@ class ArtikelsController extends Controller
             SELECT
             exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark
             ,u.id as user_id
+            ,tbl_fav_artikel.id_artikel
             ,u.name
             ,p.id
             ,p.title
@@ -101,7 +102,8 @@ class ArtikelsController extends Controller
             ,p.created_at
             FROM
             tbl_user u,
-            tbl_artikel p WHERE u.id =:id AND LOWER(p.title) LIKE :q", ['id' => Auth::user()->id, 'q' => '%'.strtolower($request->title).'%']);
+            tbl_artikel p
+            WHERE u.id =:id AND LOWER(p.title) LIKE :q", ['id' => Auth::user()->id, 'q' => '%'.strtolower($request->title).'%']);
 
         $datas = collect($data);
 
@@ -180,7 +182,7 @@ class ArtikelsController extends Controller
 
     public function removeMyFavorit($id)
     {
-        $delete = \App\Favorite::where('id_artikel',$id)->delete();
+        $delete = \App\Favorite::where('id_artikel', $id)->delete();
         if ($delete) {
             return \response([
                 "message" => "succsess"
@@ -194,7 +196,7 @@ class ArtikelsController extends Controller
 
     public function getMyFavorite(Request $request)
     {
-        $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel')->with('user');
+        $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel');
         $paginate = $datas->paginate($request->per_page);
 
         // $result = [];

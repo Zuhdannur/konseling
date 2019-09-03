@@ -24,6 +24,6 @@ class Favorite extends Model {
     }
 
     public function user(){
-        return $this->hasOne('\App\User','id','id_user')->select(array('id AS user_id', 'name'));
+        return $this->hasOne('\App\User','id','id_user')->select(array('id', 'name'));
     }
 }
