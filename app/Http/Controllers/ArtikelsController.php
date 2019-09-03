@@ -104,7 +104,7 @@ class ArtikelsController extends Controller
             tbl_user u,
             tbl_artikel p,
             tbl_fav_artikel
-            WHERE u.id =:id AND LOWER(p.title) LIKE :q", ['id' => Auth::user()->id, 'q' => '%'.strtolower($request->title).'%']);
+            WHERE u.id =:id AND where tbl_fav_artikel.id_artikel = p.id and fav.id_user = u.id AND LOWER(p.title) LIKE :q", ['id' => Auth::user()->id, 'q' => '%'.strtolower($request->title).'%']);
 
         $datas = collect($data);
 
