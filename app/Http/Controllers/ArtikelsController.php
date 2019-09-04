@@ -54,7 +54,6 @@ class ArtikelsController extends Controller
         //     $q->whereRaw('LOWER(title) LIKE ? ', '%' . strtolower($request->title) . '%');
         // });
 
-        $bookmark = "exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark";
         // $categorias = \App\Favorit::with(['artikel' => function($query) use ($bookmark){
         //     $query->select($bookmark, 'tbl_user.name', 'tbl_artikel.title')
         // }])->whereRaw('u.id =:id', ['id' => 1])->get();
@@ -92,15 +91,18 @@ class ArtikelsController extends Controller
         
         $data = DB::select("
             SELECT
-            exists(select 1 from tbl_fav_artikel fav where fav.id_artikel = p.id and fav.id_user = u.id limit 1) as hasBookmark
-            ,u.name
-            ,p.id
-            ,p.title
-            ,p.desc
-            ,p.created_at
+            exists(select 1 from tbl_fav_artikel where tbl_fav_artikel.id_artikel = tbl_artikel.id and tbl_fav_artikel.id_user = tbl_user.id limit 1) as hasBookmark,
+            (select tbl_fav_artikel.id_favorit from tbl_fav_artikel where tbl_fav_artikel.id_artikel = tbl_artikel.id and tbl_fav_artikel.id_user = tbl_user.id limit 1) as id_favorit
+            ,tbl_user.name
+            ,tbl_artikel.id
+            ,tbl_artikel.title
+            ,tbl_artikel.desc
+            ,tbl_artikel.created_at
+            ,tbl_user.id as user_id
             FROM
-            tbl_user u,
-            tbl_artikel p WHERE u.id =:id AND LOWER(p.title) LIKE :q", ['id' => Auth::user()->id, 'q' => '%'.strtolower($request->title).'%']);
+            tbl_artikel,
+            tbl_user
+            WHERE tbl_user.id =:id AND LOWER(tbl_artikel.title) LIKE :q", ['id' => Auth::user()->id, 'q' => '%'.strtolower($request->title).'%']);
 
         $datas = collect($data);
 
@@ -156,11 +158,11 @@ class ArtikelsController extends Controller
 
     public function storeFavorite(Request $request)
     {
-        if ($this->checkingArtikel($request->id_artikel)) {
-            return \response()->json([
-                "message" => "duplicate artikel"
-            ], 201);
-        }
+        // if ($this->checkingArtikel($request->id_artikel)) {
+        //     return \response()->json([
+        //         "message" => "duplicate artikel"
+        //     ], 201);
+        // }
         $insert = new \App\Favorite;
         $insert->id_artikel = $request->id_artikel;
         $insert->id_user = Auth::user()->id;
@@ -177,30 +179,32 @@ class ArtikelsController extends Controller
         }
     }
 
+    public function removeMyFavorit($id, $id_favorit)
+    {
+        $delete = \App\Favorite::where('id_artikel', $id)->where('id_favorit', $id_favorit)->delete();
+        if ($delete) {
+            return \response([
+                "message" => "succsess"
+            ], 200);
+        } else {
+            return \response([
+                "message" => "failed"
+            ], 201);
+        }
+    }
+
     public function getMyFavorite(Request $request)
     {
-        $limit = $request->limit;
-
-        if ($request->page == "") {
-            $skip = 0;
-        } else {
-            $skip = $limit * $request->page;
-        }
-
         $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel');
-        $data = $datas
-        ->skip($skip)
-        ->take($limit)
-        ->get();
+        $paginate = $datas->paginate($request->per_page);
 
-        $result = [];
-        foreach ($data as $key => $value) {
-            $result[$key] = $value['artikel'];
-            $result[$key]['id_favorit'] = $value->id_favorit;
-            $result[$key]['id_user'] = Auth::user()->id;
-        }
-        $data['result'] = \response()->json($result, 200);
-        return $data['result'];
+        // $result = [];
+        // foreach ($data as $key => $value) {
+        //     $result[$key] = $value['artikel'];
+        //     $result[$key]['id_favorit'] = $value->id_favorit;
+        //     $result[$key]['id_user'] = Auth::user()->id;
+        // }
+        return \response()->json($paginate, 200);
     }
 
     public function getMyFavoriteCount(Request $request)
@@ -233,17 +237,4 @@ class ArtikelsController extends Controller
         }
     }
 
-    public function removeMyFavorit($id)
-    {
-        $delete = \App\Favorite::find($id)->delete();
-        if ($delete) {
-            return \response([
-                "message" => "succsess"
-            ], 200);
-        } else {
-            return \response([
-                "message" => "failed"
-            ], 201);
-        }
-    }
 }
