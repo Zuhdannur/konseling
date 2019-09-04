@@ -193,23 +193,18 @@ class UsersController extends Controller
         ]);
 
         if (Auth::user()->role == 'siswa') {
-            $kelasId = \App\Kelas::where('nama_kelas', $request->nama_kelas)->first()->id;
-            if ($update && $kelasId) {
+            if ($update) {
                 $update_detail = \App\DetailUser::where('id_user', Auth::user()->id)->update([
                     'address' => $request->address,
                     'phone_number' => $request->phone_number,
-                    'id_kelas' => $kelasId,
+                    'kelas' => $request->kelas,
                     'gender' => $request->gender
                 ]);
 
                 if ($update_detail) {
-                    return Response::json([
-                        "message" => 'profile Updated'
-                    ], 200);
+                    return Response::json(["message" => 'Profil berhasil disunting.'], 200);
                 } else {
-                    return Response::json([
-                        "message" => 'failed to Updated'
-                    ], 201);
+                    return Response::json(['message' => 'Gagal menyunting profil.']);
                 }
             } else {
                 return Response::json([
