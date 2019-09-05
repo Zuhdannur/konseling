@@ -49,7 +49,6 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     //For Develpment Purposes
     $router->get('user', 'UsersController@all');
     // $router->get('viewRiwayat', 'RiwayatsController@view');
-    $router->get('diary', 'DiariesController@all');
    
     $router->group(['middleware' => 'auth'], function () use ($router) {
         
@@ -106,6 +105,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         /**
          * Routes for resource diary
          */
+        $router->get('diary', 'DiariesController@all');
         $router->post('diary', 'DiariesController@add');
         $router->put('diary', 'DiariesController@put');
         $router->delete('diary/{id}', 'DiariesController@remove');
