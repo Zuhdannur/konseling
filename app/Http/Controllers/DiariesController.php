@@ -58,7 +58,7 @@ class DiariesController extends Controller
         // $limit = $request->per_page;
         // $skip = $limit * $request->per_page
 
-        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
+        $datas = \App\Diary::where('id_user', 3)->orderBy('created_at', 'desc');
         
         $paginate = $datas->paginate($request->per_page);
 
