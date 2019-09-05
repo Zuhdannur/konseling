@@ -54,7 +54,7 @@ class RiwayatsController extends Controller
             });
         }
 
-        $paginate = $datas->paginate($request->pageSize);
+        $paginate = $datas->paginate($request->per_page);
 
         return Response::json($paginate, 200);
     }
