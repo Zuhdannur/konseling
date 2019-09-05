@@ -35,13 +35,6 @@ class RiwayatsController extends Controller
 
     public function all(Request $request)
     {
-        $limit = $request->limit;
-        if (empty($request->page)) {
-            $skip = 0;
-        } else {
-            $skip = $limit * $request->page;
-        }
-
         $datas = \App\Riwayat::where('user_id', Auth::user()->id);
         $datas->with('schedule')->with('user')->with('schedule.consultant')->with('schedule.request');
 
@@ -61,19 +54,9 @@ class RiwayatsController extends Controller
             });
         }
 
-        $count = $datas
-            ->paginate($skip)
-            ->lastPage($limit);
+        $paginate = $datas->paginate($request->pageSize);
 
-        $data = $datas
-            ->skip($skip)
-            ->take($limit)
-            ->get();
-
-        return Response::json([
-            'total_page' => $count,
-            'data' => $data
-        ], 200);
+        return Response::json($paginate, 200);
     }
 
     public function count(Request $filters)
