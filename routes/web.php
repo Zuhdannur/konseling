@@ -50,7 +50,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     $router->get('user', 'UsersController@all');
     // $router->get('viewRiwayat', 'RiwayatsController@view');
    
-    $router->group(['middleware' => ['auth'],'paging'], function () use ($router) {
+    $router->group(['middleware' => ['auth','paging'], function () use ($router) {
         
         //Message
         $router->get('index', 'MessagesController@index');
