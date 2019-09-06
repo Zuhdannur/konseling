@@ -15,6 +15,8 @@ class ExampleMiddleware
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+        if ($request->title == 'a') {
+            return $next($request);
+        }
     }
 }
