@@ -162,5 +162,5 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->post('catatan-konseling', 'CatatanKonselingsController@add');
         $router->put('catatan-konseling/{id}', 'CatatanKonselingsController@put');
         $router->delete('catatan-konseling/{id}', 'CatatanKonselingsController@remove');
-    });
+    }]);
 });
