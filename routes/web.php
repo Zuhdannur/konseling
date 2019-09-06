@@ -50,7 +50,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     $router->get('user', 'UsersController@all');
     // $router->get('viewRiwayat', 'RiwayatsController@view');
    
-    $router->group(['middleware' => ['auth','paging'], function () use ($router) {
+    $router->group(['middleware' => 'auth'], function () use ($router) {
         
         //Message
         $router->get('index', 'MessagesController@index');
@@ -82,7 +82,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
          * Routes for resource schedule
          */
         $router->post('schedule', 'SchedulesController@add');
-        $router->get('schedule', 'SchedulesController@all');
+        $router->get('schedule', 'SchedulesController@all')->middleware('paging');
         $router->get('schedule/{id}', 'SchedulesController@get');
         $router->put('schedule', 'SchedulesController@put');
         $router->delete('schedule/{id}', 'SchedulesController@remove');
