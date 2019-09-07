@@ -54,16 +54,15 @@ class LinkHeaderPagination
     {
         $pagination = $bodyContent['meta']['pagination'];
 
-        $pages = $this->getPageNumbers($pagination);
+        // $pages = $this->getPageNumbers($pagination);
 
-        $prev = null;
         // if (array_key_exists('prev', $pagination['prev_page_url'])) {
-        $prev = "<{$url}{$params}page={$pages->prev}&page_size={$pagination['per_page']}>; rel=\"prev\"";
+        $prev = "<{$url}{$params}page={$pagination['prev']}&page_size={$pagination['per_page']}>; rel=\"prev\"";
         // }
 
-        $next = null;
+
         // if (array_key_exists('next', $pagination['next_page_url'])) {
-        $next = "<{$url}{$params}page={$pages->next}&page_size={$pagination['per_page']}>; rel=\"next\"";
+        $next = "<{$url}{$params}page={$pagination['next']}&page_size={$pagination['per_page']}>; rel=\"next\"";
         // }
 
         $first = "<{$url}{$params}page=1&page_size={$pagination['per_page']}>; rel=\"first\"";

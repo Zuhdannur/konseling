@@ -617,8 +617,8 @@ class SchedulesController extends Controller
         // ->get();
 
         $data['pagination']['total'] = $paginate->total();
-        $data['pagination']['prev_page_url'] = $paginate->previousPageUrl();
-        $data['pagination']['next_page_url'] = $paginate->previousPageUrl();
+        $data['pagination']['prev'] = $paginate->previousPageUrl();
+        $data['pagination']['next'] = $paginate->nextPageUrl();
         $data['pagination']['current_page'] = $paginate->currentPage();
         $data['pagination']['per_page'] = $paginate->perPage();
         $data['pagination']['last_page'] = $paginate->lastPage();
