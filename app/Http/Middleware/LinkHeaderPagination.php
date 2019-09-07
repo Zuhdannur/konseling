@@ -112,7 +112,7 @@ class LinkHeaderPagination
      */
     public function cleanParams($params)
     {
-        $clean = ['p', 'page', 'page_size'];
+        $clean = ['p', 'page', 'per_page'];
 
         foreach ($clean as $value) {
             if (array_key_exists($value, $params)) {
