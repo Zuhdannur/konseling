@@ -481,7 +481,7 @@ class SchedulesController extends Controller
     public function all(Request $filters)
     {
         $schedule = new \App\Schedule;
-        $schedule = $schedule->where('requester_id', 1);
+        $schedule = $schedule->where('requester_id', Auth::user()->id);
         $schedule = $schedule->with('request', 'consultant');
 
         if ($filters->has('pengajuan')) {
