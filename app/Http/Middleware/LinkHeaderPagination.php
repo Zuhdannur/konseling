@@ -15,34 +15,31 @@ class LinkHeaderPagination
      */
     public function handle($request, Closure $next)
     {
-        // if (!$request->isMethod('get')) {
-        //     return $next($request);
-        // }
-
-        // $response = $next($request);
-
-        // $bodyContent = json_decode($response->getContent(), true);
-
-        // if ($request->count == true) {
-        //     $response->header('X-Total-Count', $bodyContent['meta']['pagination']['total']);
-        // }
-
-        // if ($bodyContent && array_key_exists('meta', $bodyContent)) {
-        //     $params = $this->getParams($request);
-
-        //     $links = $this->createPaginationLinks($bodyContent, $request->url(), $params);
-
-        //     $response->header('Link', $links);
-
-        //     unset($bodyContent['meta']);
-
-        //     $response->setContent($bodyContent);
-        // }
-        if ($request->page == 10) {
-            return response('Valid');
-        } else {
+        if (!$request->isMethod('get')) {
             return $next($request);
         }
+
+        $response = $next($request);
+
+        $bodyContent = json_decode($response->getContent(), true);
+
+        if ($request->count == true) {
+            $response->header('X-Total-Count', $bodyContent['meta']['pagination']['total']);
+        }
+
+        if ($bodyContent && array_key_exists('meta', $bodyContent)) {
+            $params = $this->getParams($request);
+
+            $links = $this->createPaginationLinks($bodyContent, $request->url(), $params);
+
+            $response->header('Link', $links);
+
+            unset($bodyContent['meta']);
+
+            $response->setContent($bodyContent);
+        }
+
+        return $response;
     }
 
     /**
