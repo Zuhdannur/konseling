@@ -36,7 +36,7 @@ class LinkHeaderPagination
 
             unset($bodyContent['meta']);
 
-            $response->setContent($bodyContent);
+            $response->setContent('asd');
         }
 
         return $response;
@@ -57,18 +57,18 @@ class LinkHeaderPagination
         $pages = $this->getPageNumbers($pagination);
 
         $prev = null;
-        if (array_key_exists('previous', $pagination['links'])) {
+        if (property_exists('previous', $pagination['prev_page_url'])) {
             $prev = "<{$url}{$params}page={$pages->prev}&page_size={$pagination['per_page']}>; rel=\"prev\"";
         }
 
         $next = null;
-        if (array_key_exists('next', $pagination['links'])) {
+        if (property_exists('next', $pagination['next_page_url'])) {
             $next = "<{$url}{$params}page={$pages->next}&page_size={$pagination['per_page']}>; rel=\"next\"";
         }
 
         $first = "<{$url}{$params}page=1&page_size={$pagination['per_page']}>; rel=\"first\"";
 
-        $last = "<{$url}{$params}page={$pagination['total_pages']}&page_size={$pagination['per_page']}>; rel=\"last\"";
+        $last = "<{$url}{$params}page={$pagination['last_page']}&page_size={$pagination['per_page']}>; rel=\"last\"";
 
         if ($prev && $next) {
             $links = "{$prev}, {$next}, {$first}, {$last}";
@@ -131,7 +131,7 @@ class LinkHeaderPagination
      */
     public function getPageNumbers($pagination)
     {
-        $total = $pagination['total_pages'];
+        $total = $pagination['total'];
         $pagination['current_page'] >= $total
             ? $current = $total
             : $current = $pagination['current_page'];

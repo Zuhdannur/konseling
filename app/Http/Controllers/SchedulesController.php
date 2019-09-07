@@ -15,7 +15,6 @@ use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 
 class SchedulesController extends Controller
 {
-
     protected static $API_ACCESS_KEY = 'AAAA_vRurwA:APA91bFvUdoT1ruL0WZC3rkvQWoK76WFOgUSAFuc3aUpN0_kjiP22y3Pf_o1TthpfN6_o_0HnHJeMGZMp8MqHzm1zTCk8zuTY4UzAByzknPDlcBlNFvz60oN6fx9Kq3gkfR373aboRy0';
 
     public function take(Request $request)
@@ -62,7 +61,8 @@ class SchedulesController extends Controller
 //        return response($result,200);
     }
 
-    public function get($id, Request $request) {
+    public function get($id, Request $request)
+    {
         $data = \App\Schedule::where('requester_id', $id)
         ->orderBy('created_at', 'desc')
         ->take($request->limit)
@@ -71,25 +71,25 @@ class SchedulesController extends Controller
         return Response::json($data);
     }
 
-    public function receive(Request $filters) {
+    public function receive(Request $filters)
+    {
         $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
 
         $schedule = \App\Schedule::where(function ($query) use ($user, $filters) {
-            $query->whereHas('request', function($q) use ($user) {
-                $q->whereHas('detail', function($sql) use ($user) {
+            $query->whereHas('request', function ($q) use ($user) {
+                $q->whereHas('detail', function ($sql) use ($user) {
                     $sql->where('id_sekolah', $user->detail->id_sekolah);
                 });
             });
 
-            if($filters->has('pengajuan')) {
-                if($filters->pengajuan == 'daring') {
-    
+            if ($filters->has('pengajuan')) {
+                if ($filters->pengajuan == 'daring') {
                 }
-                if($filters->pengajuan == 'realtime') {
+                if ($filters->pengajuan == 'realtime') {
                     foreach ($query->get() as $key => $row) {
                         if ($row->type_schedule != "daring") {
                             if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
-                                if($row->exp == 0) {
+                                if ($row->exp == 0) {
                                     $row->update([
                                         'exp'=> 1
                                     ]);
@@ -98,11 +98,11 @@ class SchedulesController extends Controller
                         }
                     }
                 }
-                if($filters->pengajuan == 'direct') {
+                if ($filters->pengajuan == 'direct') {
                     foreach ($query->get() as $key => $row) {
                         if ($row->type_schedule != "daring") {
                             if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
-                                if($row->exp == 0) {
+                                if ($row->exp == 0) {
                                     $row->update([
                                         'exp'=> 1
                                     ]);
@@ -112,7 +112,7 @@ class SchedulesController extends Controller
                     }
                 }
     
-                if($filters->pengajuan == 'acceptedDirect') {
+                if ($filters->pengajuan == 'acceptedDirect') {
                     $query->where('consultant_id', Auth::user()->id);
                     foreach ($query->get() as $key => $row) {
                         if ($row->type_schedule != "daring" && $row->type_schedule != "realtime") {
@@ -129,21 +129,36 @@ class SchedulesController extends Controller
             }
         })->with('request')->with('consultant')->orderBy('id', 'desc');
 
-        if($filters->has('type_schedule')) $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+        if ($filters->has('type_schedule')) {
+            $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+        }
         
-        if($filters->has('canceled')) $schedule = $schedule->where('canceled', $filters->canceled);
-        if($filters->has('exp')) $schedule = $schedule->where('exp', $filters->exp);
-        if($filters->has('status')) $schedule = $schedule->where('status', $filters->status);
-        if($filters->has('ended')) $schedule = $schedule->where('ended', $filters->ended);
+        if ($filters->has('canceled')) {
+            $schedule = $schedule->where('canceled', $filters->canceled);
+        }
+        if ($filters->has('exp')) {
+            $schedule = $schedule->where('exp', $filters->exp);
+        }
+        if ($filters->has('status')) {
+            $schedule = $schedule->where('status', $filters->status);
+        }
+        if ($filters->has('ended')) {
+            $schedule = $schedule->where('ended', $filters->ended);
+        }
 
-        if($filters->has('upcoming')) if ($filters->upcoming == "true") {
-            $schedule = $schedule->where('time', '>', Carbon::now());
+        if ($filters->has('upcoming')) {
+            if ($filters->upcoming == "true") {
+                $schedule = $schedule->where('time', '>', Carbon::now());
+            }
         }
 
         $limit = $filters->limit;
 
-        if (empty($filters->page)) $skip = 0;
-        else $skip = $limit * $filters->page;
+        if (empty($filters->page)) {
+            $skip = 0;
+        } else {
+            $skip = $limit * $filters->page;
+        }
 
         $datas = $schedule
             ->skip($skip)
@@ -153,32 +168,48 @@ class SchedulesController extends Controller
         return Response::json($datas, 200);
     }
 
-    public function receiveCount(Request $filters) {
+    public function receiveCount(Request $filters)
+    {
         $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
 
         $schedule = \App\Schedule::where(function ($query) use ($user, $filters) {
-            $query->whereHas('request', function($q) use ($user) {
-                $q->whereHas('detail', function($sql) use ($user) {
+            $query->whereHas('request', function ($q) use ($user) {
+                $q->whereHas('detail', function ($sql) use ($user) {
                     $sql->where('id_sekolah', $user->detail->id_sekolah);
                 });
             });
         })->with('request')->with('consultant')->orderBy('id', 'desc');
 
-        if($filters->has('type_schedule')) $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+        if ($filters->has('type_schedule')) {
+            $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+        }
         
-        if($filters->has('canceled')) $schedule = $schedule->where('canceled', $filters->canceled);
-        if($filters->has('exp')) $schedule = $schedule->where('exp', $filters->exp);
-        if($filters->has('status')) $schedule = $schedule->where('status', $filters->status);
-        if($filters->has('ended')) $schedule = $schedule->where('ended', $filters->ended);
+        if ($filters->has('canceled')) {
+            $schedule = $schedule->where('canceled', $filters->canceled);
+        }
+        if ($filters->has('exp')) {
+            $schedule = $schedule->where('exp', $filters->exp);
+        }
+        if ($filters->has('status')) {
+            $schedule = $schedule->where('status', $filters->status);
+        }
+        if ($filters->has('ended')) {
+            $schedule = $schedule->where('ended', $filters->ended);
+        }
 
-        if($filters->has('upcoming')) if ($filters->upcoming == "true") {
-            $schedule = $schedule->where('time', '>', Carbon::now());
+        if ($filters->has('upcoming')) {
+            if ($filters->upcoming == "true") {
+                $schedule = $schedule->where('time', '>', Carbon::now());
+            }
         }
 
         $limit = $filters->limit;
 
-        if (empty($filters->page)) $skip = 0;
-        else $skip = $limit * $filters->page;
+        if (empty($filters->page)) {
+            $skip = 0;
+        } else {
+            $skip = $limit * $filters->page;
+        }
 
         $count = $schedule
         ->paginate($skip)
@@ -189,14 +220,15 @@ class SchedulesController extends Controller
         ], 200);
     }
 
-    public function finish(Request $request) {
+    public function finish(Request $request)
+    {
         if (Auth::user()->role == 'guru') {
             $schedule = \App\Schedule::where('id', $request->id)->where('ended', 0)->first();
-            if($schedule) {
+            if ($schedule) {
                 $update = $schedule->update([
                     'ended' => 1
                 ]);
-                if($update) {
+                if ($update) {
                     //Simpan riwayat untuk guru
                     $data['user_id'] = Auth::user()->id;
                     $data['schedule_id'] = $schedule->id;
@@ -216,11 +248,11 @@ class SchedulesController extends Controller
             }
         } else {
             $schedule = \App\Schedule::where('id', $request->id)->where('ended', 0)->first();
-            if($schedule) {
+            if ($schedule) {
                 $update = $schedule->update([
                     'ended' => 1
                 ]);
-                if($update) {
+                if ($update) {
                     //Simpan riwayat untuk guru
                     $data['user_id'] = $schedule->consultant_id;
                     $data['schedule_id'] = $schedule->id;
@@ -239,7 +271,6 @@ class SchedulesController extends Controller
                 return Response::json(['message' => 'Telah diselesaikan oleh guru.'], 201);
             }
         }
-        
     }
 
     public function updateChannelUrl(Request $request)
@@ -248,17 +279,20 @@ class SchedulesController extends Controller
         $update = $schedule->update([
             'channel_url' => $request->channel_url
         ]);
-        if($update) return Response::json(['message' => 'Berhasil update channel url.'], 200);
-        else return Response::json(['message' => 'Gagal mengupdate.'], 201);
+        if ($update) {
+            return Response::json(['message' => 'Berhasil update channel url.'], 200);
+        } else {
+            return Response::json(['message' => 'Gagal mengupdate.'], 201);
+        }
     }
 
     //Helpers
 
-    public function accept(Request $request) {
-
+    public function accept(Request $request)
+    {
         $schedule = \App\Schedule::where('id', $request->schedule_id)->first();
         
-        if($schedule->canceled == 0) {
+        if ($schedule->canceled == 0) {
             if ($schedule->status == 0) {
                 if ($schedule->exp == 0) {
                     $update = \App\Schedule::where('id', $request->schedule_id)->update([
@@ -333,11 +367,11 @@ class SchedulesController extends Controller
         }
     }
 
-    public function cancel($id, $status) {
-        if(Auth::user()->role == 'guru') {
+    public function cancel($id, $status)
+    {
+        if (Auth::user()->role == 'guru') {
             $schedule = \App\Schedule::where('id', $id)->where('status', $status)->first();
-            if($schedule) {
-
+            if ($schedule) {
                 $senderName = \App\User::where('id', $schedule['consultant_id'])->first()->name;
 
                 $result['type'] = 'cancel';
@@ -361,7 +395,7 @@ class SchedulesController extends Controller
                     'canceled' => 1
                 ]);
 
-                if($update) {
+                if ($update) {
                     $data['user_id'] = Auth::user()->id;
                     $data['schedule_id'] = $schedule->id;
                     $this->saveToRiwayat($data);
@@ -380,7 +414,7 @@ class SchedulesController extends Controller
         } else {
             //Role Siswa
             $schedule = \App\Schedule::where('id', $id)->where('requester_id', Auth::user()->id)->where('status', $status)->first();
-            if($schedule) {
+            if ($schedule) {
 
                 // $senderName = \App\User::where('id', $schedule['requester_id'])->first()->name;
 
@@ -406,7 +440,7 @@ class SchedulesController extends Controller
                     'canceled' => 1
                 ]);
 
-                if($update) {
+                if ($update) {
                     $data['user_id'] = Auth::user()->id;
                     $data['schedule_id'] = $schedule->id;
                     $this->saveToRiwayat($data);
@@ -423,10 +457,10 @@ class SchedulesController extends Controller
                 return \Illuminate\Support\Facades\Response::json(["message" => "Pengajuan telah diterima oleh guru."], 201);
             }
         }
-        
     }
 
-    private function sendNotificationToDirect() {
+    private function sendNotificationToDirect()
+    {
         $client = new Client();
         $client->setApiKey(self::$API_ACCESS_KEY);
         $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
@@ -444,14 +478,14 @@ class SchedulesController extends Controller
         return \response()->json($response);
     }
 
-    public function all(Request $filters) {
+    public function all(Request $filters)
+    {
         $schedule = new \App\Schedule;
-        $schedule = $schedule->where('requester_id', Auth::user()->id);
+        $schedule = $schedule->where('requester_id', 1);
         $schedule = $schedule->with('request', 'consultant');
 
-        if($filters->has('pengajuan')) {
-
-            if($filters->pengajuan == 'pending') {
+        if ($filters->has('pengajuan')) {
+            if ($filters->pengajuan == 'pending') {
                 //Saat fetch data jika pengajuannya pending & time < sekarang, update expired ke 1
                 $schedule = $schedule->where([
                     ['status', '=', 0],
@@ -469,24 +503,23 @@ class SchedulesController extends Controller
                         }
                     }
                 }
-                
             }
 
-            if($filters->pengajuan == 'riwayat') {
+            if ($filters->pengajuan == 'riwayat') {
                 //Saat fetch data jika pengajuannya riwayat
-                $schedule = $schedule->where(function ($query){
+                $schedule = $schedule->where(function ($query) {
                     //Selesai Pengajuannya
                     $query->where('status', 1)
                             ->where('ended', 1);
-                })->orWhere(function ($query){
+                })->orWhere(function ($query) {
                     //Di accept tapi di cancel sama guru
                     $query->where('status', 1)
                             ->where('canceled', 1);
-                })->orWhere(function ($query){
+                })->orWhere(function ($query) {
                     //Di cancel sama siswa
                     $query->where('status', 0)
                             ->where('canceled', 1);
-                })->orWhere(function ($query){
+                })->orWhere(function ($query) {
                     //Kadaluarsa
                     $query->where('status', 0)
                             ->where('canceled', 0)
@@ -495,9 +528,9 @@ class SchedulesController extends Controller
                 });
             }
 
-            if($filters->pengajuan == 'acceptedDirect') {
+            if ($filters->pengajuan == 'acceptedDirect') {
                 if ($filters->has('outdated')) {
-                    if($filters->outdated == 0 || $filters->outdated == 1) {
+                    if ($filters->outdated == 0 || $filters->outdated == 1) {
                         $schedule = $schedule->where('outdated', $filters->outdated);
                     }
                 }
@@ -534,7 +567,9 @@ class SchedulesController extends Controller
         }
         
         if ($filters->has('status')) {
-            if($filters->status == 0 || $filters->status == 1) $schedule = $schedule->where('status', $filters->status);
+            if ($filters->status == 0 || $filters->status == 1) {
+                $schedule = $schedule->where('status', $filters->status);
+            }
         }
 
         if ($filters->has('canceled')) {
@@ -542,7 +577,7 @@ class SchedulesController extends Controller
         }
 
         if ($filters->has('type_schedule')) {
-            if(!empty($filters->type_schedule)) {
+            if (!empty($filters->type_schedule)) {
                 $schedule = $schedule->where('type_schedule', $filters->type_schedule);
             }
         }
@@ -551,12 +586,12 @@ class SchedulesController extends Controller
             $schedule = $schedule->where('exp', $filters->exp);
         }
 
-        if($filters->has('ended')) {
+        if ($filters->has('ended')) {
             $schedule = $schedule->where('ended', $filters->ended);
         }
 
-        if($filters->has('orderBy')) {
-            if($filters->has('orderBy') == '') {
+        if ($filters->has('orderBy')) {
+            if ($filters->has('orderBy') == '') {
                 $schedule = $schedule->orderBy('created_at', 'desc');
             } else {
                 $schedule = $schedule->orderBy($filters->orderBy, 'desc');
@@ -573,27 +608,37 @@ class SchedulesController extends Controller
         $paginate = $schedule->paginate($filters->per_page);
 
         // $count = $schedule
-            // ->paginate($skip)
-            // ->lastPage($limit);
+        // ->paginate($skip)
+        // ->lastPage($limit);
 
         // $data = $schedule
-            // ->skip($skip)
-            // ->take($limit)
-            // ->get();
+        // ->skip($skip)
+        // ->take($limit)
+        // ->get();
 
-        return Response::json($paginate, 200);
+        $data['pagination']['total'] = $paginate->total();
+        $data['pagination']['prev_page_url'] = $paginate->previousPageUrl();
+        $data['pagination']['next_page_url'] = $paginate->previousPageUrl();
+        $data['pagination']['current_page'] = $paginate->currentPage();
+        $data['pagination']['per_page'] = $paginate->perPage();
+        $data['pagination']['last_page'] = $paginate->lastPage();
+
+        return response()->json([
+            'meta' => $data,
+            'items' => 'asd'
+        ], 200);
     }
 
-    public function count(Request $filters) {
+    public function count(Request $filters)
+    {
         $schedule = new \App\Schedule;
         $schedule = $schedule->where('requester_id', Auth::user()->id);
         $schedule = $schedule->with('request', 'consultant');
 
-        if($filters->has('pengajuan')) {
+        if ($filters->has('pengajuan')) {
 
             //NO NEED TO COUNT THIS QUERY
-            if($filters->pengajuan == 'pending') {
-
+            if ($filters->pengajuan == 'pending') {
                 $schedule = $schedule->where([
                     ['status', '=', 0],
                     ['ended', '=', 0],
@@ -613,18 +658,18 @@ class SchedulesController extends Controller
                 // }
             }
 
-            if($filters->pengajuan == 'riwayat') {
+            if ($filters->pengajuan == 'riwayat') {
          
                 //Saat fetch data jika pengajuannya riwayat
-                $schedule = $schedule->where(function ($query){
+                $schedule = $schedule->where(function ($query) {
                     //Selesai Pengajuannya
                     $query->where('status', 1)
                             ->where('ended', 1);
-                })->orWhere(function ($query){
+                })->orWhere(function ($query) {
                     //Di accept tapi di cancel sama guru
                     $query->where('status', 1)
                             ->where('canceled', 1);
-                })->orWhere(function ($query){
+                })->orWhere(function ($query) {
                     //Di cancel sama siswa
                     $query->where('status', 0)
                             ->where('canceled', 1);
@@ -645,7 +690,7 @@ class SchedulesController extends Controller
         }
 
         if ($filters->has('outdated')) {
-            if(!empty($filters->outdated)) {
+            if (!empty($filters->outdated)) {
                 $schedule = $schedule->where('outdated', $filters->outdated);
             }
         }
@@ -658,11 +703,14 @@ class SchedulesController extends Controller
             $schedule = $schedule->where('ended', $filters->ended);
         }
 
-        if($filters->has('limit') && $filters->has('page')) {
+        if ($filters->has('limit') && $filters->has('page')) {
             $limit = $filters->limit;
 
-            if (empty($filters->page)) $skip = 0;
-            else $skip = $limit * $filters->page;
+            if (empty($filters->page)) {
+                $skip = 0;
+            } else {
+                $skip = $limit * $filters->page;
+            }
 
             $schedule = $schedule
                 ->paginate($skip)
@@ -686,7 +734,8 @@ class SchedulesController extends Controller
         }
     }
 
-    public function add(Request $request) {
+    public function add(Request $request)
+    {
         if ($request->type_schedule == 'realtime') {
             $insert = $this->storeRealtime($request);
         } elseif ($request->type_schedule == 'direct') {
@@ -747,7 +796,7 @@ class SchedulesController extends Controller
 
     public function put(Request $request)
     {
-        if($request->type_schedule == 'daring') {
+        if ($request->type_schedule == 'daring') {
             $update = \App\Schedule::where('id', $request->schedule_id)
             ->where('requester_id', Auth::user()->id)
             ->where('exp', 0)
@@ -756,16 +805,16 @@ class SchedulesController extends Controller
                 'desc' => $request->desc
             ]);
     
-            if($update) {
+            if ($update) {
                 return \Illuminate\Support\Facades\Response::json([
                     "message" => 'schedule updated'
-                ],200);
+                ], 200);
             } else {
                 return \Illuminate\Support\Facades\Response::json([
                     "message" => 'failed to update'
-                ],201);
+                ], 201);
             }
-        } else { 
+        } else {
             //Direct dan Realtime
             if (!$this->isExpired($request)) {
                 $update = \App\Schedule::where('id', $request->schedule_id)
@@ -787,24 +836,26 @@ class SchedulesController extends Controller
             } else {
                 return \Illuminate\Support\Facades\Response::json(["message" => 'pengajuan telah kadaluarsa.'], 201);
             }
-        } 
+        }
 
         return $request;
     }
 
-    private function isExpired($request) {
+    private function isExpired($request)
+    {
         if (Carbon::parse($request->original_time)->lte(Carbon::now())) {
             \App\Schedule::where('id', $request->schedule_id)->update([
                 'exp'=> 1
             ]);
             return true;
-        } 
+        }
         return false;
     }
 
     
 
-    private function saveToRiwayat($data) {
+    private function saveToRiwayat($data)
+    {
         $catatan = new \App\CatatanKonseling;
         $catatan->updateOrCreate([
             'schedule_id' => $data['schedule_id']
@@ -843,8 +894,8 @@ class SchedulesController extends Controller
                 ], 201);
             }
         } else {
-            if(\App\Schedule::where('id', $request->schedule_id)->exists()) {
-                if(\App\Schedule::where('id',$request->schedule_id)->first()->exp) {
+            if (\App\Schedule::where('id', $request->schedule_id)->exists()) {
+                if (\App\Schedule::where('id', $request->schedule_id)->first()->exp) {
                     $update = \App\Schedule::where('id', $request->schedule_id)->update([
                         'status' => 1,
                         'tgl_pengajuan' => $request->date,
@@ -877,7 +928,7 @@ class SchedulesController extends Controller
                 } else {
                     return Response::json([
                         "message" => "expired tho"
-                    ],200);
+                    ], 200);
                 }
             } else {
                 return Response::json(["message" => "id not found"], 201);
@@ -885,10 +936,14 @@ class SchedulesController extends Controller
         }
     }
 
-    public function deleteDirectSchedule($id) {
+    public function deleteDirectSchedule($id)
+    {
         $delete = \App\Schedule::where('id', $id)->where('status', 1)->delete();
-        if ($delete) return \response()->json(["message" => "success"], 200);
-        else return \response()->json(["message" => "failed"], 201);
+        if ($delete) {
+            return \response()->json(["message" => "success"], 200);
+        } else {
+            return \response()->json(["message" => "failed"], 201);
+        }
     }
 
     public function getConsultan()
@@ -901,17 +956,22 @@ class SchedulesController extends Controller
     {
         $limit = $request->limit;
 
-        if (empty($request->page)) $skip = 0;
-        else $skip = $limit * $request->page;
+        if (empty($request->page)) {
+            $skip = 0;
+        } else {
+            $skip = $limit * $request->page;
+        }
 
         $stats = $request->status;
         $upcoming = $request->upcoming;
 
         $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
         $schedule = \App\Schedule::where(function ($query) use ($user, $id, $stats, $upcoming) {
-
-            if (Auth::user()->role == "siswa") $query->where('requester_id', Auth::user()->id);
-            else $query->where('consultant_id', Auth::user()->id);
+            if (Auth::user()->role == "siswa") {
+                $query->where('requester_id', Auth::user()->id);
+            } else {
+                $query->where('consultant_id', Auth::user()->id);
+            }
 
             $query->whereHas('request', function ($q) use ($user) {
                 $q->whereHas('detail', function ($sql) use ($user) {
@@ -920,7 +980,9 @@ class SchedulesController extends Controller
             });
             $query->where('type_schedule', $id);
             $query->where('status', $stats);
-            if ($upcoming == "true") $query->where('time', '>', Carbon::now());
+            if ($upcoming == "true") {
+                $query->where('time', '>', Carbon::now());
+            }
         })->with('request')->with('consultant')->orderBy('id', 'desc');
 
 
@@ -944,17 +1006,22 @@ class SchedulesController extends Controller
     {
         $limit = $request->limit;
 
-        if (empty($request->page)) $skip = 0;
-        else $skip = $limit * $request->page;
+        if (empty($request->page)) {
+            $skip = 0;
+        } else {
+            $skip = $limit * $request->page;
+        }
 
         $stat = $request->status;
         $upcoming = $request->upcoming;
 
         $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
         $schedule = \App\Schedule::where(function ($query) use ($user, $id, $stat, $upcoming) {
-
-            if (Auth::user()->role == "siswa") $query->where('requester_id', Auth::user()->id);
-            else $query->where('consultant_id', Auth::user()->id);
+            if (Auth::user()->role == "siswa") {
+                $query->where('requester_id', Auth::user()->id);
+            } else {
+                $query->where('consultant_id', Auth::user()->id);
+            }
 
             $query->whereHas('request', function ($q) use ($user) {
                 $q->whereHas('detail', function ($sql) use ($user) {
@@ -963,7 +1030,9 @@ class SchedulesController extends Controller
             });
             $query->where('type_schedule', $id);
             $query->where('status', $stat);
-            if ($upcoming == "true") $query->where('time', '>', Carbon::now());
+            if ($upcoming == "true") {
+                $query->where('time', '>', Carbon::now());
+            }
         })->with('request')->with('consultant')->orderBy('id', 'desc');
 
         $datas = $schedule
@@ -979,8 +1048,11 @@ class SchedulesController extends Controller
     {
         $limit = $request->limit;
 
-        if (empty($request->page)) $skip = 0;
-        else $skip = $limit * $request->page;
+        if (empty($request->page)) {
+            $skip = 0;
+        } else {
+            $skip = $limit * $request->page;
+        }
 
         if (Auth::user()->role == "siswa" && $id == '') {
             $data = \App\Schedule::where('requester_id', Auth::user()->id);
@@ -992,7 +1064,6 @@ class SchedulesController extends Controller
                 ->get();
 
             return Response::json($datas, 200);
-
         } else {
 //            dd($request->status);
             $stat = $request->status;
@@ -1011,7 +1082,9 @@ class SchedulesController extends Controller
                 });
                 $query->where('type_schedule', $id);
                 $query->where('status', $stat);
-                if ($upcoming == "true") $query->where('time', '>', Carbon::now());
+                if ($upcoming == "true") {
+                    $query->where('time', '>', Carbon::now());
+                }
             })->with('request')->with('consultant')->orderBy('id', 'desc');
 
 
@@ -1036,16 +1109,19 @@ class SchedulesController extends Controller
     {
         $limit = $request->limit;
 
-        if (empty($request->page)) $skip = 0;
-        else $skip = $limit * $request->page;
+        if (empty($request->page)) {
+            $skip = 0;
+        } else {
+            $skip = $limit * $request->page;
+        }
 
         if (Auth::user()->role == "siswa" && $id == '') {
             $data = "";
             if ($request->only == "online") {
                 $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('type_schedule', 'online');
-            } else if ($request->only == "daring") {
+            } elseif ($request->only == "daring") {
                 $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('type_schedule', 'daring');
-            } else if ($request->only == "direct") {
+            } elseif ($request->only == "direct") {
                 $data = \App\Schedule::where('requester_id', Auth::user()->id)->where('type_schedule', 'direct');
             } else {
                 $data = \App\Schedule::where('requester_id', Auth::user()->id);
@@ -1088,8 +1164,11 @@ class SchedulesController extends Controller
     {
         $limit = $request->limit;
 
-        if (empty($request->page)) $skip = 0;
-        else $skip = $limit * $request->page;
+        if (empty($request->page)) {
+            $skip = 0;
+        } else {
+            $skip = $limit * $request->page;
+        }
 
         $data = "";
         if (!empty($request->only)) {
@@ -1116,8 +1195,11 @@ class SchedulesController extends Controller
     {
         $limit = $request->limit;
 
-        if (empty($request->page)) $skip = 0;
-        else $skip = $limit * $request->page;
+        if (empty($request->page)) {
+            $skip = 0;
+        } else {
+            $skip = $limit * $request->page;
+        }
 
         $data = "";
         if (!empty($request->only)) {
@@ -1140,5 +1222,4 @@ class SchedulesController extends Controller
 
         return Response::json($data);
     }
-
 }
