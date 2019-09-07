@@ -82,9 +82,8 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
          * Routes for resource schedule
          */
         $router->post('schedule', 'SchedulesController@add');
-        $router->group(['middleware' => 'paging'], function () use ($router) {
-            $router->get('schedule', 'SchedulesController@all');
-        });
+        $router->get('schedule', 'SchedulesController@all');
+        
         $router->get('schedule/{id}', 'SchedulesController@get');
         $router->put('schedule', 'SchedulesController@put');
         $router->delete('schedule/{id}', 'SchedulesController@remove');
