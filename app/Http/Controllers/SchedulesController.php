@@ -12,7 +12,6 @@ use sngrl\PhpFirebaseCloudMessaging\Client;
 use sngrl\PhpFirebaseCloudMessaging\Message;
 use sngrl\PhpFirebaseCloudMessaging\Notification;
 use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
-use DanBovey\LinkHeaderPaginator\LengthAwarePaginator;
 
 class SchedulesController extends Controller
 {
@@ -623,9 +622,8 @@ class SchedulesController extends Controller
         // $data['pagination']['current_page'] = $paginate->currentPage();
         // $data['pagination']['per_page'] = $paginate->perPage();
         // $data['pagination']['last_page'] = $paginate->lastPage();
-        $paginator = new LengthAwarePaginator($paginate);
 
-        return response()->json($paginator->toResponse(), 200);
+        return response()->json($paginate, 200);
     }
 
     public function count(Request $filters)

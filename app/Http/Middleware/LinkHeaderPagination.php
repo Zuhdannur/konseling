@@ -23,10 +23,6 @@ class LinkHeaderPagination
 
         $bodyContent = json_decode($response->getContent(), true);
 
-        if ($request->count == true) {
-            $response->header('X-Total-Count', $bodyContent['meta']['pagination']['total']);
-        }
-
         if ($bodyContent && array_key_exists('meta', $bodyContent)) {
             $params = $this->getParams($request);
 
