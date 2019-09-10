@@ -36,11 +36,11 @@ class RiwayatsController extends Controller
     public function all(Request $request)
     {
         $datas = \App\Riwayat::where('user_id', Auth::user()->id);
-        $datas->with('schedule')->with('user')->with('schedule.consultant')->with('schedule.request');
+        $datas->with('schedule')->with('user')->with('schedule.consultant')->with('schedule.request')->orderBy('created_at','desc');
 
-        if ($request->has('orderBy')) {
-            $datas = $datas->orderBy($request->orderBy, 'desc');
-        }
+        // if ($request->has('orderBy')) {
+            // $datas = $datas->orderBy($request->orderBy, 'desc');
+        // }
 
         if ($request->has('status') && $request->status != '') {
             $datas = $datas->whereHas('schedule', function ($query) use ($request, $datas) {
