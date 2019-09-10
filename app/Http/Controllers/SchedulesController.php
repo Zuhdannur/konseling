@@ -553,7 +553,7 @@ class SchedulesController extends Controller
                 }
 
                 foreach ($schedule->get() as $key => $row) {
-                    if ($row->type_schedule != "daring" && $row->type_schedule != "realtime") {
+                    if ($row->type_schedule == "direct" && $row->consultant_id != null) {
                         if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
                             if ($row->outdated == 0) {
                                 $row->update([
