@@ -52,7 +52,7 @@ class DiariesController extends Controller
         }
     }
 
-    private function diary()
+    private function diary(Request $request)
     {
         $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
         
@@ -64,14 +64,14 @@ class DiariesController extends Controller
     public function all(Request $request)
     {
 
-        $paginate = $this->diary();
+        $paginate = $this->diary($request);
 
         return \Illuminate\Support\Facades\Response::json($paginate, 200);
     }
 
     public function diaryCount(Request $request)
     {
-        $total = $this->diary()->total();
+        $total = $this->diary($request)->total();
 
         return \Illuminate\Support\Facades\Response::json([
             "total" => $total
