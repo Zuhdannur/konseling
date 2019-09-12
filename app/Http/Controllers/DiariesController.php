@@ -52,53 +52,29 @@ class DiariesController extends Controller
         }
     }
 
-    public function all(Request $request)
+    private function diary()
     {
-
-        // $limit = $request->per_page;
-        // $skip = $limit * $request->per_page
-
         $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
         
         $paginate = $datas->paginate($request->per_page);
 
-        // $count = $datas->paginate($limit)->lastPage();
+        return $paginate;
+    }
 
-        // $data = $datas
-        // ->skip($skip)
-        // ->take($limit)
-        // ->get();
+    public function all(Request $request)
+    {
 
-
-        // if ($request->page == "") {
-        //     $skip = 0;
-        // } else {
-        //     $skip = $limit * $request->page;
-        // }
-
-
-        // $result = $datas->simplePaginate($request->pageSize);
+        $paginate = $this->diary();
 
         return \Illuminate\Support\Facades\Response::json($paginate, 200);
     }
 
     public function diaryCount(Request $request)
     {
-        $limit = $request->limit;
-
-        if ($request->page == "") {
-            $skip = 0;
-        } else {
-            $skip = $limit * $request->page;
-        }
-        $datas = \App\Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
-
-        $count = $datas
-        ->paginate($limit)
-        ->lastPage();
+        $total = $this->diary()->total();
 
         return \Illuminate\Support\Facades\Response::json([
-            "total_page" => $count
+            "total" => $total
         ], 200);
     }
 

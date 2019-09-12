@@ -111,7 +111,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->put('diary', 'DiariesController@put');
         $router->delete('diary/{id}', 'DiariesController@remove');
         $router->delete('diary', 'DiariesController@removeAll');
-        $router->get('diaryPageCount', 'DiariesController@diaryCount');
+        $router->get('diaryCount', 'DiariesController@diaryCount');
 
         $router->get('shareDiary', 'DiariesController@readDiary');
         $router->get('shareDiaryCount', 'DiariesController@readDiaryCount');
