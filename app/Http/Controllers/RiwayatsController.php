@@ -51,6 +51,10 @@ class RiwayatsController extends Controller
                 if ($request->status == 'dibatalkan') {
                     $query->where('canceled', 1);
                 }
+
+                if ($request->status == 'kadaluarsa') {
+                    $query->where('exp', 1);
+                }
             });
         }
 
