@@ -36,7 +36,7 @@ class RiwayatsController extends Controller
     public function all(Request $request)
     {
         $datas = \App\Riwayat::where('user_id', Auth::user()->id);
-        $datas->with('schedule')->with('user')->with('schedule.consultant')->with('schedule.request')->orderBy('created_at', 'desc');
+        $datas->with('schedule')->with('user')->with('schedule.consultant')->with('schedule.request')->orderBy('id', 'desc');
 
         // if ($request->has('orderBy')) {
             // $datas = $datas->orderBy($request->orderBy, 'desc');
