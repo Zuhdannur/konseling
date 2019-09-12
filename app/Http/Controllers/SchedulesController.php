@@ -543,7 +543,7 @@ class SchedulesController extends Controller
                 ]);
 
                 foreach ($schedule->get() as $key => $row) {
-                    if ($row->type_schedule != "direct" && $row->consultant_id == null) {
+                    if ($row->type_schedule != "direct" && $row->consultant_id == 0) {
                         if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
                             $row->update([
                                 'exp'=> 1
@@ -553,7 +553,7 @@ class SchedulesController extends Controller
                 }
 
                 foreach ($schedule->get() as $key => $row) {
-                    if ($row->type_schedule == "direct" && $row->consultant_id != null) {
+                    if ($row->type_schedule == "direct" && $row->consultant_id != 0) {
                         if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
                             if ($row->outdated == 0) {
                                 $row->update([
