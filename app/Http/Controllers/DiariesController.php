@@ -19,6 +19,7 @@ class DiariesController extends Controller
         if ($insert) {
             return \Illuminate\Support\Facades\Response::json([
                 'message' => 'success',
+                'id' => $insert->id
             ], 200);
         }
         return $request;
