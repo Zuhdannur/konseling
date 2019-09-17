@@ -16,7 +16,7 @@ class CreateTblRiwayat extends Migration
         Schema::create('tbl_riwayat', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('user_id')->unsigned();
-            $table->integer('schedule_id')->unsigned();
+            $table->integer('schedule_id')->references('id')->on('tbl_schedule')->onDelete('cascade');
             $table->timestamps();
         });
     }

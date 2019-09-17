@@ -91,7 +91,8 @@ class RiwayatsController extends Controller
 
     public function remove($id)
     {
-        $data = \App\Riwayat::where('id', $id)->where('user_id', Auth::user()->id)->delete();
+        $data = \App\Riwayat::where('id', $id)->where('user_id', Auth::user()->id);
+
         if ($data) {
             return Response::json(['message' => 'Berhasil menghapus riwayat.'], 200);
         } else {
