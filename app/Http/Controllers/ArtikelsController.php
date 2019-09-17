@@ -193,10 +193,16 @@ class ArtikelsController extends Controller
         }
     }
 
-    public function getMyFavorite(Request $request)
-    {
+    private function getFavorite(Request $request) {
         $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel');
         $paginate = $datas->paginate($request->per_page);
+
+        return $paginate;
+    }
+
+    public function getMyFavorite(Request $request)
+    {
+        $paginate = $this->getFavorite($request);
 
         // $result = [];
         // foreach ($data as $key => $value) {
@@ -209,21 +215,10 @@ class ArtikelsController extends Controller
 
     public function getMyFavoriteCount(Request $request)
     {
-        $limit = $request->limit;
-
-        if ($request->page == "") {
-            $skip = 0;
-        } else {
-            $skip = $limit * $request->page;
-        }
-        $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel');
-
-        $count = $datas
-        ->paginate($limit)
-        ->lastPage();
+        $total = $this->getFavorite($request)->total();
 
         return \Illuminate\Support\Facades\Response::json([
-            "total_page" => $count
+            "total" => $total
         ], 200);
     }
 
