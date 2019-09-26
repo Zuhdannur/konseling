@@ -38,7 +38,7 @@ class RiwayatsController extends Controller
         $datas = \App\Riwayat::where('user_id', Auth::user()->id);
         $datas->with('schedule')->with('user')->with('schedule.consultant')->with('schedule.request')->orderBy('id', 'desc');
 
-        if ($request->has('status') && $request->status != '') {
+        if ($request->has('status')) {
             $datas = $datas->whereHas('schedule', function ($query) use ($request, $datas) {
                 if ($request->status == 'selesai') {
                     $query->where('ended', 1);
