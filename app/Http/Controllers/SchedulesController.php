@@ -487,12 +487,18 @@ class SchedulesController extends Controller
         if ($filters->has('pengajuan')) {
             if ($filters->pengajuan == 'pending') {
                 //Saat fetch data jika pengajuannya pending & time < sekarang, update expired ke 1
-                $schedule = $schedule->where([
-                    ['status', '=', 0],
-                    ['ended', '=', 0],
-                    ['canceled', '=', 0],
-                    ['exp', '=', 0]
-                ]);
+                $schedule = $schedule
+                    ->where('status', 0)
+                    ->where('ended', 0)
+                    ->where('canceled', 0)
+                    ->where('exp', 0);
+                
+                // where([
+                //     ['status', '=', 0],
+                //     ['ended', '=', 0],
+                //     ['canceled', '=', 0],
+                //     ['exp', '=', 0]
+                // ]);
 
                 foreach ($schedule->get() as $key => $row) {
                     if ($row->type_schedule != "daring") {
@@ -624,97 +630,6 @@ class SchedulesController extends Controller
         // $data['pagination']['last_page'] = $paginate->lastPage();
 
         return response()->json($paginate, 200);
-    }
-
-    public function count(Request $filters)
-    {
-        $schedule = new \App\Schedule;
-        $schedule = $schedule->where('requester_id', Auth::user()->id);
-        $schedule = $schedule->with('request', 'consultant');
-
-        if ($filters->has('pengajuan')) {
-
-            //NO NEED TO COUNT THIS QUERY
-            if ($filters->pengajuan == 'pending') {
-                $schedule = $schedule->where([
-                    ['status', '=', 0],
-                    ['ended', '=', 0],
-                    ['canceled', '=', 0],
-                    ['exp', '=', 0]
-                ]);
-
-                //Saat fetch data jika pengajuannya pending & time < sekarang, update expired ke 1
-                // foreach ($schedule->get() as $key => $row) {
-                //     if ($row->type_schedule != "daring") {
-                //         if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
-                //             $row->update([
-                //                 'exp'=> 1
-                //             ]);
-                //         }
-                //     }
-                // }
-            }
-
-            if ($filters->pengajuan == 'riwayat') {
-         
-                //Saat fetch data jika pengajuannya riwayat
-                $schedule = $schedule->where(function ($query) {
-                    //Selesai Pengajuannya
-                    $query->where('status', 1)
-                            ->where('ended', 1);
-                })->orWhere(function ($query) {
-                    //Di accept tapi di cancel sama guru
-                    $query->where('status', 1)
-                            ->where('canceled', 1);
-                })->orWhere(function ($query) {
-                    //Di cancel sama siswa
-                    $query->where('status', 0)
-                            ->where('canceled', 1);
-                });
-            }
-        }
-
-        if ($filters->has('status')) {
-            $schedule = $schedule->where('status', $filters->status);
-        }
-
-        if ($filters->has('canceled')) {
-            $schedule = $schedule->where('canceled', $filters->canceled);
-        }
-
-        if ($filters->has('type_schedule')) {
-            $schedule = $schedule->where('type_schedule', $filters->type_schedule);
-        }
-
-        if ($filters->has('outdated')) {
-            if (!empty($filters->outdated)) {
-                $schedule = $schedule->where('outdated', $filters->outdated);
-            }
-        }
-
-        if ($filters->has('exp')) {
-            $schedule = $schedule->where('exp', $filters->exp);
-        }
-
-        if ($filters->has('ended')) {
-            $schedule = $schedule->where('ended', $filters->ended);
-        }
-
-        if ($filters->has('limit') && $filters->has('page')) {
-            $limit = $filters->limit;
-
-            if (empty($filters->page)) {
-                $skip = 0;
-            } else {
-                $skip = $limit * $filters->page;
-            }
-
-            $schedule = $schedule
-                ->paginate($skip)
-                ->lastPage($limit);
-        }
-
-        return Response::json(["total_page" => $schedule], 200);
     }
 
     public function removeAll()
