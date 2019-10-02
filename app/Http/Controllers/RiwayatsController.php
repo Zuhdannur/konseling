@@ -54,40 +54,17 @@ class RiwayatsController extends Controller
             });
         }
 
+        if ($request->has('type') && $request->status != '') {
+            $datas = $datas->whereHas('schedule', function ($query) use ($request, $datas) {
+                $query->where('type_schedule', $request->type);
+            });
+        }
+
         $paginate = $datas->paginate($request->per_page);
 
         return Response::json($paginate, 200);
     }
 
-    public function count(Request $filters)
-    {
-        $data = \App\Riwayat::where('user_id', Auth::user()->id);
-
-        $limit = $filters->limit;
-        if (empty($filters->page)) {
-            $skip = 0;
-        } else {
-            $skip = $limit * $filters->page;
-        }
-
-        if ($filters->has('status')) {
-            $datas = $data->whereHas('schedule', function ($query) use ($filters, $data) {
-                if ($filters->status == 'selesai') {
-                    $query->where('ended', 1);
-                }
-    
-                if ($filters->status == 'dibatalkan') {
-                    $query->where('canceled', 1);
-                }
-            });
-        }
-
-        $count = $data
-            ->paginate($skip)
-            ->lastPage($limit);
-
-        return Response::json(['total_page' => $count], 200);
-    }
 
     public function remove($id)
     {
