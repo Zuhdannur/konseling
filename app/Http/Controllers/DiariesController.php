@@ -64,7 +64,6 @@ class DiariesController extends Controller
 
     public function all(Request $request)
     {
-
         $paginate = $this->diary($request);
 
         return \Illuminate\Support\Facades\Response::json($paginate, 200);
@@ -81,13 +80,7 @@ class DiariesController extends Controller
 
     public function readDiary(Request $request)
     {
-        $limit = $request->limit;
-
-        if ($request->page == "") {
-            $skip = 0;
-        } else {
-            $skip = $limit * $request->page;
-        }
+        $per_page = $request->per_page;
 
         $mySekolah = \App\User::with('detail')->where('id', Auth::user()->id)->first()->detail;
         $diaries = \App\Diary::whereHas('user', function ($q) use ($mySekolah) {
@@ -97,37 +90,9 @@ class DiariesController extends Controller
         })->with('user')->with('user.detail')->orderBy('id', 'desc');
 
         $data = $diaries
-        ->skip($skip)
-        ->take($limit)
-        ->get();
+        ->paginate($per_page);
 
         return \Illuminate\Support\Facades\Response::json($data, 200);
-    }
-
-    public function readDiaryCount(Request $request)
-    {
-        $limit = $request->limit;
-
-        if ($request->page == "") {
-            $skip = 0;
-        } else {
-            $skip = $limit * $request->page;
-        }
-
-        $mySekolah = \App\User::with('detail')->where('id', Auth::user()->id)->first()->detail;
-        $diaries = \App\Diary::whereHas('user', function ($q) use ($mySekolah) {
-            $q->whereHas('detail', function ($query) use ($mySekolah) {
-                $query->where('id_sekolah', $mySekolah->id_sekolah);
-            });
-        })->with('user');
-
-        $count = $diaries
-        ->paginate($limit)
-        ->lastPage();
-
-        return \Illuminate\Support\Facades\Response::json([
-            "total_page" => $count
-        ], 200);
     }
 
     public function put(Request $request)

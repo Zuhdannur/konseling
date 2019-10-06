@@ -485,13 +485,14 @@ class SchedulesController extends Controller
         $schedule = $schedule->with('request', 'consultant');
 
         if ($filters->has('pengajuan')) {
+            
             if ($filters->pengajuan == 'pending') {
                 //Saat fetch data jika pengajuannya pending & time < sekarang, update expired ke 1
-                $schedule = $schedule
-                    ->where('status', 0)
-                    ->where('ended', 0)
-                    ->where('canceled', 0)
-                    ->where('exp', 0);
+                // $schedule = $schedule
+                //     ->where('status', 0)
+                //     ->where('ended', 0)
+                //     ->where('canceled', 0)
+                //     ->where('exp', 0);
                 
                 // where([
                 //     ['status', '=', 0],
@@ -582,12 +583,6 @@ class SchedulesController extends Controller
             $schedule = $schedule->where('canceled', $filters->canceled);
         }
 
-        if ($filters->has('type_schedule') || $filters->has('type_schedule2')) {
-            if (!empty($filters->type_schedule)) {
-                $schedule = $schedule->where('type_schedule', $filters->type_schedule)->orWhere('type_schedule', $filters->type_schedule2);
-            }
-        }
-
         if ($filters->has('exp')) {
             $schedule = $schedule->where('exp', $filters->exp);
         }
@@ -595,6 +590,13 @@ class SchedulesController extends Controller
         if ($filters->has('ended')) {
             $schedule = $schedule->where('ended', $filters->ended);
         }
+
+        if ($filters->has('type_schedule') || $filters->has('type_schedule2')) {
+            if (!empty($filters->type_schedule)) {
+                $schedule = $schedule->where('type_schedule', $filters->type_schedule)->orWhere('type_schedule', $filters->type_schedule2);
+            }
+        }
+
 
         if ($filters->has('orderBy')) {
             if ($filters->has('orderBy') == '') {
