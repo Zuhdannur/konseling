@@ -152,18 +152,7 @@ class SchedulesController extends Controller
             }
         }
 
-        $limit = $filters->limit;
-
-        if (empty($filters->page)) {
-            $skip = 0;
-        } else {
-            $skip = $limit * $filters->page;
-        }
-
-        $datas = $schedule
-            ->skip($skip)
-            ->take($limit)
-            ->get();
+        $datas = $schedule->paginate($filters->per_page);
 
         return Response::json($datas, 200);
     }
@@ -485,7 +474,6 @@ class SchedulesController extends Controller
         $schedule = $schedule->with('request', 'consultant');
 
         if ($filters->has('pengajuan')) {
-            
             if ($filters->pengajuan == 'pending') {
                 //Saat fetch data jika pengajuannya pending & time < sekarang, update expired ke 1
                 // $schedule = $schedule
