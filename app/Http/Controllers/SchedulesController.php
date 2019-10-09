@@ -83,7 +83,8 @@ class SchedulesController extends Controller
             });
 
             if ($filters->has('pengajuan')) {
-                if ($filters->pengajuan == 'daring') {
+                if ($filters->pengajuan == 'online') {
+                    $query->where('type_schedule', 'daring')->orWhere('type_schedule','realtime');
                 }
                 if ($filters->pengajuan == 'realtime') {
                     foreach ($query->get() as $key => $row) {
