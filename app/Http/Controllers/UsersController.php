@@ -230,6 +230,14 @@ class UsersController extends Controller
         return $request;
     }
 
+    public function getStudentInfo(Request $request)
+    {
+        $data = \App\User::where('api_token', $request->apiKey)->with('detail', 'detail.sekolah')->first();
+        return Response::json([
+            "data" => $data,
+        ], 200);
+    }
+
     public function updateImageProfile(Request $request)
     {
         $image = \App\User::find(Auth::user()->id);

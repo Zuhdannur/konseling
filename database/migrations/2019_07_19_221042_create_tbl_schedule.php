@@ -22,11 +22,10 @@ class CreateTblSchedule extends Migration
             $table->string('type_schedule');
             $table->string('channel_url')->nullable();
 
-            $table->integer('status')->default(0);
-            $table->integer('exp')->default(0);
-            $table->integer('ended')->default(0);
+            $table->integer('expired')->default(0);
             $table->integer('canceled')->default(0);
-            $table->integer('outdated')->default(0);
+            $table->integer('status')->default(0);
+            $table->integer('progress')->default(0);
 
             $table->integer('consultant_id')->unsigned()->default(0);
             $table->string('time')->nullable();
