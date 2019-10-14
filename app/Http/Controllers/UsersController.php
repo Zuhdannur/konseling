@@ -236,6 +236,12 @@ class UsersController extends Controller
         return Response::json($data, 200);
     }
 
+    public function getStudentInfoWithId(Request $request)
+    {
+        $data = \App\User::where('id', $request->id)->with('detail', 'detail.sekolah')->first();
+        return Response::json($data, 200);
+    }
+
     public function updateImageProfile(Request $request)
     {
         $image = \App\User::find(Auth::user()->id);
