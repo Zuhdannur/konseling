@@ -104,7 +104,7 @@ class DiaryRepository
     }
 
     public function diaryCount(Request $request) {
-        $datas = $this->diary->where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
+        $datas = $this->diary->where('id_user', $request->id)->orderBy('created_at', 'desc');
 
         $total = $datas->paginate($request->per_page)->total();
 
@@ -112,4 +112,7 @@ class DiaryRepository
             "total" => $total
         ], 200);
     }
+
+
+
 }
