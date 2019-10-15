@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
+use App\Repositories\ScheduleRepository;
 use Carbon\Carbon;
 use function foo\func;
 use Illuminate\Http\Request;
@@ -15,7 +16,22 @@ use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 
 class SchedulesController extends Controller
 {
+    private $scheduleRepository;
+
     protected static $API_ACCESS_KEY = 'AAAA_vRurwA:APA91bFvUdoT1ruL0WZC3rkvQWoK76WFOgUSAFuc3aUpN0_kjiP22y3Pf_o1TthpfN6_o_0HnHJeMGZMp8MqHzm1zTCk8zuTY4UzAByzknPDlcBlNFvz60oN6fx9Kq3gkfR373aboRy0';
+
+    /**
+     * SchedulesController constructor.
+     * @param $scheduleRepository
+     */
+    public function __construct(ScheduleRepository $scheduleRepository)
+    {
+        $this->scheduleRepository = $scheduleRepository;
+    }
+
+    public function getStudentScheduleCount($id) {
+        return $this->scheduleRepository->getStudentScheduleCount($id);
+    }
 
     public function take(Request $request)
     {
@@ -112,7 +128,7 @@ class SchedulesController extends Controller
                         }
                     }
                 }
-    
+
                 if ($filters->pengajuan == 'acceptedDirect') {
                     $query->where('consultant_id', Auth::user()->id);
                     foreach ($query->get() as $key => $row) {
@@ -133,7 +149,7 @@ class SchedulesController extends Controller
         if ($filters->has('type_schedule')) {
             $schedule = $schedule->where('type_schedule', $filters->type_schedule);
         }
-        
+
         if ($filters->has('canceled')) {
             $schedule = $schedule->where('canceled', $filters->canceled);
         }
@@ -173,7 +189,7 @@ class SchedulesController extends Controller
         if ($filters->has('type_schedule')) {
             $schedule = $schedule->where('type_schedule', $filters->type_schedule);
         }
-        
+
         if ($filters->has('canceled')) {
             $schedule = $schedule->where('canceled', $filters->canceled);
         }
@@ -204,7 +220,7 @@ class SchedulesController extends Controller
         $count = $schedule
         ->paginate($skip)
         ->lastPage($limit);
-            
+
         return Response::json([
             'total_page' => $count
         ], 200);
@@ -281,7 +297,7 @@ class SchedulesController extends Controller
     public function accept(Request $request)
     {
         $schedule = \App\Schedule::where('id', $request->schedule_id)->first();
-        
+
         if ($schedule->canceled == 0) {
             if ($schedule->status == 0) {
                 if ($schedule->exp == 0) {
@@ -293,7 +309,7 @@ class SchedulesController extends Controller
 
                     if ($update) {
                         $schedule = \App\Schedule::where('id', $request->schedule_id)->with('consultant')->first();
-                        
+
                         // if($schedule->type_schedule == 'direct') {
                         //     $this->sendNotificationToDirect();
                         // }
@@ -306,7 +322,7 @@ class SchedulesController extends Controller
                         //     $this->sendNotificationToDaring();
                         // }
                         $senderName = \App\User::where('id', $schedule['consultant_id'])->first()->name;
-                        
+
                         $result['type'] = "accept";
                         $result['schedule_id'] = $schedule['id'];
                         $result['requester_id'] = $schedule['requester_id'];
@@ -314,7 +330,7 @@ class SchedulesController extends Controller
                         $result['title'] = 'Pengajuanmu telah diterima';
                         $result['body'] = "Pengajuan ".$schedule['title']." telah diterima oleh ".$senderName;
                         $result['read'] = 0;
-                        
+
                         Helper::sendNotificationToSingle($result);
 
                         // $data['requester_id'] = $schedule['requester_id'];
@@ -370,7 +386,7 @@ class SchedulesController extends Controller
                 $result['title'] = 'Pengajuanmu telah dibatalkan.';
                 $result['body'] = "Pengajuan ". $schedule['title'] ." telah dibatalkan oleh ".$senderName;
                 $result['read'] = 0;
-                
+
                 Helper::sendNotificationToSingle($result);
 
                 // $data['requester_id'] = $schedule['requester_id'];
@@ -379,7 +395,7 @@ class SchedulesController extends Controller
                 // $data['id_user'] = $schedule['requester_id'];
                 // $data['type'] = 'cancel';
                 // Helper::Notification($data);
-                
+
 
                 $update = $schedule->update([
                     'canceled' => 1
@@ -414,7 +430,7 @@ class SchedulesController extends Controller
                 // $result['title'] = 'Pengajuanmu telah dibatalkan.';
                 // $result['body'] = "Pengajuan ". $schedule['title'] ." telah dibatalkan oleh ".$senderName;
                 // $result['read'] = 0;
-                
+
                 // Helper::sendNotificationToSingle($result);
 
                 // $data['requester_id'] = $schedule['requester_id'];
@@ -423,8 +439,8 @@ class SchedulesController extends Controller
                 // $data['id_user'] = $schedule['requester_id'];
                 // $data['type'] = 'cancel';
                 // Helper::storeDataNotification($data);
-                
-                
+
+
                 //Tandai bahwa pengajuan telah dicancel.
                 $update = $schedule->update([
                     'canceled' => 1
@@ -463,7 +479,7 @@ class SchedulesController extends Controller
         $message->setData([
             'title' => $senderName." menerima pengajuanmu."
         ]);
-        
+
         $response = $client->send($message);
         return \response()->json($response);
     }
@@ -482,7 +498,7 @@ class SchedulesController extends Controller
                 //     ->where('ended', 0)
                 //     ->where('canceled', 0)
                 //     ->where('exp', 0);
-                
+
                 // where([
                 //     ['status', '=', 0],
                 //     ['ended', '=', 0],
@@ -561,7 +577,7 @@ class SchedulesController extends Controller
                 }
             }
         }
-        
+
         if ($filters->has('status')) {
             if ($filters->status == 0 || $filters->status == 1) {
                 $schedule = $schedule->where('status', $filters->status);
@@ -671,7 +687,7 @@ class SchedulesController extends Controller
         $insert->save();
         return $insert;
     }
-    
+
 
     private function storeDaring($request)
     {
@@ -707,7 +723,7 @@ class SchedulesController extends Controller
                 'title' => $request->title,
                 'desc' => $request->desc
             ]);
-    
+
             if ($update) {
                 return \Illuminate\Support\Facades\Response::json([
                     "message" => 'schedule updated'
@@ -728,7 +744,7 @@ class SchedulesController extends Controller
                     'desc' => $request->desc,
                     'time' => $request->time
                 ]);
-    
+
                 if ($update) {
                     return \Illuminate\Support\Facades\Response::json([
                     "message" => 'schedule updated'], 200);
@@ -755,7 +771,7 @@ class SchedulesController extends Controller
         return false;
     }
 
-    
+
 
     private function saveToRiwayat($data)
     {

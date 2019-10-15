@@ -60,7 +60,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->post('profile', 'UsersController@updateProfile');
         $router->get('getStudentProfile', 'UsersController@getStudentInfo');
         $router->get('getStudentProfileWithId', 'UsersController@getStudentInfoWithId');
-        
+
         $router->post('updateImage', 'UsersController@updateImageProfile');
 
         //schedule
@@ -84,6 +84,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         /**
          * Routes for resource schedule
          */
+        $router->get('schedule/student/{id}', 'SchedulesController@getStudentScheduleCount');
         $router->post('schedule', 'SchedulesController@add');
         $router->get('schedule', 'SchedulesController@all');
 
@@ -91,18 +92,11 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->put('schedule', 'SchedulesController@put');
         $router->delete('schedule/{id}', 'SchedulesController@remove');
         $router->delete('schedule', 'SchedulesController@removeAll');
-        $router->get('schedulePageCount', 'SchedulesController@count');
 
         $router->post('scheduleChannelUrl', 'SchedulesController@updateChannelUrl');
-
-        // $router->get('scheduleSiswaAktif', 'SchedulesController@aktif');
-        // $router->get('scheduleSiswaPending', 'SchedulesController@pending');
-        // $router->get('scheduleSiswaRiwayat', 'SchedulesController@riwayat');
         $router->get('get', 'SchedulesController@take');
-
         $router->get('scheduleReceive', 'SchedulesController@receive');
         $router->get('scheduleReceiveCount', 'SchedulesController@receiveCount');
-
         $router->post('scheduleAccept', 'SchedulesController@accept');
         $router->post('scheduleFinish', 'SchedulesController@finish');
         $router->post('scheduleCancel/{id}/{status}', 'SchedulesController@cancel');
