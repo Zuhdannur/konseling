@@ -104,9 +104,7 @@ class DiaryRepository
     }
 
     public function diaryCount(Request $request) {
-        $datas = $this->diary->where('id_user', $request->id)->orderBy('created_at', 'desc');
-
-        $total = $datas->paginate($request->per_page)->total();
+        $total = $this->diary->where('id_user', $request->id)->count();
 
         return Response::json([
             "total" => $total
