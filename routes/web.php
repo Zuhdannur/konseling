@@ -49,9 +49,9 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     //For Develpment Purposes
     $router->get('user', 'UsersController@all');
     // $router->get('viewRiwayat', 'RiwayatsController@view');
-   
+
     $router->group(['middleware' => 'auth'], function () use ($router) {
-        
+
         //Message
         $router->get('index', 'MessagesController@index');
         $router->post('send', 'MessagesController@store');
@@ -84,7 +84,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
          */
         $router->post('schedule', 'SchedulesController@add');
         $router->get('schedule', 'SchedulesController@all');
-        
+
         $router->get('schedule/{id}', 'SchedulesController@get');
         $router->put('schedule', 'SchedulesController@put');
         $router->delete('schedule/{id}', 'SchedulesController@remove');
@@ -111,7 +111,6 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->post('diary', 'DiariesController@add');
         $router->put('diary', 'DiariesController@put');
         $router->delete('diary/{id}', 'DiariesController@remove');
-        $router->delete('diary', 'DiariesController@removeAll');
         $router->get('diaryCount', 'DiariesController@diaryCount');
 
         $router->get('shareDiary', 'DiariesController@readDiary');
@@ -134,7 +133,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->delete('notifikasi/{id}', 'NotifikasisController@remove');
         $router->delete('notifikasi', 'NotifikasisController@removeAll');
         $router->get('notifikasiPageCount', 'NotifikasisController@notifikasiCount');
-        
+
         $router->post('updateRead', 'NotifikasisController@read');
 
         /**
@@ -146,7 +145,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->put('riwayat/{id}', 'RiwayatsController@put');
         $router->delete('riwayat/{id}', 'RiwayatsController@remove');
         $router->get('viewRiwayat', 'RiwayatsController@view');
-            
+
         //Favorite Artikels
         $router->post('favorit', 'ArtikelsController@storeFavorite');
         $router->get('favorit', 'ArtikelsController@getMyFavorite');
