@@ -59,6 +59,8 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         //profile
         $router->post('profile', 'UsersController@updateProfile');
         $router->get('getStudentProfile', 'UsersController@getStudentInfo');
+        $router->get('getStudentProfileWithId', 'UsersController@getStudentInfoWithId');
+        
         $router->post('updateImage', 'UsersController@updateImageProfile');
 
         //schedule
