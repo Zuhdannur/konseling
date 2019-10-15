@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 
 use App\Diary;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -90,7 +91,7 @@ class DiaryRepository
         $per_page = $request->per_page;
 
         $mySekolah = User::with('detail')->where('id', Auth::user()->id)->first()->detail;
-        $diaries = Diary::whereHas('user', function ($q) use ($mySekolah) {
+        $diaries = $this->diary->whereHas('user', function ($q) use ($mySekolah) {
             $q->whereHas('detail', function ($query) use ($mySekolah) {
                 $query->where('id_sekolah', $mySekolah->id_sekolah);
             });
@@ -103,11 +104,11 @@ class DiaryRepository
     }
 
     public function diaryCount(Request $request) {
-        $datas = Diary::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
+        $datas = $this->diary->where('id_user', Auth::user()->id)->orderBy('created_at', 'desc');
 
         $total = $datas->paginate($request->per_page)->total();
 
-        return \Illuminate\Support\Facades\Response::json([
+        return Response::json([
             "total" => $total
         ], 200);
     }
