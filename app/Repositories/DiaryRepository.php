@@ -11,8 +11,21 @@ use Illuminate\Support\Facades\Response;
 
 class DiaryRepository
 {
+
+    private $diary;
+
+    /**
+     * DiaryRepository constructor.
+     * @param $diary
+     */
+    public function __construct(Diary $diary)
+    {
+        $this->diary = $diary;
+    }
+
+
     public function all(Request $request) {
-        $query = Diary::where('id_user', Auth::user()->id);
+        $query = $this->diary->where('id_user', Auth::user()->id);
         if($request->has('orderBy')) {
             $query = $query->orderBy($request->orderBy, 'desc');
         }
@@ -22,7 +35,7 @@ class DiaryRepository
     }
 
     public function add(Request $request) {
-        $insert = new Diary;
+        $insert = $this->diary;
         $insert->id_user = Auth::user()->id;
         $insert->body = $request->body;
         $insert->title = $request->title;
@@ -39,7 +52,7 @@ class DiaryRepository
 
     public function remove($id)
     {
-        $data = Diary::where('id', $id)->where('id_user', Auth::user()->id)->delete();
+        $data = $this->diary->where('id', $id)->where('id_user', Auth::user()->id)->delete();
         if ($data) {
             return Response::json([
                 "message" => "Berhasil menghapus data.",
@@ -53,7 +66,7 @@ class DiaryRepository
 
     public function update(Request $request)
     {
-        $update = Diary::where('id', $request->id)->where('id_user', Auth::user()->id)->update([
+        $update = $this->diary->where('id', $request->id)->where('id_user', Auth::user()->id)->update([
             'title' => $request->title,
             'body' => $request->body,
             'tgl' => $request->tgl
@@ -68,7 +81,6 @@ class DiaryRepository
                 "message" => 'Gagal menyunting catatan.'
             ], 201);
         }
-        return $request;
     }
 
 
