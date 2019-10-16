@@ -82,7 +82,7 @@ class UsersRepository
             ], 201);
         }
 
-        if(!Hash::check($request->password, $request->password)) {
+        if(!Hash::check($request->password, $user->password)) {
             return Response::json([
                 "message" => 'Username atau kata sandi salah.',
             ], 201);
