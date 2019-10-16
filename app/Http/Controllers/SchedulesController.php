@@ -3,15 +3,11 @@
 use App\Helpers\Helper;
 use App\Repositories\ScheduleRepository;
 use Carbon\Carbon;
-use function foo\func;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Validator;
-use Pusher\Pusher;
 use sngrl\PhpFirebaseCloudMessaging\Client;
 use sngrl\PhpFirebaseCloudMessaging\Message;
-use sngrl\PhpFirebaseCloudMessaging\Notification;
 use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 
 class SchedulesController extends Controller
@@ -29,7 +25,8 @@ class SchedulesController extends Controller
         $this->scheduleRepository = $scheduleRepository;
     }
 
-    public function getStudentScheduleCount($id) {
+    public function getStudentScheduleCount($id)
+    {
         return $this->scheduleRepository->getStudentScheduleCount($id);
     }
 
@@ -74,9 +71,9 @@ class SchedulesController extends Controller
     public function get($id, Request $request)
     {
         $data = \App\Schedule::where('requester_id', $id)
-        ->orderBy('created_at', 'desc')
-        ->take($request->limit)
-        ->get();
+            ->orderBy('created_at', 'desc')
+            ->take($request->limit)
+            ->get();
 
         return Response::json($data);
     }
@@ -94,7 +91,7 @@ class SchedulesController extends Controller
 
             if ($filters->has('pengajuan')) {
                 if ($filters->pengajuan == 'online') {
-                    $query->where('type_schedule', 'daring')->orWhere('type_schedule','realtime');
+                    $query->where('type_schedule', 'daring')->orWhere('type_schedule', 'realtime');
                 }
                 if ($filters->pengajuan == 'realtime') {
                     foreach ($query->get() as $key => $row) {
@@ -102,7 +99,7 @@ class SchedulesController extends Controller
                             if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
                                 if ($row->exp == 0) {
                                     $row->update([
-                                        'exp'=> 1
+                                        'exp' => 1
                                     ]);
                                 }
                             }
@@ -115,7 +112,7 @@ class SchedulesController extends Controller
                             if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
                                 if ($row->exp == 0) {
                                     $row->update([
-                                        'exp'=> 1
+                                        'exp' => 1
                                     ]);
                                 }
                             }
@@ -183,7 +180,7 @@ class SchedulesController extends Controller
                     $this->saveToRiwayat($data);
 
                     //Simpan riwayat untuk siswa
-                    $data['user_id'] =$schedule->requester_id;
+                    $data['user_id'] = $schedule->requester_id;
                     $data['schedule_id'] = $schedule->id;
                     $this->saveToRiwayat($data);
 
@@ -270,7 +267,7 @@ class SchedulesController extends Controller
                         $result['requester_id'] = $schedule['requester_id'];
                         $result['consultant_id'] = $schedule['consultant_id'];
                         $result['title'] = 'Pengajuanmu telah diterima';
-                        $result['body'] = "Pengajuan ".$schedule['title']." telah diterima oleh ".$senderName;
+                        $result['body'] = "Pengajuan " . $schedule['title'] . " telah diterima oleh " . $senderName;
                         $result['read'] = 0;
 
                         Helper::sendNotificationToSingle($result);
@@ -326,7 +323,7 @@ class SchedulesController extends Controller
                 $result['requester_id'] = $schedule['requester_id'];
                 $result['consultant_id'] = $schedule['consultant_id'];
                 $result['title'] = 'Pengajuanmu telah dibatalkan.';
-                $result['body'] = "Pengajuan ". $schedule['title'] ." telah dibatalkan oleh ".$senderName;
+                $result['body'] = "Pengajuan " . $schedule['title'] . " telah dibatalkan oleh " . $senderName;
                 $result['read'] = 0;
 
                 Helper::sendNotificationToSingle($result);
@@ -415,11 +412,11 @@ class SchedulesController extends Controller
 
         $message = new Message();
         $message->setPriority('normal');
-        $pattern = "guru".Auth::user()->detail->id_sekolah."pengajuan";
+        $pattern = "guru" . Auth::user()->detail->id_sekolah . "pengajuan";
 
         $message->addRecipient(new Topic($pattern));
         $message->setData([
-            'title' => $senderName." menerima pengajuanmu."
+            'title' => $senderName . " menerima pengajuanmu."
         ]);
 
         $response = $client->send($message);
@@ -428,150 +425,7 @@ class SchedulesController extends Controller
 
     public function all(Request $filters)
     {
-        $schedule = new \App\Schedule;
-        $schedule = $schedule->where('requester_id', Auth::user()->id);
-        $schedule = $schedule->with('request', 'consultant');
-
-        if ($filters->has('pengajuan')) {
-            if ($filters->pengajuan == 'pending') {
-                //Saat fetch data jika pengajuannya pending & time < sekarang, update expired ke 1
-                // $schedule = $schedule
-                //     ->where('status', 0)
-                //     ->where('ended', 0)
-                //     ->where('canceled', 0)
-                //     ->where('exp', 0);
-
-                // where([
-                //     ['status', '=', 0],
-                //     ['ended', '=', 0],
-                //     ['canceled', '=', 0],
-                //     ['exp', '=', 0]
-                // ]);
-
-                foreach ($schedule->get() as $key => $row) {
-                    if ($row->type_schedule != "daring") {
-                        if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
-                            $row->update([
-                                'exp'=> 1
-                            ]);
-                        }
-                    }
-                }
-            }
-
-            if ($filters->pengajuan == 'riwayat') {
-                //Saat fetch data jika pengajuannya riwayat
-                $schedule = $schedule->where(function ($query) {
-                    //Selesai Pengajuannya
-                    $query->where('status', 1)
-                            ->where('ended', 1);
-                })->orWhere(function ($query) {
-                    //Di accept tapi di cancel sama guru
-                    $query->where('status', 1)
-                            ->where('canceled', 1);
-                })->orWhere(function ($query) {
-                    //Di cancel sama siswa
-                    $query->where('status', 0)
-                            ->where('canceled', 1);
-                })->orWhere(function ($query) {
-                    //Kadaluarsa
-                    $query->where('status', 0)
-                            ->where('canceled', 0)
-                            ->where('exp', 1)
-                            ->where('ended', 0);
-                });
-            }
-
-            if ($filters->pengajuan == 'acceptedDirect') {
-                if ($filters->has('outdated')) {
-                    if ($filters->outdated == 0 || $filters->outdated == 1) {
-                        $schedule = $schedule->where('outdated', $filters->outdated);
-                    }
-                }
-
-                $schedule = $schedule->where([
-                    ['status', '=', 0],
-                    ['ended', '=', 0],
-                    ['canceled', '=', 0],
-                    ['exp', '=', 0]
-                ]);
-
-                foreach ($schedule->get() as $key => $row) {
-                    if ($row->type_schedule == "direct" && $row->consultant_id == 0) {
-                        if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
-                            $row->update([
-                                'exp'=> 1
-                            ]);
-                        }
-                    }
-                }
-
-                foreach ($schedule->get() as $key => $row) {
-                    if ($row->type_schedule == "direct" && $row->consultant_id != 0) {
-                        if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
-                            if ($row->outdated == 0) {
-                                $row->update([
-                                    'outdated' => 1
-                                ]);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if ($filters->has('status')) {
-            if ($filters->status == 0 || $filters->status == 1) {
-                $schedule = $schedule->where('status', $filters->status);
-            }
-        }
-
-        if ($filters->has('canceled')) {
-            $schedule = $schedule->where('canceled', $filters->canceled);
-        }
-
-        if ($filters->has('exp')) {
-            $schedule = $schedule->where('exp', $filters->exp);
-        }
-
-        if ($filters->has('ended')) {
-            $schedule = $schedule->where('ended', $filters->ended);
-        }
-
-        if ($filters->has('type_schedule') || $filters->has('type_schedule2')) {
-            if (!empty($filters->type_schedule)) {
-                $schedule = $schedule->where('type_schedule', $filters->type_schedule)->orWhere('type_schedule', $filters->type_schedule2);
-            }
-        }
-
-
-        if ($filters->has('orderBy')) {
-            if ($filters->has('orderBy') == '') {
-                $schedule = $schedule->orderBy('created_at', 'desc');
-            } else {
-                $schedule = $schedule->orderBy($filters->orderBy, 'desc');
-            }
-        } else {
-            $schedule = $schedule->orderBy('created_at', 'desc');
-        }
-
-        $paginate = $schedule->paginate($filters->per_page);
-
-        return response()->json($paginate, 200);
-    }
-
-    public function removeAll()
-    {
-        $delete = \App\Schedule::where('requester_id', Auth::user()->id)->truncate();
-        if ($delete) {
-            return Response::json([
-                "message" => "Berhasil menghapus data."
-            ], 200);
-        } else {
-            return Response::json([
-                "message" => 'Gagal menghapus data.'
-            ], 201);
-        }
+        return $this->scheduleRepository->all($filters);
     }
 
     public function add(Request $request)
