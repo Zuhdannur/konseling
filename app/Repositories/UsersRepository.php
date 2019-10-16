@@ -82,22 +82,22 @@ class UsersRepository
             ], 201);
         }
 
-        if(!Hash::check($request->password, $user->password)) {
+        if(!Hash::check($request->password, $request->password)) {
             return Response::json([
                 "message" => 'Username atau kata sandi salah.',
             ], 201);
         }
 
         $apiKey = base64_encode(str_random(40));
-        $this->$user->where('username', $request->username)->update([
+        $this->user->where('username', $request->username)->update([
             'api_token' => $apiKey,
             'firebase_token' => $request->firebase_token
         ]);
 
         if ($user->role == 'siswa') {
-            $data = $this->$user->where('api_token', $apiKey)->with('detail', 'detail.sekolah')->first();
+            $data = $this->user->where('api_token', $apiKey)->with('detail', 'detail.sekolah')->first();
         } else {
-            $data = $this->$user->where('api_token', $apiKey)->with('detail', 'detail.sekolah')->first();
+            $data = $this->user->where('api_token', $apiKey)->with('detail', 'detail.sekolah')->first();
             $this->addTopic($data);
         }
 
