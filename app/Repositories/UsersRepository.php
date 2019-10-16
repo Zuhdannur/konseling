@@ -53,14 +53,14 @@ class UsersRepository
         $insertDetail->tanggal_lahir = $request->tanggal_lahir;
         $insertDetail->kota_lahir = $request->kota_lahir;
 
+        $insert->save();
+        $insertDetail->save();
+
         if(!$insertDetail || !$insert) {
             return Response::json([
                 'message' => 'register failed'
             ], 201);
         }
-
-        $insert->save();
-        $insertDetail->save();
 
         return Response::json([
             'message' => 'register successfully',
@@ -142,11 +142,10 @@ class UsersRepository
     private function isUsernameDuplicate($username)
     {
         $check = $this->user->where('username', $username)->first();
-        if ($check) {
-            return $check;
-        } else {
+        if (!$check) {
             return null;
         }
+        return $check;
     }
 
     public function all()
