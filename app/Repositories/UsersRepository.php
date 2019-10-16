@@ -41,25 +41,26 @@ class UsersRepository
         $insert->password = Hash::make($request->password);
         $insert->role = $request->role;
         $insert->avatar = $request->avatar;
-        $insert->save();
 
         $insertDetail = $this->detailUser;
         $insertDetail->id_user = $this->getLastID()->id;
         $insertDetail->jenkel = $request->jenkel;
         $insertDetail->alamat = $request->alamat;
-        $insertDetail->nomor_hp = $request->phone;
+        $insertDetail->nomor_hp = $request->nomor_hp;
         $insertDetail->kelas = $request->kelas;
         $insertDetail->id_sekolah = $request->id_sekolah;
         $insertDetail->kota = $request->kota;
         $insertDetail->tanggal_lahir = $request->tanggal_lahir;
         $insertDetail->kota_lahir = $request->kota_lahir;
-        $insertDetail->save();
 
-        if(!$insertDetail) {
+        if(!$insertDetail || !$insert) {
             return Response::json([
                 'message' => 'register failed'
             ], 201);
         }
+
+        $insert->save();
+        $insertDetail->save();
 
         return Response::json([
             'message' => 'register successfully',
