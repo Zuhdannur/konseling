@@ -22,6 +22,7 @@ $router->get('/', function () {
 });
 $router->get('/test', 'SchedulesController@notification');
 $router->group(['prefix'=>'v1/api'], function () use ($router) {
+
     $router->post('login', 'UsersController@login');
     $router->post('register', 'UsersController@register');
 
@@ -46,16 +47,14 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     $router->put('kelas/{id}', 'KelasController@put');
     $router->delete('kelas/{id}', 'KelasController@remove');
 
-    $router->get('user', 'UsersController@all');
-    // $router->get('viewRiwayat', 'RiwayatsController@view');
 
     $router->group(['middleware' => 'auth'], function () use ($router) {
 
         //profile
-        $router->post('profile', 'UsersController@updateProfile');
-
-        $router->get('profile/teacher/student/getProfile/{id}','UsersController@getStudentInfo');
-        $router->post('profile/updateImage', 'UsersController@updateImageProfile');
+        $router->put('user', 'UsersController@put');
+        $router->get('user/teacher/student/profile/{id}','UsersController@getStudentInfo');
+        $router->post('user/update/image', 'UsersController@updateImageProfile');
+        $router->get('user', 'UsersController@all');
 
         /*Siswa dapat melihat diary*/
         $router->get('diary/student', 'DiariesController@all');
