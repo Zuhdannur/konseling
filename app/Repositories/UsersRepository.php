@@ -41,9 +41,10 @@ class UsersRepository
         $insert->password = Hash::make($request->password);
         $insert->role = $request->role;
         $insert->avatar = $request->avatar;
+        $insert->save();
 
         $insertDetail = $this->detailUser;
-        $insertDetail->id_user = $this->getLastID()->id;
+        $insertDetail->id_user = $this->user->id;
         $insertDetail->jenkel = $request->jenkel;
         $insertDetail->alamat = $request->alamat;
         $insertDetail->nomor_hp = $request->nomor_hp;
@@ -52,8 +53,6 @@ class UsersRepository
         $insertDetail->kota = $request->kota;
         $insertDetail->tanggal_lahir = $request->tanggal_lahir;
         $insertDetail->kota_lahir = $request->kota_lahir;
-
-        $insert->save();
         $insertDetail->save();
 
         if(!$insertDetail || !$insert) {
