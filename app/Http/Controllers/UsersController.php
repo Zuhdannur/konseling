@@ -99,7 +99,7 @@ class UsersController extends Controller
 
             $insertDetail->kelas = $request->kelas;
             $insertDetail->id_sekolah = $request->id_sekolah;
-            
+
             $insertDetail->save();
 
             if ($insertDetail) {
@@ -150,7 +150,7 @@ class UsersController extends Controller
             $data = \App\User::where('api_token', $id)->with('detail', 'detail.sekolah')->first();
             $this->addTopic($data);
         }
-        
+
         return Response::json($data, 200);
     }
 
@@ -170,13 +170,13 @@ class UsersController extends Controller
         //     $client->addTopicSubscription($pattern.$value['detail']['id_sekolah']."pengajuan", $value['firebase_token']);
         // }
     }
-    
+
     public function all()
     {
         $data = \App\User::with('detail', 'detail.kelas', 'detail.sekolah')->get();
         return Response::json($data, 200);
     }
-    
+
     public function remove($id)
     {
         $data = \App\User::find($id)->delete();
@@ -225,20 +225,14 @@ class UsersController extends Controller
                 return Response::json(['message' => 'Gagal menyunting profil.']);
             }
         }
-        
-        
+
+
         return $request;
     }
 
-    public function getStudentInfo(Request $request)
+    public function getStudentInfo($id)
     {
-        $data = \App\User::where('api_token', $request->apiKey)->with('detail', 'detail.sekolah')->first();
-        return Response::json($data, 200);
-    }
-
-    public function getStudentInfoWithId(Request $request)
-    {
-        $data = \App\User::where('id', $request->id)->with('detail', 'detail.sekolah')->first();
+        $data = User::where('id', $id)->with('detail', 'detail.sekolah')->first();
         return Response::json($data, 200);
     }
 

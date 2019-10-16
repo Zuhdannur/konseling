@@ -46,71 +46,53 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     $router->put('kelas/{id}', 'KelasController@put');
     $router->delete('kelas/{id}', 'KelasController@remove');
 
-    //For Develpment Purposes
     $router->get('user', 'UsersController@all');
     // $router->get('viewRiwayat', 'RiwayatsController@view');
 
     $router->group(['middleware' => 'auth'], function () use ($router) {
 
-        //Message
-        $router->get('index', 'MessagesController@index');
-        $router->post('send', 'MessagesController@store');
-
         //profile
         $router->post('profile', 'UsersController@updateProfile');
-        $router->get('getStudentProfile', 'UsersController@getStudentInfo');
-        $router->get('getStudentProfileWithId', 'UsersController@getStudentInfoWithId');
 
-        $router->post('updateImage', 'UsersController@updateImageProfile');
+        $router->get('profile/teacher/student/getProfile/{id}','UsersController@getStudentInfo');
+        $router->post('profile/updateImage', 'UsersController@updateImageProfile');
 
-        //schedule
-        // $router->post('schedule', 'SchedulesController@send');
-        // $router->post('updateSchedule', 'SchedulesController@updateSchedule');
-        // $router->post('mySchedule/{id}', 'SchedulesController@viewMySchedule');
-        // $router->post('mySchedulePageCount/{id}', 'SchedulesController@mySchedulePageCount');
-        // $router->post('readStudentSchedule', 'SchedulesController@studentSchedule');
-
-        // $router->post('mySchedulePageCount/', 'SchedulesController@mySchedulePageCount');
-        // $router->post('mySchedule', 'SchedulesController@viewMySchedule');
-        // $router->post('mySchedule', 'SchedulesController@getPengajuanByStatus');
-        // $router->post('mySchedulePage', 'SchedulesController@getPengajuanByStatusPageCount');
-        // $router->get('expired/{id}', 'SchedulesController@deleteSchedule');
-
-        // $router->delete('schedule/{id}', 'SchedulesController@deleteDirectSchedule');
-
-        // $router->post('scheduleDirect/{id}', 'SchedulesController@postScheduleDirect');
-        // $router->post('scheduleDirectCount/{id}', 'SchedulesController@postScheduleDirectCount');
+        /*Siswa dapat melihat diary*/
+        $router->get('diary/student', 'DiariesController@all');
+        /*Siswa dapat menambahkan catatan*/
+        $router->post('diary/student', 'DiariesController@add');
+        /*Siswa dapat menyunting catatan*/
+        $router->put('diary/student', 'DiariesController@put');
+        /*Siswa dapat menghapus catatan*/
+        $router->delete('diary/student/{id}', 'DiariesController@remove');
+        /*Guru dapat mendapatkan jumlah catatan siswa*/
+        $router->get('diary/teacher/student/count', 'DiariesController@diaryCount');
+        /*Guru dapat membaca catatan siswa*/
+        $router->get('diary/teacher', 'DiariesController@readDiary');
 
         /**
          * Routes for resource schedule
          */
-        $router->get('schedule/student/{id}', 'SchedulesController@getStudentScheduleCount');
-        $router->post('schedule', 'SchedulesController@add');
-        $router->get('schedule', 'SchedulesController@all');
+        /*Guru melihat jumlah pengajuan siswa*/
+        $router->get('schedule/teacher/student/{id}', 'SchedulesController@getStudentScheduleCount');
+        /*Siswa dapat menambahkan jadwal*/
+        $router->post('schedule/student', 'SchedulesController@add');
+        /*Siswa dapat melihat semua jadwal*/
+        $router->get('schedule/student', 'SchedulesController@all');
+        /*Siswa dapat menyunting jadwal*/
+        $router->put('schedule/student', 'SchedulesController@put');
+        /*Siswa dapat menghapus jadwal berdasarkan id*/
+        $router->delete('schedule/student/{id}', 'SchedulesController@remove');
+        /*Siswa dapat membatalkan pengajuan*/
+        $router->post('schedule/student/cancel/{id}/{status}', 'SchedulesController@cancel');
+        /*Guru & Siswa dapat menyelesaikan pengajuan*/
+        $router->post('schedule/finish/{id}', 'SchedulesController@finish');
 
-        $router->get('schedule/{id}', 'SchedulesController@get');
-        $router->put('schedule', 'SchedulesController@put');
-        $router->delete('schedule/{id}', 'SchedulesController@remove');
+
         $router->delete('schedule', 'SchedulesController@removeAll');
 
         $router->post('scheduleChannelUrl', 'SchedulesController@updateChannelUrl');
-        $router->get('get', 'SchedulesController@take');
         $router->get('scheduleReceive', 'SchedulesController@receive');
-        $router->get('scheduleReceiveCount', 'SchedulesController@receiveCount');
-        $router->post('scheduleAccept', 'SchedulesController@accept');
-        $router->post('scheduleFinish', 'SchedulesController@finish');
-        $router->post('scheduleCancel/{id}/{status}', 'SchedulesController@cancel');
-        /**
-         * Routes for resource diary
-         */
-        $router->get('diary', 'DiariesController@all');
-        $router->post('diary', 'DiariesController@add');
-        $router->put('diary', 'DiariesController@put');
-        $router->delete('diary/{id}', 'DiariesController@remove');
-        $router->get('diaryCount', 'DiariesController@diaryCount');
-
-        $router->get('shareDiary', 'DiariesController@readDiary');
-        $router->get('shareDiaryCount', 'DiariesController@readDiaryCount');
 
         /**
          * Routes for resource user

@@ -25,9 +25,10 @@ class DiaryRepository
     }
 
 
-    public function all(Request $request) {
+    public function all(Request $request)
+    {
         $query = $this->diary->where('id_user', Auth::user()->id);
-        if($request->has('orderBy')) {
+        if ($request->has('orderBy')) {
             $query = $query->orderBy($request->orderBy, 'desc');
         }
         $paginate = $query->paginate($request->per_page);
@@ -35,34 +36,32 @@ class DiaryRepository
         return Response::json($paginate, 200);
     }
 
-    public function add(Request $request) {
+    public function add(Request $request)
+    {
         $insert = $this->diary;
         $insert->id_user = Auth::user()->id;
         $insert->body = $request->body;
         $insert->title = $request->title;
         $insert->tgl = $request->tgl;
         $insert->save();
-        if ($insert) {
-            return Response::json([
-                'message' => 'success',
-                'id' => $insert->id
-            ], 200);
-        }
-        return $request;
+
+        return Response::json([
+            'message' => 'success',
+            'id' => $insert->id
+        ], 200);
     }
 
     public function remove($id)
     {
         $data = $this->diary->where('id', $id)->where('id_user', Auth::user()->id)->delete();
-        if ($data) {
-            return Response::json([
-                "message" => "Berhasil menghapus data.",
-            ], 200);
-        } else {
+        if (!$data) {
             return Response::json([
                 "message" => 'Gagal menghapus data.'
             ], 201);
         }
+        return Response::json([
+            "message" => "Berhasil menghapus data.",
+        ], 200);
     }
 
     public function update(Request $request)
@@ -73,15 +72,15 @@ class DiaryRepository
             'tgl' => $request->tgl
         ]);
 
-        if ($update) {
-            return Response::json([
-                "message" => 'Berhasil menyunting catatan.'
-            ], 200);
-        } else {
+        if (!$update) {
             return Response::json([
                 "message" => 'Gagal menyunting catatan.'
             ], 201);
         }
+
+        return Response::json([
+            "message" => 'Berhasil menyunting catatan.'
+        ], 200);
     }
 
 
@@ -97,20 +96,19 @@ class DiaryRepository
             });
         })->with('user')->with('user.detail')->orderBy('id', 'desc');
 
-        $data = $diaries
-            ->paginate($per_page);
+        $data = $diaries->paginate($per_page);
 
         return Response::json($data, 200);
     }
 
-    public function diaryCount(Request $request) {
-        $total = $this->diary->where('id_user', $request->id)->count();
+    public function diaryCount($id)
+    {
+        $total = $this->diary->where('id_user', $id)->count();
 
         return Response::json([
             "total" => $total
         ], 200);
     }
-
 
 
 }

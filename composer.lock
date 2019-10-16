@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b128b484fea9fa7c3cbe58337a7e201a",
+    "content-hash": "2bd021c2b7933c2dd819b94e2e2aca5e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -171,52 +171,6 @@
                 "stream_filter_register"
             ],
             "time": "2019-04-09T12:31:48+00:00"
-        },
-        {
-            "name": "danbovey/laravel-linkheader-paginator",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/danbovey/laravel-linkheader-paginator.git",
-                "reference": "4138185bfe4737c716944a38cc3110ed77199358"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/danbovey/laravel-linkheader-paginator/zipball/4138185bfe4737c716944a38cc3110ed77199358",
-                "reference": "4138185bfe4737c716944a38cc3110ed77199358",
-                "shasum": ""
-            },
-            "require-dev": {
-                "illuminate/http": "^5.3",
-                "illuminate/pagination": "^5.3",
-                "phpish/link_header": "dev-master",
-                "phpunit/phpunit": "^5.6"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "DanBovey\\LinkHeaderPaginator\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dan Bovey",
-                    "email": "dan@danbovey.uk"
-                }
-            ],
-            "description": "Laravel Paginator that moves pagination info to the HTTP LinkHeader",
-            "homepage": "https://github.com/danbovey/laravel-linkheader-paginator",
-            "keywords": [
-                "laravel",
-                "linkheader",
-                "pagination",
-                "paginator"
-            ],
-            "time": "2016-11-06T23:30:15+00:00"
         },
         {
             "name": "doctrine/inflector",

@@ -33,12 +33,6 @@ class SchedulesController extends Controller
         return $this->scheduleRepository->getStudentScheduleCount($id);
     }
 
-    public function take(Request $request)
-    {
-        $schedule = \App\Schedule::where('id', $request->id)->first();
-        return Response::json($schedule, 200);
-    }
-
     public function notification()
     {
 //        $API_ACCSESS_KEY = 'AAAA_vRurwA:APA91bGd7ayeeU2Nlb5D0T1DwRc48CzU-G_ez4SM_qIgdGv-wpQvuUhbJ3xbUFmJZOPtr_EVe_vB2z38O4CUjJPY-WcapZb-Xy_Y1rC3B-v-AFIIQsRxMPJi6pZY8jX1k1eytQSdiXiW';
@@ -172,58 +166,6 @@ class SchedulesController extends Controller
         $datas = $schedule->paginate($filters->per_page);
 
         return Response::json($datas, 200);
-    }
-
-    public function receiveCount(Request $filters)
-    {
-        $user = \App\User::where('id', Auth::user()->id)->with('detail')->first();
-
-        $schedule = \App\Schedule::where(function ($query) use ($user, $filters) {
-            $query->whereHas('request', function ($q) use ($user) {
-                $q->whereHas('detail', function ($sql) use ($user) {
-                    $sql->where('id_sekolah', $user->detail->id_sekolah);
-                });
-            });
-        })->with('request')->with('consultant')->orderBy('id', 'desc');
-
-        if ($filters->has('type_schedule')) {
-            $schedule = $schedule->where('type_schedule', $filters->type_schedule);
-        }
-
-        if ($filters->has('canceled')) {
-            $schedule = $schedule->where('canceled', $filters->canceled);
-        }
-        if ($filters->has('exp')) {
-            $schedule = $schedule->where('exp', $filters->exp);
-        }
-        if ($filters->has('status')) {
-            $schedule = $schedule->where('status', $filters->status);
-        }
-        if ($filters->has('ended')) {
-            $schedule = $schedule->where('ended', $filters->ended);
-        }
-
-        if ($filters->has('upcoming')) {
-            if ($filters->upcoming == "true") {
-                $schedule = $schedule->where('time', '>', Carbon::now());
-            }
-        }
-
-        $limit = $filters->limit;
-
-        if (empty($filters->page)) {
-            $skip = 0;
-        } else {
-            $skip = $limit * $filters->page;
-        }
-
-        $count = $schedule
-        ->paginate($skip)
-        ->lastPage($limit);
-
-        return Response::json([
-            'total_page' => $count
-        ], 200);
     }
 
     public function finish(Request $request)
@@ -613,28 +555,7 @@ class SchedulesController extends Controller
             $schedule = $schedule->orderBy('created_at', 'desc');
         }
 
-        // $limit = $filters->limit;
-
-        // if (empty($filters->page)) $skip = 0;
-        // else $skip = $limit * $filters->page;
-
         $paginate = $schedule->paginate($filters->per_page);
-
-        // $count = $schedule
-        // ->paginate($skip)
-        // ->lastPage($limit);
-
-        // $data = $schedule
-        // ->skip($skip)
-        // ->take($limit)
-        // ->get();
-
-        // $data['pagination']['total'] = $paginate->total();
-        // $data['pagination']['prev'] = $paginate->previousPageUrl();
-        // $data['pagination']['next'] = $paginate->nextPageUrl();
-        // $data['pagination']['current_page'] = $paginate->currentPage();
-        // $data['pagination']['per_page'] = $paginate->perPage();
-        // $data['pagination']['last_page'] = $paginate->lastPage();
 
         return response()->json($paginate, 200);
     }
@@ -655,123 +576,13 @@ class SchedulesController extends Controller
 
     public function add(Request $request)
     {
-        if ($request->type_schedule == 'realtime') {
-            $insert = $this->storeRealtime($request);
-        } elseif ($request->type_schedule == 'direct') {
-            $insert = $this->storeDirect($request);
-        } else {
-            $insert = $this->storeDaring($request);
-        }
-
-        if ($insert) {
-            Helper::sendNotificationTopic($request->type_schedule);
-            return \Illuminate\Support\Facades\Response::json([
-                "message" => 'success create schedule',
-                'type_schedule' => $request->type_schedule
-            ], 200);
-        } else {
-            return Response::json([
-                "message" => 'failed create schedule'
-            ], 201);
-        }
-    }
-
-    private function storeRealtime($request)
-    {
-        $insert = new \App\Schedule;
-        $insert->requester_id = Auth::user()->id;
-        $insert->time = $request->time;
-        $insert->title = $request->title;
-        $insert->desc = $request->desc;
-        $insert->type_schedule = 'realtime';
-        $insert->save();
-        return $insert;
-    }
-
-
-    private function storeDaring($request)
-    {
-        $insert = new \App\Schedule;
-        $insert->requester_id = Auth::user()->id;
-        $insert->title = $request->title;
-        $insert->desc = $request->desc;
-        $insert->type_schedule = 'daring';
-        $insert->save();
-        return $insert;
-    }
-
-    private function storeDirect($request)
-    {
-        $insert = new \App\Schedule;
-        $insert->requester_id = Auth::user()->id;
-        $insert->title = $request->title;
-        $insert->desc = $request->desc;
-        $insert->type_schedule = 'direct';
-        $insert->time = $request->time;
-        $insert->location = $request->location;
-        $insert->save();
-        return $insert;
+        return $this->scheduleRepository->add($request);
     }
 
     public function put(Request $request)
     {
-        if ($request->type_schedule == 'daring') {
-            $update = \App\Schedule::where('id', $request->schedule_id)
-            ->where('requester_id', Auth::user()->id)
-            ->where('exp', 0)
-            ->where('status', 0)->update([
-                'title' => $request->title,
-                'desc' => $request->desc
-            ]);
-
-            if ($update) {
-                return \Illuminate\Support\Facades\Response::json([
-                    "message" => 'schedule updated'
-                ], 200);
-            } else {
-                return \Illuminate\Support\Facades\Response::json([
-                    "message" => 'failed to update'
-                ], 201);
-            }
-        } else {
-            //Direct dan Realtime
-            if (!$this->isExpired($request)) {
-                $update = \App\Schedule::where('id', $request->schedule_id)
-                ->where('requester_id', Auth::user()->id)
-                ->where('exp', 0)
-                ->where('status', 0)->update([
-                    'title' => $request->title,
-                    'desc' => $request->desc,
-                    'time' => $request->time
-                ]);
-
-                if ($update) {
-                    return \Illuminate\Support\Facades\Response::json([
-                    "message" => 'schedule updated'], 200);
-                } else {
-                    return \Illuminate\Support\Facades\Response::json([
-                    "message" => 'pengajuan telah diterima oleh guru.'], 201);
-                }
-            } else {
-                return \Illuminate\Support\Facades\Response::json(["message" => 'pengajuan telah kadaluarsa.'], 201);
-            }
-        }
-
-        return $request;
+        return $this->scheduleRepository->put($request);
     }
-
-    private function isExpired($request)
-    {
-        if (Carbon::parse($request->original_time)->lte(Carbon::now())) {
-            \App\Schedule::where('id', $request->schedule_id)->update([
-                'exp'=> 1
-            ]);
-            return true;
-        }
-        return false;
-    }
-
-
 
     private function saveToRiwayat($data)
     {
