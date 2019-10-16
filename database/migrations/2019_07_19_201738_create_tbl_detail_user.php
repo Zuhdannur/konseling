@@ -21,7 +21,7 @@ class CreateTblDetailUser extends Migration
 
             $table->string('jenkel', 25);
             $table->string('nomor_hp', 12);
-            $table->string('kelas', 25);
+            $table->string('kelas', 25)->nullable();
             $table->integer('id_sekolah')->length(11)->unsigned();
 
             $table->text('alamat');
