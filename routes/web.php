@@ -65,7 +65,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         /*Siswa dapat menghapus catatan*/
         $router->delete('diary/student/{id}', 'DiariesController@remove');
         /*Guru dapat mendapatkan jumlah catatan siswa*/
-        $router->get('diary/teacher/student/count', 'DiariesController@diaryCount');
+        $router->get('diary/teacher/student/{id}', 'DiariesController@diaryCount');
         /*Guru dapat membaca catatan siswa*/
         $router->get('diary/teacher', 'DiariesController@readDiary');
 
