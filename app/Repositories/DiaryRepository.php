@@ -14,14 +14,16 @@ class DiaryRepository
 {
 
     private $diary;
+    private $user;
 
     /**
      * DiaryRepository constructor.
      * @param $diary
      */
-    public function __construct(Diary $diary)
+    public function __construct(Diary $diary, User $user)
     {
         $this->diary = $diary;
+        $this->user = $user;
     }
 
 
@@ -89,7 +91,7 @@ class DiaryRepository
     {
         $per_page = $request->per_page;
 
-        $mySekolah = $this->diary->with('detail')->where('id', Auth::user()->id)->first()->detail;
+        $mySekolah = $this->user->with('detail')->where('id', Auth::user()->id)->first()->detail;
         $diaries = $this->diary->whereHas('user', function ($q) use ($mySekolah) {
             $q->whereHas('detail', function ($query) use ($mySekolah) {
                 $query->where('id_sekolah', $mySekolah->id_sekolah);
