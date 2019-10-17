@@ -4,7 +4,6 @@
 namespace App\Repositories;
 
 
-use App\Helpers\Helper;
 use App\Schedule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -15,18 +14,21 @@ class ScheduleRepository
 {
 
     private $schedule;
+    private $user;
 
     /**
      * ScheduleRepository constructor.
      * @param $schedule
      */
-    public function __construct(Schedule $schedule)
+    public function __construct(Schedule $schedule, User $user)
     {
         $this->schedule = $schedule;
+        $this->user = $user;
     }
 
 
-    public function getStudentScheduleCount($id) {
+    public function getStudentScheduleCount($id)
+    {
         $total = $this->schedule->where('requester_id', $id)->count();
 
         return Response::json([
@@ -115,7 +117,7 @@ class ScheduleRepository
             ], 200);
         } else {
             //Direct dan Realtime
-            if($this->isExpired($request)) {
+            if ($this->isExpired($request)) {
                 return Response::json(["message" => 'pengajuan telah kadaluarsa.'], 201);
             }
 
@@ -141,7 +143,7 @@ class ScheduleRepository
     {
         if (Carbon::parse($request->original_time)->lte(Carbon::now())) {
             Schedule::where('id', $request->schedule_id)->update([
-                'exp'=> 1
+                'exp' => 1
             ]);
             return true;
         }
@@ -271,6 +273,94 @@ class ScheduleRepository
         $paginate = $schedule->paginate($filters->per_page);
 
         return response()->json($paginate, 200);
+    }
+
+    public function receive(Request $filters)
+    {
+        $user = $this->user->where('id', Auth::user()->id)->with('detail')->first();
+
+        $schedule = $this->schedule->where(function ($query) use ($user, $filters) {
+            $query->whereHas('request', function ($q) use ($user) {
+                $q->whereHas('detail', function ($sql) use ($user) {
+                    $sql->where('id_sekolah', $user->detail->id_sekolah);
+                });
+            });
+        })->with('request')->with('consultant')->orderBy('id', 'desc');
+//
+//            if ($filters->has('pengajuan')) {
+//                if ($filters->pengajuan == 'online') {
+//                    $query->where('type_schedule', 'daring')->orWhere('type_schedule', 'realtime');
+//                }
+//                if ($filters->pengajuan == 'realtime') {
+//                    foreach ($query->get() as $key => $row) {
+//                        if ($row->type_schedule != "daring") {
+//                            if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+//                                if ($row->exp == 0) {
+//                                    $row->update([
+//                                        'exp' => 1
+//                                    ]);
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                if ($filters->pengajuan == 'direct') {
+//                    foreach ($query->get() as $key => $row) {
+//                        if ($row->type_schedule != "daring") {
+//                            if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+//                                if ($row->exp == 0) {
+//                                    $row->update([
+//                                        'exp' => 1
+//                                    ]);
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                if ($filters->pengajuan == 'acceptedDirect') {
+//                    $query->where('consultant_id', Auth::user()->id);
+//                    foreach ($query->get() as $key => $row) {
+//                        if ($row->type_schedule != "daring" && $row->type_schedule != "realtime") {
+//                            if (Carbon::parse($row->time)->lessThan(Carbon::now())) {
+//                                if ($row->outdated == 0) {
+//                                    $row->update([
+//                                        'outdated' => 1
+//                                    ]);
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        })->with('request')->with('consultant')->orderBy('id', 'desc');
+
+        if ($filters->has('type_schedule')) {
+            $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+        }
+
+        if ($filters->has('canceled')) {
+            $schedule = $schedule->where('canceled', $filters->canceled);
+        }
+        if ($filters->has('exp')) {
+            $schedule = $schedule->where('exp', $filters->exp);
+        }
+        if ($filters->has('status')) {
+            $schedule = $schedule->where('status', $filters->status);
+        }
+        if ($filters->has('ended')) {
+            $schedule = $schedule->where('ended', $filters->ended);
+        }
+
+        if ($filters->has('upcoming')) {
+            if ($filters->upcoming == "true") {
+                $schedule = $schedule->where('time', '>', Carbon::now());
+            }
+        }
+
+        $datas = $schedule->paginate($filters->per_page);
+
+        return Response::json($datas, 200);
     }
 
 }
