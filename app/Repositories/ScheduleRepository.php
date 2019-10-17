@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 
 use App\Schedule;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

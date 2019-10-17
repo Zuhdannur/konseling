@@ -80,7 +80,7 @@ class SchedulesController extends Controller
 
     public function receive(Request $filters)
     {
-        $this->scheduleRepository->receive($filters);
+        return $this->scheduleRepository->receive($filters);
     }
 
     public function finish(Request $request)
