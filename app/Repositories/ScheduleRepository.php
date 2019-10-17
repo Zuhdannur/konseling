@@ -343,14 +343,14 @@ class ScheduleRepository
         if ($filters->has('canceled')) {
             $schedule = $schedule->where('canceled', $filters->canceled);
         }
-        if ($filters->has('exp')) {
+        if ($filters->has('expired')) {
             $schedule = $schedule->where('exp', $filters->exp);
         }
         if ($filters->has('status')) {
             $schedule = $schedule->where('status', $filters->status);
         }
-        if ($filters->has('ended')) {
-            $schedule = $schedule->where('ended', $filters->ended);
+        if ($filters->has('progress')) {
+            $schedule = $schedule->where('progress', $filters->ended);
         }
 
         if ($filters->has('upcoming')) {
