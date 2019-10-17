@@ -40,9 +40,9 @@ class DiariesController extends Controller
         return $all;
     }
 
-    public function diaryCount(Request $request)
+    public function diaryCount($id)
     {
-        $total = $this->diaryRepository->diaryCount($request);
+        $total = $this->diaryRepository->diaryCount($id);
         return $total;
     }
 
