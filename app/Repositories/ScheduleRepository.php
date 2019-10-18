@@ -4,6 +4,7 @@
 namespace App\Repositories;
 
 
+use App\Helpers\Helper;
 use App\Schedule;
 use App\User;
 use Carbon\Carbon;
@@ -47,7 +48,7 @@ class ScheduleRepository
             $insert = $this->storeDaring($request);
         }
 
-        if ($insert) {
+        if (!$insert) {
             // Helper::sendNotificationTopic($request->type_schedule);
             return Response::json([
                 "message" => 'failed create schedule'
@@ -149,6 +150,71 @@ class ScheduleRepository
             return true;
         }
         return false;
+    }
+
+    public function send(Request $request)
+    {
+        if (Auth::user()->role == 'siswa') {
+            if ($request->type_schedule == 'realtime') {
+                $insert = $this->storeRealtime($request);
+            } elseif ($request->type_schedule == 'direct') {
+                $insert = $this->storeDirect($request);
+            } else {
+                $insert = $this->storeDaring($request);
+            }
+
+            if ($insert) {
+                //Mengirim Dari siswa ke Semua Guru berdasarkan Sekolah
+                Helper::sendNotificationTopic($request->type_schedule);
+                return \Illuminate\Support\Facades\Response::json([
+                    "message" => 'success create schedule'
+                ], 200);
+            } else {
+                return Response::json([
+                    "message" => 'failed create schedule'
+                ], 201);
+            }
+        } else {
+            if (\App\Schedule::where('id', $request->schedule_id)->exists()) {
+                if (\App\Schedule::where('id', $request->schedule_id)->first()->exp) {
+                    $update = \App\Schedule::where('id', $request->schedule_id)->update([
+                        'status' => 1,
+                        'tgl_pengajuan' => $request->date,
+                        'consultant_id' => Auth::user()->id
+                    ]);
+
+                    $checkType = \App\Schedule::where('id', $request->schedule_id)->first();
+
+                    if ($checkType->type_schedule == "online") {
+                        $createRoom = \App\Schedule::where('id', $request->schedule_id)->update([
+                            'room_id' => base64_encode(str_random(5))
+                        ]);
+                    }
+                    if ($update) {
+                        $schedule = \App\Schedule::where('id', $request->schedule_id)->first();
+
+                        $id = $schedule['requester_id'];
+                        // Helper::sendNotificationToSingel($id);
+
+                        $result['requester_id'] = $schedule['requester_id'];
+                        $result["title"] = $schedule['title'];
+                        $result['desc'] = $schedule['desc'];
+
+                        return Response::json($result, 200);
+                    } else {
+                        return [
+                            "message" => "failed accept"
+                        ];
+                    }
+                } else {
+                    return Response::json([
+                        "message" => "expired tho"
+                    ], 200);
+                }
+            } else {
+                return Response::json(["message" => "id not found"], 201);
+            }
+        }
     }
 
     public function all(Request $filters)

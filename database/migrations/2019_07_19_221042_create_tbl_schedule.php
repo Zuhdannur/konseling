@@ -24,6 +24,7 @@ class CreateTblSchedule extends Migration
             $table->string('type_schedule');
             $table->string('channel_url')->nullable();
 
+
             /*Saat konseling tidak diterima sama sekali*/
             $table->integer('expired')->default(0);
             /*Saat konseling diterima lalu dibatalkan oleh guru/siswa */
@@ -33,6 +34,7 @@ class CreateTblSchedule extends Migration
             /*Saat konseling sedang berlangsung*/
             /*Pilihan 0 atau 1*/
             $table->integer('progress')->default(0);
+
 
             $table->string('time')->nullable();
             $table->string('location')->nullable();
