@@ -311,19 +311,23 @@ class ScheduleRepository
 //            }
 //        }
 
-        if ($filters->has('status')) {
-            if ($filters->status == 0 || $filters->status == 1 || $filters->status == 2) {
-                $schedule = $schedule->where('status', $filters->status);
-            }
+        if ($filters->has('expired')) {
+            $schedule = $schedule->where('expired', $filters->canceled);
         }
         if ($filters->has('canceled')) {
             $schedule = $schedule->where('canceled', $filters->canceled);
         }
-        if ($filters->has('expired')) {
-            $schedule = $schedule->where('expired', $filters->expired);
+        if ($filters->has('pending')) {
+            $schedule = $schedule->where('pending', $filters->pending);
         }
-        if ($filters->has('progress')) {
-            $schedule = $schedule->where('progress', $filters->progress);
+        if ($filters->has('finish')) {
+            $schedule = $schedule->where('finish', $filters->finish);
+        }
+        if ($filters->has('active')) {
+            $schedule = $schedule->where('active', $filters->active);
+        }
+        if ($filters->has('start')) {
+            $schedule = $schedule->where('start', $filters->start);
         }
 
         if ($filters->has('type_schedule') || $filters->has('type_schedule2')) {
@@ -406,17 +410,23 @@ class ScheduleRepository
             $schedule = $schedule->where('type_schedule', $filters->type_schedule);
         }
 
+        if ($filters->has('expired')) {
+            $schedule = $schedule->where('expired', $filters->canceled);
+        }
         if ($filters->has('canceled')) {
             $schedule = $schedule->where('canceled', $filters->canceled);
         }
-        if ($filters->has('expired')) {
-            $schedule = $schedule->where('exp', $filters->exp);
+        if ($filters->has('pending')) {
+            $schedule = $schedule->where('pending', $filters->pending);
         }
-        if ($filters->has('status')) {
-            $schedule = $schedule->where('status', $filters->status);
+        if ($filters->has('finish')) {
+            $schedule = $schedule->where('finish', $filters->finish);
         }
-        if ($filters->has('progress')) {
-            $schedule = $schedule->where('progress', $filters->ended);
+        if ($filters->has('active')) {
+            $schedule = $schedule->where('active', $filters->active);
+        }
+        if ($filters->has('start')) {
+            $schedule = $schedule->where('start', $filters->start);
         }
 
         if ($filters->has('upcoming')) {
@@ -438,9 +448,9 @@ class ScheduleRepository
             return Response::json(["message" => "Pengajuan ini telah dibatalkan."], 201);
         }
 
-        if ($schedule->status != 0) {
+        if ($schedule->active != 0) {
             return Response::json([
-                "message" => "Pengajuan telah diterima oleh guru lain."
+                "message" => "Pengajuan telah diterima."
             ], 201);
         }
 

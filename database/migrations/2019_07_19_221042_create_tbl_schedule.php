@@ -35,7 +35,7 @@ class CreateTblSchedule extends Migration
             $table->integer('active')->default(0);
             /*Saat konseling sedang berlangsung*/
             /*Pilihan 0 atau 1*/
-            $table->integer('progress')->default(0);
+            $table->integer('start')->default(0);
 
 
             $table->string('time')->nullable();
