@@ -88,10 +88,10 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->post('schedule/finish/{id}', 'SchedulesController@finish');
         /*Guru dapat melihat pengajuan*/
         $router->get('schedule/guru', 'SchedulesController@receive');
-
+        /*Guru & Siswa dapat menyelesaikan pengajuan*/
+        $router->post('schedule/guru/accept/{id}', 'SchedulesController@accept');
 
         $router->delete('schedule', 'SchedulesController@removeAll');
-
         $router->post('scheduleChannelUrl', 'SchedulesController@updateChannelUrl');
 
         /**

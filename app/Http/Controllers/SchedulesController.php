@@ -151,71 +151,9 @@ class SchedulesController extends Controller
 
     //Helpers
 
-    public function accept(Request $request)
+    public function accept($id, Request $request)
     {
-        $schedule = \App\Schedule::where('id', $request->schedule_id)->first();
-
-        if ($schedule->canceled == 0) {
-            if ($schedule->status == 0) {
-                if ($schedule->exp == 0) {
-                    $update = \App\Schedule::where('id', $request->schedule_id)->update([
-                        'status' => 1,
-                        'tgl_pengajuan' => $request->date,
-                        'consultant_id' => Auth::user()->id
-                    ]);
-
-                    if ($update) {
-                        $schedule = \App\Schedule::where('id', $request->schedule_id)->with('consultant')->first();
-
-                        // if($schedule->type_schedule == 'direct') {
-                        //     $this->sendNotificationToDirect();
-                        // }
-
-                        // if($schedule->type_schedule == 'realtime') {
-                        //     $this->sendNotificationToRealtime();
-                        // }
-
-                        // if($schedule->type_schedule == 'daring') {
-                        //     $this->sendNotificationToDaring();
-                        // }
-                        $senderName = \App\User::where('id', $schedule['consultant_id'])->first()->name;
-
-                        $result['type'] = "accept";
-                        $result['schedule_id'] = $schedule['id'];
-                        $result['requester_id'] = $schedule['requester_id'];
-                        $result['consultant_id'] = $schedule['consultant_id'];
-                        $result['title'] = 'Pengajuanmu telah diterima';
-                        $result['body'] = "Pengajuan " . $schedule['title'] . " telah diterima oleh " . $senderName;
-                        $result['read'] = 0;
-
-                        Helper::sendNotificationToSingle($result);
-
-                        // $data['requester_id'] = $schedule['requester_id'];
-                        // $data['title'] = 'Pengajuanmu telah diterima.';
-                        // $data['body'] = 'Pengajuan '.$schedule['title']. ' telah diterima oleh '. $schedule['consultant']['name'];
-                        // $data['id_user'] = $schedule['requester_id'];
-                        // $data['type'] = 'accept';
-                        // Helper::storeDataNotification($data);
-
-                        return Response::json($schedule, 200);
-                    } else {
-                        return Response::json([
-                            "message" => "Gagal menerima."
-                        ], 201);
-                    }
-                } else {
-                    return Response::json([
-                        "message" => "Pengajuan telah kadaluarsa."
-                    ], 201);
-                }
-            } else {
-                return Response::json([
-                    "message" => "Pengajuan telah diterima oleh guru lain."
-                ], 201);
-            }
-        } else {
-            return Response::json(["message" => "Pengajuan ini telah dibatalkan."], 201);
-        }
+        return $this->scheduleRepository->accept($id, $request);
     }
 
     public function remove($id)

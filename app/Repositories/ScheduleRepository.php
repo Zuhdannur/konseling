@@ -430,4 +430,72 @@ class ScheduleRepository
         return Response::json($datas, 200);
     }
 
+    public function accept($id, Request $request)
+    {
+        $schedule = $this->schedule->where('id', $id)->first();
+
+        if ($schedule->canceled != 0) {
+            return Response::json(["message" => "Pengajuan ini telah dibatalkan."], 201);
+        }
+
+        if ($schedule->status != 0) {
+            return Response::json([
+                "message" => "Pengajuan telah diterima oleh guru lain."
+            ], 201);
+        }
+
+        if ($schedule->expired != 0) {
+            return Response::json([
+                "message" => "Pengajuan telah kadaluarsa."
+            ], 201);
+        }
+
+        $update = $this->schedule->where('id', $id)->update([
+            'status' => 1,
+            'tgl_pengajuan' => $request->date,
+            'consultant_id' => Auth::user()->id
+        ]);
+
+        if (!$update) {
+            return Response::json([
+                "message" => "Gagal menerima."
+            ], 201);
+        }
+
+
+        $schedule = $this->schedule->where('id', $id)->with('consultant')->first();
+
+        // if($schedule->type_schedule == 'direct') {
+        //     $this->sendNotificationToDirect();
+        // }
+
+        // if($schedule->type_schedule == 'realtime') {
+        //     $this->sendNotificationToRealtime();
+        // }
+
+        // if($schedule->type_schedule == 'daring') {
+        //     $this->sendNotificationToDaring();
+        // }
+        $senderName = $this->user->where('id', $schedule['consultant_id'])->first()->name;
+
+        $result['type'] = "accept";
+        $result['schedule_id'] = $schedule['id'];
+        $result['requester_id'] = $schedule['requester_id'];
+        $result['consultant_id'] = $schedule['consultant_id'];
+        $result['title'] = 'Pengajuanmu telah diterima';
+        $result['body'] = "Pengajuan " . $schedule['title'] . " telah diterima oleh " . $senderName;
+        $result['read'] = 0;
+
+//            Helper::sendNotificationToSingle($result);
+
+        // $data['requester_id'] = $schedule['requester_id'];
+        // $data['title'] = 'Pengajuanmu telah diterima.';
+        // $data['body'] = 'Pengajuan '.$schedule['title']. ' telah diterima oleh '. $schedule['consultant']['name'];
+        // $data['id_user'] = $schedule['requester_id'];
+        // $data['type'] = 'accept';
+        // Helper::storeDataNotification($data);
+
+        return Response::json($schedule, 200);
+    }
+
 }
