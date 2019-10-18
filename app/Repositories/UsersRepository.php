@@ -124,8 +124,11 @@ class UsersRepository
         }
 
         $user->password = Hash::make($request->newPassword);
-        $user->hasEverChangePassword = 1;
         $user->save();
+
+        $user->update([
+            'hasEverChangePassword' => 1
+        ]);
 
         if(!$user) {
             return Response::json(
