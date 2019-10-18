@@ -108,6 +108,24 @@ class UsersRepository
         ], 200);
     }
 
+    public function changePassword(Request $request) {
+        $user = $this->user->find(Auth::user()->id);
+
+        if(!Hash::check($request->oldPassword, $user->password)) {
+            return Response::json("Kata sandi lama tidak sesuai.", 201);
+        }
+
+        $user->password = Hash::make($request->newPassword);
+        $user->save();
+
+        if(!$user) {
+            return Response::json("Gagal mengganti kata sandi lama.", 201);
+        }
+
+        return Response::json("Kata sandi berhasil diubah.", 200);
+
+    }
+
     public function get($id)
     {
         if (Auth::user()->role == 'siswa') {

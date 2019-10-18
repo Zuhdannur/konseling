@@ -57,4 +57,9 @@ class UsersController extends Controller
     {
         return $this->userRepository->updateImageProfile($request);
     }
+
+    public function changePassword(Request $request) {
+        return $this->userRepository->changePassword($request);
+    }
+
 }

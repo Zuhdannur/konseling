@@ -452,7 +452,6 @@ class ScheduleRepository
 
         $update = $this->schedule->where('id', $id)->update([
             'status' => 1,
-            'tgl_pengajuan' => $request->date,
             'consultant_id' => Auth::user()->id
         ]);
 

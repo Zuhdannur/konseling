@@ -29,8 +29,10 @@ class CreateTblSchedule extends Migration
             $table->integer('expired')->default(0);
             /*Saat konseling diterima lalu dibatalkan oleh guru/siswa */
             $table->integer('canceled')->default(0);
+            $table->integer('pending')->default(0);
+            $table->integer('finish')->default(0);
             /*3 tipe, 0 = pending, 1 = diterima, 2 = selesai*/
-            $table->integer('status')->default(0);
+            $table->integer('active')->default(0);
             /*Saat konseling sedang berlangsung*/
             /*Pilihan 0 atau 1*/
             $table->integer('progress')->default(0);

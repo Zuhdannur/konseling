@@ -55,6 +55,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('user/teacher/student/profile/{id}','UsersController@getStudentInfo');
         $router->post('user/update/image', 'UsersController@updateImageProfile');
         $router->get('user', 'UsersController@all');
+        $router->post('user/password', 'UsersController@changePassword');
 
         /*Siswa dapat melihat diary*/
         $router->get('diary/student', 'DiariesController@all');
