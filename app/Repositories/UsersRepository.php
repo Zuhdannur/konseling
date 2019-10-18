@@ -126,7 +126,7 @@ class UsersRepository
         $user->password = Hash::make($request->newPassword);
         $save = $user->save();
 
-        $updateHasEver = $user->update([
+        $updateHasEver = $this->user->where('id', Auth::user()->id)->update([
             'hasEverChangePassword' => 1
         ]);
 
