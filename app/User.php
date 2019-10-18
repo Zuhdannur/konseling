@@ -22,7 +22,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $primaryKey = "id";
 
     protected $fillable = [
-        'name', 'username', 'password'
+        'name', 'username'
     ];
 
     /**
@@ -30,9 +30,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @var array
      */
-//    protected $hidden = [
-//        'password'
-//    ];
+    protected $hidden = [
+        'password'
+    ];
 
     public function detail()
     {
