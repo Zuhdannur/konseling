@@ -117,6 +117,12 @@ class UsersRepository
                 201);
         }
 
+        if(Hash::check($request->newPassword, $user->password)) {
+            return Response::json(
+                ["message" => "Kata sandi baru tidak boleh sama dengan kata sandi saat ini."],
+                201);
+        }
+
         $user->password = Hash::make($request->newPassword);
         $user->save();
 
