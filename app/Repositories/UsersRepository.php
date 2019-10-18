@@ -113,7 +113,7 @@ class UsersRepository
 
         if(!Hash::check($request->oldPassword, $user->password)) {
             return Response::json(
-                ["message" => "Kata sandi lama tidak sesuai."],
+                ["message" => "Kata sandi lama salah."],
                 201);
         }
 
