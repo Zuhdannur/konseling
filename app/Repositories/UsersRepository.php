@@ -112,7 +112,9 @@ class UsersRepository
         $user = $this->user->find(Auth::user()->id);
 
         if(!Hash::check($request->oldPassword, $user->password)) {
-            return Response::json("Kata sandi lama tidak sesuai.", 201);
+            return Response::json(
+                ["message" => "Kata sandi lama tidak sesuai."],
+                201);
         }
 
         $user->password = Hash::make($request->newPassword);
@@ -123,11 +125,12 @@ class UsersRepository
         ]);
 
         if(!$user) {
-            return Response::json("Gagal mengganti kata sandi lama.", 201);
+            return Response::json(
+                ["message" => "Gagal mengganti kata sandi lama."],
+                201);
         }
 
-        return Response::json("Kata sandi berhasil diubah.", 200);
-
+        return Response::json(["message" => "Kata sandi berhasil diubah."], 200);
     }
 
     public function get($id)
