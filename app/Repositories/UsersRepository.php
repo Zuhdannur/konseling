@@ -123,14 +123,14 @@ class UsersRepository
                 201);
         }
 
-//        $user->password = Hash::make($request->newPassword);
-//        $save = $user->save();
+        $user->password = Hash::make($request->newPassword);
+        $save = $user->save();
 
         $updateHasEver = $user->update([
             'hasEverChangePassword' => 1
         ]);
 
-        if(!$updateHasEver) {
+        if(!$save || !$updateHasEver) {
             return Response::json(
                 ["message" => "Gagal mengganti kata sandi lama."],
                 201);
