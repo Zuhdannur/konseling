@@ -123,20 +123,20 @@ class UsersRepository
                 201);
         }
 
-        $user->password = Hash::make($request->newPassword);
-        $save = $user->save();
+//        $user->password = Hash::make($request->newPassword);
+//        $save = $user->save();
 
         $updateHasEver = $this->user->where('id', Auth::user()->id)->update([
             'hasEverChangePassword' => 1
         ]);
 
-        if(!$save || !$updateHasEver) {
+        if(!$updateHasEver) {
             return Response::json(
                 ["message" => "Gagal mengganti kata sandi lama."],
                 201);
         }
 
-        return Response::json(["message" => "Kata sandi berhasil diubah."], 200);
+        return Response::json(["message" => "Kata sandi berhasil diubah.."], 200);
     }
 
     public function get($id)
