@@ -330,6 +330,16 @@ class ScheduleRepository
             $schedule = $schedule->where('start', $filters->start);
         }
 
+        if ($filters->has('type_schedule')) {
+            $schedule = $schedule->where('type_schedule', $filters->type_schedule);
+        }
+
+        if($filters->has('type_schedule')) {
+            if($filters->type_schedule == 'online') {
+                $schedule = $schedule->where('type_schedule', 'daring')->orWhere('type_schedule', 'realtime');
+            }
+        }
+
         if ($filters->has('type_schedule') || $filters->has('type_schedule2')) {
             if (!empty($filters->type_schedule)) {
                 $schedule = $schedule->where('type_schedule', $filters->type_schedule)->orWhere('type_schedule', $filters->type_schedule2);
