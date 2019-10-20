@@ -69,6 +69,7 @@ class ScheduleRepository
         $insert->title = $request->title;
         $insert->desc = $request->desc;
         $insert->type_schedule = 'realtime';
+        $insert->pending = 1;
         $insert->save();
         return $insert;
     }
@@ -81,6 +82,7 @@ class ScheduleRepository
         $insert->title = $request->title;
         $insert->desc = $request->desc;
         $insert->type_schedule = 'daring';
+        $insert->pending = 1;
         $insert->save();
         return $insert;
     }
@@ -94,6 +96,7 @@ class ScheduleRepository
         $insert->type_schedule = 'direct';
         $insert->time = $request->time;
         $insert->location = $request->location;
+        $insert->pending = 1;
         $insert->save();
         return $insert;
     }
