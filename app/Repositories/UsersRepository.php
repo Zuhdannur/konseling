@@ -136,7 +136,7 @@ class UsersRepository
                 201);
         }
 
-        return Response::json(["message" => "Kata sandi berhasil diubah.."], 200);
+        return Response::json(["message" => "Kata sandi berhasil diubah."], 200);
     }
 
     public function get($id)
