@@ -113,7 +113,7 @@ class UsersRepository
 
         if(!Hash::check($request->oldPassword, $user->password)) {
             return Response::json(
-                ["message" => "Kata sandi lama salah."],
+                ["message" => "Kata sandi saat ini salah."],
                 201);
         }
 
@@ -132,7 +132,7 @@ class UsersRepository
 
         if(!$save || !$updateHasEver) {
             return Response::json(
-                ["message" => "Gagal mengganti kata sandi lama."],
+                ["message" => "Gagal mengganti kata sandi."],
                 201);
         }
 
