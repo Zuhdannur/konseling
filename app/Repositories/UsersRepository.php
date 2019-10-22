@@ -197,7 +197,10 @@ class UsersRepository
     {
 
         $update = $this->user->find(Auth::user()->id);
+        $updateDetailUser = $this->detailUser->where('id_user', Auth::user()->id);
+
         $update->fill($request->input())->save();
+        $updateDetailUser->fill($request->input())->save();
 
         if(!$update) {
             return Response::json(['message' => 'Gagal menyunting profil.']);

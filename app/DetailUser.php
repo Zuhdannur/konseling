@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class DetailUser extends Model
 {
     protected $fillable = [
-        'id_user','gender','address','phone_number','id_sekolah','kelas'
+        'id_user','jenkel','alamat','nomor_hp','id_sekolah','kelas','kota','tanggal_lahir','kota_lahir'
     ];
 
     protected $dates = [];
