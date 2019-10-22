@@ -203,7 +203,7 @@ class UsersRepository
         $updateDetailUser->fill($request->input())->save();
 
         if(!$update) {
-            return Response::json(['message' => 'Gagal menyunting profil.']);
+            return Response::json(['message' => 'Gagal menyunting profils.']);
         }
 
         return Response::json(["message" => 'Profil berhasil disunting.'], 200);
