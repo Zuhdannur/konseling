@@ -195,44 +195,54 @@ class UsersRepository
 
     public function put(Request $request)
     {
-        $update = $this->user->find(Auth::user()->id)->update([
-            'name' => $request->name
-        ]);
 
-        if (Auth::user()->role == 'siswa') {
-            if(!$update) {
-                return Response::json([
-                    "message" => 'nama siswa atau nama kelas tidak ditemukan'
-                ], 201);
-            }
+        $update = $this->user->find(Auth::user()->id);
+        $update->fill($request->input())->save();
 
-            $update_detail = $this->detailUser->where('id_user', Auth::user()->id)->update([
-                'alamat' => $request->alamat,
-                'nomor_hp' => $request->nomor_hp,
-                'kelas' => $request->kelas,
-                'jenkel' => $request->jenkel
-            ]);
-
-            if (!$update_detail) {
-                return Response::json(['message' => 'Gagal menyunting profil.']);
-            }
-
-            return Response::json(["message" => 'Profil berhasil disunting.'], 200);
-        } else {
-            //Nama, Jenkel, Alamat, No HP
-            $update = $this->detailUser->where('id_user', Auth::user()->id)->update([
-                'jenkel' => $request->jenkel,
-                'alamat' => $request->alamat,
-                'nomor_hp' => $request->nomor_hp
-            ]);
-
-            if (!$update) {
-                return Response::json(['message' => 'Gagal menyunting profil.']);
-            }
-            return Response::json(["message" => 'Profil berhasil disunting.'], 200);
+        if(!$update) {
+            return Response::json(['message' => 'Gagal menyunting profil.']);
         }
 
-        return $request;
+        return Response::json(["message" => 'Profil berhasil disunting.'], 200);
+
+//        $update = $this->user->find(Auth::user()->id)->update([
+//            'name' => $request->name
+//        ]);
+//
+//        if (Auth::user()->role == 'siswa') {
+//            if(!$update) {
+//                return Response::json([
+//                    "message" => 'nama siswa atau nama kelas tidak ditemukan'
+//                ], 201);
+//            }
+//
+//            $update_detail = $this->detailUser->where('id_user', Auth::user()->id)->update([
+//                'alamat' => $request->alamat,
+//                'nomor_hp' => $request->nomor_hp,
+//                'kelas' => $request->kelas,
+//                'jenkel' => $request->jenkel
+//            ]);
+//
+//            if (!$update_detail) {
+//                return Response::json(['message' => 'Gagal menyunting profil.']);
+//            }
+//
+//            return Response::json(["message" => 'Profil berhasil disunting.'], 200);
+//        } else {
+//            //Nama, Jenkel, Alamat, No HP
+//            $update = $this->detailUser->where('id_user', Auth::user()->id)->update([
+//                'jenkel' => $request->jenkel,
+//                'alamat' => $request->alamat,
+//                'nomor_hp' => $request->nomor_hp
+//            ]);
+//
+//            if (!$update) {
+//                return Response::json(['message' => 'Gagal menyunting profil.']);
+//            }
+//            return Response::json(["message" => 'Profil berhasil disunting.'], 200);
+//        }
+//
+//        return $request;
     }
 
     public function getStudentInfo($id)
