@@ -196,13 +196,13 @@ class UsersRepository
     public function put(Request $request)
     {
 
-        $update = $this->user->find(Auth::user()->id);
-        $updateDetailUser = $this->detailUser->where('id_user', Auth::user()->id);
+        $update = $this->user->findOrFail(Auth::user()->id)->first();
+        $updateDetailUser = $this->detailUser->where('id_user', Auth::user()->id)->first();
 
-        $update->fill($request->input())->save();
-        $updateDetailUser->fill($request->input())->save();
+        $update = $update->fill($request->input())->save();
+        $updateDetailUser = $updateDetailUser->fill($request->input())->save();
 
-        if(!$update) {
+        if(!$update && !$updateDetailUser) {
             return Response::json(['message' => 'Gagal menyunting profils.']);
         }
 
