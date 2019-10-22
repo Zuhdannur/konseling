@@ -66,7 +66,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         /*Siswa dapat menghapus catatan*/
         $router->delete('diary/student/{id}', 'DiariesController@remove');
         /*Guru dapat mendapatkan jumlah catatan siswa*/
-        $router->get('diary/teacher/student/{id}', 'DiariesController@diaryCount');
+        $router->get('diary/student/{id}', 'DiariesController@diaryCount');
         /*Guru dapat membaca catatan siswa*/
         $router->get('diary/teacher', 'DiariesController@readDiary');
 
@@ -74,7 +74,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
          * Routes for resource schedule
          */
         /*Guru melihat jumlah pengajuan siswa*/
-        $router->get('schedule/teacher/student/{id}', 'SchedulesController@getStudentScheduleCount');
+        $router->get('schedule/student/{id}', 'SchedulesController@getStudentScheduleCount');
         /*Siswa dapat menambahkan jadwal*/
         $router->post('schedule/student', 'SchedulesController@add');
         /*Siswa dapat melihat semua jadwal*/
