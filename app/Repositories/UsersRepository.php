@@ -196,7 +196,7 @@ class UsersRepository
     public function put(Request $request)
     {
 
-        $update = $this->user->findOrFail(Auth::user()->id)->first();
+        $update = $this->user->where('id', Auth::user()->id)->first();
         $updateDetailUser = $this->detailUser->where('id_user', Auth::user()->id)->first();
 
         $update = $update->fill($request->input())->save();
