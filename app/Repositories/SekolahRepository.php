@@ -36,7 +36,7 @@ class SekolahRepository
 
     private function isSekolahExists($namaSekolah)
     {
-        $check = $this->user->where('nama_sekolah', $namaSekolah)->first();
+        $check = $this->sekolah->where('nama_sekolah', $namaSekolah)->first();
         if (!$check) {
             return null;
         }
