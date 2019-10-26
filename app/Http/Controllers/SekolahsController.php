@@ -17,6 +17,10 @@ class SekolahsController extends Controller
         $this->sekolahRepository = $sekolahRepository;
     }
 
+    public function getDataThisMonth() {
+        return $this->sekolahRepository->getDataThisMonth();
+    }
+
 
     public function all()
     {

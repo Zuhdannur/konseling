@@ -22,6 +22,17 @@ class SekolahRepository
         $this->sekolah = $sekolah;
     }
 
+    public function getDataThisMonth() {
+        $data = $this->sekolah
+            ->whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->count();
+
+        return Response::json([
+            'total' => $data
+        ], 200);
+    }
+
     public function all()
     {
         $data = $this->sekolah->all();
