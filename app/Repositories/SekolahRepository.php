@@ -45,7 +45,7 @@ class SekolahRepository
 
     public function add(Request $request)
     {
-        if($this->isSekolahExists($request->namaSekolah)) {
+        if($this->isSekolahExists($request->nama_sekolah)) {
             return Response::json([
                 'message' => 'Sekolah telah terdaftar di server.'
             ], 201);
