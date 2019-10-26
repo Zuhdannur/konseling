@@ -47,7 +47,7 @@ class SekolahRepository
     {
         if($this->isSekolahExists($request->nama_sekolah)) {
             return Response::json([
-                'message' => 'Sekolah telah terdaftar di server.'
+                'message' => 'Gagal, sekolah telah terdaftar di server.'
             ], 201);
         }
         $this->sekolah->nama_sekolah = $request->nama_sekolah;
