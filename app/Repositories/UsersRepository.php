@@ -29,7 +29,7 @@ class UsersRepository
 
 
     public function register(Request $request) {
-        if($this->isUsernameDuplicate($request->username)) {
+        if($this->isUsernameExists($request->username)) {
             return Response::json([
                 'message' => 'Duplicate Username'
             ], 201);
@@ -73,7 +73,7 @@ class UsersRepository
     }
 
     public function login(Request $request) {
-        $user = $this->isUsernameDuplicate($request->username);
+        $user = $this->isUsernameExists($request->username);
 
         if(!$user) {
             return Response::json([
@@ -169,7 +169,7 @@ class UsersRepository
     }
 
 
-    private function isUsernameDuplicate($username)
+    private function isUsernameExists($username)
     {
         $check = $this->user->where('username', $username)->first();
         if (!$check) {
