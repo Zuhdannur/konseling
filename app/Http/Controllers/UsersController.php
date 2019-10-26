@@ -2,6 +2,7 @@
 
 use App\Repositories\UsersRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class UsersController extends Controller
 {
@@ -30,6 +31,10 @@ class UsersController extends Controller
     public function register(Request $request)
     {
         return $this->userRepository->register($request);
+    }
+
+    public function getTotalAccount(Request $request) {
+        return $this->userRepository->getTotalAccount($request);
     }
 
     public function get($id)

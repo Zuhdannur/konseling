@@ -58,6 +58,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->get('user', 'UsersController@all');
         $router->post('user/password', 'UsersController@changePassword');
         $router->get('user/check', 'UsersController@checkUsername');
+        $router->get('user/master/account', 'UsersController@getTotalAccount');
 
         /*Siswa dapat melihat diary*/
         $router->get('diary/student', 'DiariesController@all');

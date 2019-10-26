@@ -6,6 +6,7 @@ namespace App\Repositories;
 
 use App\DetailUser;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -167,6 +168,16 @@ class UsersRepository
         // foreach ($query as $value) {
         //     $client->addTopicSubscription($pattern.$value['detail']['id_sekolah']."pengajuan", $value['firebase_token']);
         // }
+    }
+
+    public function getTotalAccount(Request $request) {
+        $data = $this->user
+            ->where('role', $request->role)
+            ->count();
+
+        return Response::json([
+            'total' => $data
+        ], 200);
     }
 
     public function checkUsername($username) {
