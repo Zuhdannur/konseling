@@ -23,6 +23,10 @@ class UsersController extends Controller
         return $this->userRepository->login($request);
     }
 
+    public function checkUsername(Request $request) {
+        return $this->userRepository->checkUsername($request->username);
+    }
+
     public function register(Request $request)
     {
         return $this->userRepository->register($request);

@@ -108,6 +108,7 @@ class UsersRepository
         ], 200);
     }
 
+
     public function changePassword(Request $request) {
         $user = $this->user->find(Auth::user()->id);
 
@@ -166,6 +167,14 @@ class UsersRepository
         // foreach ($query as $value) {
         //     $client->addTopicSubscription($pattern.$value['detail']['id_sekolah']."pengajuan", $value['firebase_token']);
         // }
+    }
+
+    public function checkUsername($username) {
+        $check = $this->user->where('username', $username)->first();
+        if($check) {
+            return Response::json(['message' => 'Username telah terdaftar.'], 201);
+        }
+        return Response::json(['message' => 'Username belum terdaftar.'], 200);
     }
 
 

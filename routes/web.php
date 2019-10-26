@@ -57,6 +57,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->post('user/update/image', 'UsersController@updateImageProfile');
         $router->get('user', 'UsersController@all');
         $router->post('user/password', 'UsersController@changePassword');
+        $router->get('user/check', 'UsersController@checkUsername');
 
         /*Siswa dapat melihat diary*/
         $router->get('diary/student', 'DiariesController@all');
