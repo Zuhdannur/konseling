@@ -55,7 +55,8 @@ class SekolahRepository
         $this->sekolah->save();
 
         return Response::json([
-            'message' => 'Berhasil mendaftarkan sekolah.'
+            'message' => 'Berhasil mendaftarkan sekolah.',
+            'id' => $this->sekolah->id
         ], 200);
     }
 
