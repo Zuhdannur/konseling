@@ -57,6 +57,14 @@ class SekolahRepository
         return $check;
     }
 
+    public function checkSekolahName($namaSekolah) {
+        $check = $this->sekolah->where('nama_sekolah', $namaSekolah)->first();
+        if($check) {
+            return Response::json(['message' => 'Sekolah telah terdaftar.'], 201);
+        }
+        return Response::json(['message' => 'Sekolah dapat digunakan.'], 200);
+    }
+
     public function add(Request $request)
     {
         if($this->isSekolahExists($request->nama_sekolah)) {

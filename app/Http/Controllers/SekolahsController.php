@@ -2,6 +2,7 @@
 
 use App\Repositories\SekolahRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class SekolahsController extends Controller
 {
@@ -21,6 +22,9 @@ class SekolahsController extends Controller
         return $this->sekolahRepository->getDataThisMonth();
     }
 
+    public function checkSekolahName($namaSekolah) {
+        return $this->sekolahRepository->checkSekolahName($namaSekolah);
+    }
 
     public function all(Request $request)
     {

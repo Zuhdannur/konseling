@@ -185,7 +185,7 @@ class UsersRepository
         if($check) {
             return Response::json(['message' => 'Username telah terdaftar.'], 201);
         }
-        return Response::json(['message' => 'Username belum terdaftar.'], 200);
+        return Response::json(['message' => 'Username dapat digunakan.'], 200);
     }
 
 
