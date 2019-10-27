@@ -19,15 +19,15 @@ class CreateTblDetailUser extends Migration
             /*Foreign key*/
             $table->integer('id_user')->length(11)->unsigned();
 
-            $table->string('jenkel', 25);
-            $table->string('nomor_hp', 12);
+            $table->string('jenkel', 25)->nullable();
+            $table->string('nomor_hp', 12)->nullable();
             $table->string('kelas', 25)->nullable();
             $table->integer('id_sekolah')->length(11)->unsigned();
 
-            $table->text('alamat');
-            $table->string('kota', 50);
-            $table->date('tanggal_lahir');
-            $table->string('kota_lahir', 50);
+            $table->text('alamat')->nullable();
+            $table->string('kota', 50)->nullable();
+            $table->date('tanggal_lahir')->nullable();
+            $table->string('kota_lahir', 50)->nullable();
             $table->timestamps();
         });
     }
