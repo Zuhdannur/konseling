@@ -36,7 +36,7 @@ class SekolahRepository
 
     public function all()
     {
-        $data = $this->sekolah->all()->with('detailUser');
+        $data = $this->sekolah->with('detailUser')->all();
         return Response::json($data, 200);
     }
 
