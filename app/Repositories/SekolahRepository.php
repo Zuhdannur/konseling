@@ -38,7 +38,7 @@ class SekolahRepository
     {
         $per_page = $request->per_page;
 
-        $data = $this->sekolah->with('sekolah.detailUser')->paginate($per_page)->orderBy('created_at','desc');
+        $data = $this->sekolah->with('detailUser')->paginate($per_page)->orderBy('created_at','desc');
         return Response::json($data, 200);
     }
 
