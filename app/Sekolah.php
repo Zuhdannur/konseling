@@ -20,6 +20,11 @@ class Sekolah extends Model
         // Validation rules
     ];
 
+    public function detailUser()
+    {
+        return $this->belongsTo('\App\DetailUser', 'id', 'id_sekolah');
+    }
+
     // Relationships
     // public function kelas(){
     //     return $this->hasMany('\App\Class','id_Sekolah','id');
