@@ -36,13 +36,13 @@ class SekolahRepository
 
     public function all()
     {
-        $data = $this->sekolah->all();
+        $data = $this->sekolah->all()->with('detailUser');
         return Response::json($data, 200);
     }
 
     public function get($id)
     {
-        $data = $this->sekolah->find($id)->get();
+        $data = $this->sekolah->find($id);
         return Response::json($data, 200);
     }
 
