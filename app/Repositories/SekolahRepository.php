@@ -34,9 +34,11 @@ class SekolahRepository
         ], 200);
     }
 
-    public function all()
+    public function all(Request $request)
     {
-        $data = $this->sekolah->with('detailUser')->all();
+        $per_page = $request->per_page;
+
+        $data = $this->sekolah->with('sekolah.detailUser')->paginate($per_page)->orderBy('created_at','desc');
         return Response::json($data, 200);
     }
 

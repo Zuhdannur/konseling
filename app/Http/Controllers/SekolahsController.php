@@ -22,9 +22,9 @@ class SekolahsController extends Controller
     }
 
 
-    public function all()
+    public function all(Request $request)
     {
-        return $this->sekolahRepository->all();
+        return $this->sekolahRepository->all($request);
     }
 
     public function get($id)
