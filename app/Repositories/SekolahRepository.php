@@ -34,12 +34,27 @@ class SekolahRepository
         ], 200);
     }
 
+    public function getSekolahCount() {
+        $data = $this->sekolah->count();
+
+        return Response::json([
+            'total' => $data
+        ], 200);
+    }
+
     public function all(Request $request)
     {
         $per_page = $request->per_page;
 
-        $data = $this->sekolah->with('detailUser')->orderBy('created_at','desc')->paginate($per_page);
+        $data = $this->sekolah->orderBy('created_at','desc')->paginate($per_page);
+
+
         return Response::json($data, 200);
+    }
+
+    public function getSekolahThenCheckAdmin() {
+//        $data = $this->sekolah->withAndWhereHas('detailUser.user')->orderBy('created_at','desc')->get();
+//        return Response::json($data, 200);
     }
 
     public function get($id)

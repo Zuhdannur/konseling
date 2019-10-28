@@ -26,4 +26,10 @@ class DetailUser extends Model
     {
         return $this->hasOne('\App\Sekolah', 'id', 'id_sekolah');
     }
+
+    public function user()
+    {
+        return $this->belongsTo('\App\User', 'id', 'id_user');
+    }
+
 }

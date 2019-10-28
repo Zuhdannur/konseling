@@ -25,6 +25,11 @@ class Sekolah extends Model
         return $this->belongsTo('\App\DetailUser', 'id', 'id_sekolah');
     }
 
+    public function scopeWithAndWhereHas($query, $relation, $constraint){
+        return $query->whereHas($relation, $constraint)
+            ->with([$relation => $constraint]);
+    }
+
     // Relationships
     // public function kelas(){
     //     return $this->hasMany('\App\Class','id_Sekolah','id');

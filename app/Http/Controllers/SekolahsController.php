@@ -22,6 +22,10 @@ class SekolahsController extends Controller
         return $this->sekolahRepository->getDataThisMonth();
     }
 
+    public function getSekolahCount() {
+        return $this->sekolahRepository->getSekolahCount();
+    }
+
     public function checkSekolahName(Request $namaSekolah) {
         return $this->sekolahRepository->checkSekolahName($namaSekolah);
     }
@@ -29,6 +33,11 @@ class SekolahsController extends Controller
     public function all(Request $request)
     {
         return $this->sekolahRepository->all($request);
+    }
+
+    public function getSekolahThenCheckAdmin()
+    {
+        return $this->sekolahRepository->getSekolahThenCheckAdmin();
     }
 
     public function get($id)
