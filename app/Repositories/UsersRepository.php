@@ -6,7 +6,6 @@ namespace App\Repositories;
 
 use App\DetailUser;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -29,8 +28,9 @@ class UsersRepository
     }
 
 
-    public function register(Request $request) {
-        if($this->isUsernameExists($request->username)) {
+    public function register(Request $request)
+    {
+        if ($this->isUsernameExists($request->username)) {
             return Response::json([
                 'message' => 'Duplicate Username'
             ], 201);
@@ -44,19 +44,22 @@ class UsersRepository
         $insert->avatar = $request->avatar;
         $insert->save();
 
-        $insertDetail = $this->detailUser;
-        $insertDetail->id_user = $this->user->id;
-        $insertDetail->jenkel = $request->jenkel;
-        $insertDetail->alamat = $request->alamat;
-        $insertDetail->nomor_hp = $request->nomor_hp;
-        $insertDetail->kelas = $request->kelas;
-        $insertDetail->id_sekolah = $request->id_sekolah;
-        $insertDetail->kota = $request->kota;
-        $insertDetail->tanggal_lahir = $request->tanggal_lahir;
-        $insertDetail->kota_lahir = $request->kota_lahir;
-        $insertDetail->save();
+        if ($request->id_sekolah != null) {
+            $insertDetail = $this->detailUser;
+            $insertDetail->id_user = $this->user->id;
+            $insertDetail->jenkel = $request->jenkel;
+            $insertDetail->alamat = $request->alamat;
+            $insertDetail->nomor_hp = $request->nomor_hp;
+            $insertDetail->kelas = $request->kelas;
+            $insertDetail->id_sekolah = $request->id_sekolah;
+            $insertDetail->kota = $request->kota;
+            $insertDetail->tanggal_lahir = $request->tanggal_lahir;
+            $insertDetail->kota_lahir = $request->kota_lahir;
+            $insertDetail->save();
+        }
 
-        if(!$insertDetail || !$insert) {
+
+        if (!$insertDetail || !$insert) {
             return Response::json([
                 'message' => 'register failed'
             ], 201);
@@ -73,16 +76,17 @@ class UsersRepository
         return $this->user->orderBy('id', 'desc')->first();
     }
 
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $user = $this->isUsernameExists($request->username);
 
-        if(!$user) {
+        if (!$user) {
             return Response::json([
                 'message' => 'Akun tidak ditemukan.'
             ], 201);
         }
 
-        if(!Hash::check($request->password, $user->password)) {
+        if (!Hash::check($request->password, $user->password)) {
             return Response::json([
                 "message" => 'Username atau kata sandi salah.',
             ], 201);
@@ -102,24 +106,25 @@ class UsersRepository
         }
 
         return Response::json([
-            "message"   => 'success',
+            "message" => 'success',
             "api_token" => $apiKey,
-            "role"      => $user->role,
-            "data"      => $data
+            "role" => $user->role,
+            "data" => $data
         ], 200);
     }
 
 
-    public function changePassword(Request $request) {
+    public function changePassword(Request $request)
+    {
         $user = $this->user->find(Auth::user()->id);
 
-        if(!Hash::check($request->oldPassword, $user->password)) {
+        if (!Hash::check($request->oldPassword, $user->password)) {
             return Response::json(
                 ["message" => "Kata sandi saat ini salah."],
                 201);
         }
 
-        if(Hash::check($request->newPassword, $user->password)) {
+        if (Hash::check($request->newPassword, $user->password)) {
             return Response::json(
                 ["message" => "Kata sandi baru tidak boleh sama dengan kata sandi saat ini."],
                 201);
@@ -132,7 +137,7 @@ class UsersRepository
             'hasEverChangePassword' => 1
         ]);
 
-        if(!$save || !$updateHasEver) {
+        if (!$save || !$updateHasEver) {
             return Response::json(
                 ["message" => "Gagal mengganti kata sandi."],
                 201);
@@ -170,7 +175,8 @@ class UsersRepository
         // }
     }
 
-    public function getTotalAccount(Request $request) {
+    public function getTotalAccount(Request $request)
+    {
         $data = $this->user
             ->where('role', $request->role)
             ->count();
@@ -180,9 +186,10 @@ class UsersRepository
         ], 200);
     }
 
-    public function checkUsername($username) {
+    public function checkUsername($username)
+    {
         $check = $this->user->where('username', $username)->first();
-        if($check) {
+        if ($check) {
             return Response::json(['message' => 'Username telah terdaftar.'], 201);
         }
         return Response::json(['message' => 'Username dapat digunakan.'], 200);
@@ -222,7 +229,7 @@ class UsersRepository
         $update = $update->fill($request->input())->save();
         $updateDetailUser = $updateDetailUser->fill($request->input())->save();
 
-        if(!$update && !$updateDetailUser) {
+        if (!$update && !$updateDetailUser) {
             return Response::json(['message' => 'Gagal menyunting profils.']);
         }
 
@@ -278,7 +285,7 @@ class UsersRepository
     {
         $image = $this->user->find(Auth::user()->id);
 
-        if(!$image) {
+        if (!$image) {
             return Response::json([
                 "message" => "Failed to update"
             ], 201);
