@@ -38,7 +38,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     $router->put('sekolah/{id}', 'SekolahsController@put');
     $router->delete('sekolah/{id}', 'SekolahsController@remove');
     $router->get('sekolah/master/month', 'SekolahsController@getDataThisMonth');
-    $router->get('sekolah/check', 'SekolahsController@checkSekolahName');
+    $router->post('sekolah/check', 'SekolahsController@checkSekolahName');
 
     /**
     * Routes for resource kelas
