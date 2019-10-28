@@ -59,8 +59,7 @@ class UsersRepository
         }
 
         return Response::json([
-            'message' => 'register successfully',
-            'user_id' => $insertDetail->id_user
+            'message' => 'register successfully'
         ], 200);
     }
 
