@@ -22,7 +22,7 @@ class SekolahsController extends Controller
         return $this->sekolahRepository->getDataThisMonth();
     }
 
-    public function checkSekolahName($namaSekolah) {
+    public function checkSekolahName(Request $namaSekolah) {
         return $this->sekolahRepository->checkSekolahName($namaSekolah);
     }
 
