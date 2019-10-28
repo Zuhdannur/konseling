@@ -58,13 +58,6 @@ class UsersRepository
             $insertDetail->save();
         }
 
-
-        if (!$insertDetail || !$insert) {
-            return Response::json([
-                'message' => 'register failed'
-            ], 201);
-        }
-
         return Response::json([
             'message' => 'register successfully',
             'user_id' => $insertDetail->id_user
