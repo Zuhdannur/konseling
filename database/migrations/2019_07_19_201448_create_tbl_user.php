@@ -16,7 +16,7 @@ class CreateTblUser extends Migration
         Schema::create('tbl_user', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('avatar')->nullable();
-            $table->string('name',50);
+            $table->string('name',50)->nullable();
 
             /*Username dapat berupa NIS ataupun NIP*/
             $table->string('username',30)->unique();
