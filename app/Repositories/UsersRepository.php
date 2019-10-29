@@ -60,22 +60,13 @@ class UsersRepository
     public function getTotalAccountBySchool(Request $request) {
         $idSekolah = $request->sekolah_id;
 
-        $data = $this->user->where('role', '!=','admin')
-            ->withAndWhereHas('detail', function($data) use ($idSekolah) {
-                $data->where('sekolah_id', $idSekolah);
-            });
+        $data = $this->user->where('role', '!=','admin')->where('sekolah_id', $idSekolah);
 
         if($request->has('role')) {
             $data = $data->where('role', $request->role);
         }
 
         $data = $data->count();
-
-//        $query = \App\User::where('role', 'guru')->withAndWhereHas('detail', function ($query) {
-//            //     $query->where('sekolah_id', Auth::user()->detail->sekolah_id);
-//            // })->get();
-
-
 
         return Response::json([
             'total' => $data
@@ -110,9 +101,9 @@ class UsersRepository
         ]);
 
         if ($user->role == 'siswa') {
-            $data = $this->user->where('api_token', $apiKey)->with('detail', 'detail.sekolah')->first();
+            $data = $this->user->where('api_token', $apiKey)->with('sekolah')->first();
         } else {
-            $data = $this->user->where('api_token', $apiKey)->with('detail', 'detail.sekolah')->first();
+            $data = $this->user->where('api_token', $apiKey)->with('sekolah')->first();
             $this->addTopic($data);
         }
 
@@ -160,9 +151,9 @@ class UsersRepository
     public function get($id)
     {
         if (Auth::user()->role == 'siswa') {
-            $data = $this->user->where('api_token', $id)->with('detail', 'detail.kelas', 'detail.sekolah')->first();
+            $data = $this->user->where('api_token', $id)->with('sekolah')->first();
         } else {
-            $data = $this->user->where('api_token', $id)->with('detail', 'detail.sekolah')->first();
+            $data = $this->user->where('api_token', $id)->with('sekolah')->first();
             $this->addTopic($data);
         }
 
@@ -218,7 +209,7 @@ class UsersRepository
 
     public function all()
     {
-        $data = $this->user->with('detail', 'detail.kelas', 'detail.sekolah')->get();
+        $data = $this->user->with('sekolah')->get();
         return Response::json($data, 200);
     }
 
@@ -246,7 +237,7 @@ class UsersRepository
 
     public function getStudentInfo($id)
     {
-        $data = $this->user->where('id', $id)->with('detail', 'detail.sekolah')->first();
+        $data = $this->user->where('id', $id)->with('sekolah')->first();
         return Response::json($data, 200);
     }
 

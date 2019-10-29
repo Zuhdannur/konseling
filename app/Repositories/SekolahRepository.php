@@ -52,7 +52,10 @@ class SekolahRepository
     }
 
     public function getSekolahThenCheckAdmin() {
-        $data = $this->sekolah->withAndWhereHas('user')->orderBy('created_at','desc')->get();
+        $data = $this->sekolah->withAndWhereHas('user', function($data) {
+            $data->where('role','!=','admin');
+        })->orderBy('nama_sekolah','desc')->get();
+
         return Response::json($data, 200);
     }
 
