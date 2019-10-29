@@ -52,8 +52,8 @@ class SekolahRepository
     }
 
     public function getSekolahThenCheckAdmin(Request $request) {
-        $per_page = $request->per_page;
         $data = $this->sekolah->with('user')->doesntHave('user')->get();
+        $data['causeFull'] = true;
 
         return Response::json($data, 200);
     }
