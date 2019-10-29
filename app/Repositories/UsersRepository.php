@@ -66,7 +66,7 @@ class UsersRepository
     public function getTotalAccountBySchool(Request $request) {
         $idSekolah = $request->id_sekolah;
 
-        $data = $this->user
+        $data = $this->user->where('role', '!=','admin')
             ->withAndWhereHas('detail', function($data) use ($idSekolah) {
                 $data->where('id_sekolah', $idSekolah);
             });
