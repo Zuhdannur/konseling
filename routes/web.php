@@ -40,7 +40,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     $router->get('sekolah/master/month', 'SekolahsController@getDataThisMonth');
     $router->get('sekolah/master/sekolah', 'SekolahsController@getSekolahCount');
     $router->post('sekolah/check', 'SekolahsController@checkSekolahName');
-    $router->post('sekolah/master/choose', 'SekolahsController@getSekolahThenCheckAdmin');
+    $router->get('sekolah/master/choose', 'SekolahsController@getSekolahThenCheckAdmin');
 
     /**
     * Routes for resource kelas
