@@ -2,6 +2,7 @@
 
 use App\Repositories\UsersRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class UsersController extends Controller
 {
@@ -18,14 +19,26 @@ class UsersController extends Controller
         $this->userRepository = $userRepository;
     }
 
+    public function getTotalAccountBySchool(Request $request) {
+        return $this->userRepository->getTotalAccountBySchool($request);
+    }
+
     public function login(Request $request)
     {
         return $this->userRepository->login($request);
     }
 
+    public function checkUsername(Request $request) {
+        return $this->userRepository->checkUsername($request->username);
+    }
+
     public function register(Request $request)
     {
         return $this->userRepository->register($request);
+    }
+
+    public function getTotalAccount(Request $request) {
+        return $this->userRepository->getTotalAccount($request);
     }
 
     public function get($id)

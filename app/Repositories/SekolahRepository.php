@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 
 use App\Sekolah;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -22,15 +23,45 @@ class SekolahRepository
         $this->sekolah = $sekolah;
     }
 
-    public function all()
+    public function getDataThisMonth() {
+        $data = $this->sekolah
+            ->whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->count();
+
+        return Response::json([
+            'total' => $data
+        ], 200);
+    }
+
+    public function getSekolahCount() {
+        $data = $this->sekolah->count();
+
+        return Response::json([
+            'total' => $data
+        ], 200);
+    }
+
+    public function all(Request $request)
     {
-        $data = $this->sekolah->all();
+        $per_page = $request->per_page;
+
+        $data = $this->sekolah->orderBy('created_at','desc')->paginate($per_page);
+
+        return Response::json($data, 200);
+    }
+
+    public function getSekolahThenCheckAdmin() {
+        $data = $this->sekolah->withAndWhereHas('user', function($data) {
+            $data->where('role','!=','admin');
+        })->orderBy('nama_sekolah','desc')->get();
+
         return Response::json($data, 200);
     }
 
     public function get($id)
     {
-        $data = $this->sekolah->find($id)->get();
+        $data = $this->sekolah->find($id);
         return Response::json($data, 200);
     }
 
@@ -41,6 +72,14 @@ class SekolahRepository
             return null;
         }
         return $check;
+    }
+
+    public function checkSekolahName($namaSekolah) {
+        $check = $this->sekolah->where('nama_sekolah', $namaSekolah)->first();
+        if($check) {
+            return Response::json(['message' => 'Sekolah telah terdaftar.'], 201);
+        }
+        return Response::json(['message' => 'Sekolah dapat digunakan.'], 200);
     }
 
     public function add(Request $request)

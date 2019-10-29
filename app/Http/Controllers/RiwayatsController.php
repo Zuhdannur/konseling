@@ -13,7 +13,7 @@ class RiwayatsController extends Controller
         // $riwayat = \App\Riwayat::all()->groupBy('schedule_id');
         $riwayat = \App\Riwayat::whereHas('user', function ($q) use ($user) {
             $q->whereHas('detail', function ($query) use ($user) {
-                $query->where('id_sekolah', $user->id_sekolah);
+                $query->where('sekolah_id', $user->sekolah_id);
             });
         })->with('schedule.consultant')->with('schedule.request')->orderBy('created_at', 'desc');
 
@@ -43,7 +43,7 @@ class RiwayatsController extends Controller
                 if ($request->status == 'selesai') {
                     $query->where('ended', 1);
                 }
-        
+
                 if ($request->status == 'dibatalkan') {
                     $query->where('canceled', 1);
                 }

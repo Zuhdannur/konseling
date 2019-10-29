@@ -37,6 +37,9 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     $router->get('sekolah/{id}', 'SekolahsController@get');
     $router->put('sekolah/{id}', 'SekolahsController@put');
     $router->delete('sekolah/{id}', 'SekolahsController@remove');
+    $router->get('sekolah/master/month', 'SekolahsController@getDataThisMonth');
+    $router->get('sekolah/master', 'SekolahsController@getSekolahCount');
+    $router->post('sekolah/check', 'SekolahsController@checkSekolahName');
 
     /**
     * Routes for resource kelas
@@ -56,6 +59,10 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->post('user/update/image', 'UsersController@updateImageProfile');
         $router->get('user', 'UsersController@all');
         $router->post('user/password', 'UsersController@changePassword');
+        $router->get('user/check', 'UsersController@checkUsername');
+        $router->get('user/master/account', 'UsersController@getTotalAccount');
+        $router->get('user/master/admin', 'UsersController@getSekolahThenCheckAdmin');
+        $router->get('user/admin/account', 'UsersController@getTotalAccountBySchool');
 
         /*Siswa dapat melihat diary*/
         $router->get('diary/student', 'DiariesController@all');

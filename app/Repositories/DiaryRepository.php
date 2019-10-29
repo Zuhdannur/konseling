@@ -29,7 +29,7 @@ class DiaryRepository
 
     public function all(Request $request)
     {
-        $query = $this->diary->where('id_user', Auth::user()->id);
+        $query = $this->diary->where('user_id', Auth::user()->id);
         if ($request->has('orderBy')) {
             $query = $query->orderBy($request->orderBy, 'desc');
         }
@@ -41,7 +41,7 @@ class DiaryRepository
     public function add(Request $request)
     {
         $insert = $this->diary;
-        $insert->id_user = Auth::user()->id;
+        $insert->user_id = Auth::user()->id;
         $insert->body = $request->body;
         $insert->title = $request->title;
         $insert->tgl = $request->tgl;
@@ -55,7 +55,7 @@ class DiaryRepository
 
     public function remove($id)
     {
-        $data = $this->diary->where('id', $id)->where('id_user', Auth::user()->id)->delete();
+        $data = $this->diary->where('id', $id)->where('user_id', Auth::user()->id)->delete();
         if (!$data) {
             return Response::json([
                 "message" => 'Gagal menghapus data.'
@@ -68,7 +68,7 @@ class DiaryRepository
 
     public function update(Request $request)
     {
-        $update = $this->diary->where('id', $request->id)->where('id_user', Auth::user()->id)->update([
+        $update = $this->diary->where('id', $request->id)->where('user_id', Auth::user()->id)->update([
             'title' => $request->title,
             'body' => $request->body,
             'tgl' => $request->tgl
@@ -94,7 +94,7 @@ class DiaryRepository
         $mySekolah = $this->user->with('detail')->where('id', Auth::user()->id)->first()->detail;
         $diaries = $this->diary->whereHas('user', function ($q) use ($mySekolah) {
             $q->whereHas('detail', function ($query) use ($mySekolah) {
-                $query->where('id_sekolah', $mySekolah->id_sekolah);
+                $query->where('sekolah_id', $mySekolah->sekolah_id);
             });
         })->with('user')->with('user.detail')->orderBy('id', 'desc');
 
@@ -105,7 +105,7 @@ class DiaryRepository
 
     public function diaryCount($id)
     {
-        $total = $this->diary->where('id_user', $id)->count();
+        $total = $this->diary->where('user_id', $id)->count();
 
         return Response::json([
             "total" => $total

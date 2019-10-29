@@ -87,8 +87,8 @@ class ArtikelsController extends Controller
         //         ,'tbl_artikel.title'
         //     ))->from('tbl_user')->get();
 
-        
-        
+
+
         $data = DB::select("
             SELECT
             exists(select 1 from tbl_fav_artikel where tbl_fav_artikel.id_artikel = tbl_artikel.id and tbl_fav_artikel.id_user = tbl_user.id limit 1) as hasBookmark,
@@ -165,7 +165,7 @@ class ArtikelsController extends Controller
         // }
         $insert = new \App\Favorite;
         $insert->id_artikel = $request->id_artikel;
-        $insert->id_user = Auth::user()->id;
+        $insert->user_id = Auth::user()->id;
         $insert->save();
 
         if ($insert) {
@@ -194,7 +194,7 @@ class ArtikelsController extends Controller
     }
 
     private function getFavorite(Request $request) {
-        $datas = \App\Favorite::where('id_user', Auth::user()->id)->with('artikel');
+        $datas = \App\Favorite::where('user_id', Auth::user()->id)->with('artikel');
         $paginate = $datas->paginate($request->per_page);
 
         return $paginate;

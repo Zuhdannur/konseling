@@ -9,7 +9,7 @@ class Favorite extends Model {
     protected $primaryKey = "id_favorit";
 
     protected $fillable = [
-        'id','id_artikel','id_user'
+        'id','id_artikel','user_id'
     ];
 
     protected $dates = [];
@@ -24,6 +24,6 @@ class Favorite extends Model {
     }
 
     public function user(){
-        return $this->hasOne('\App\User','id','id_user')->select(array('id', 'name'));
+        return $this->belongsTo('\App\User')->select(array('id', 'name'));
     }
 }

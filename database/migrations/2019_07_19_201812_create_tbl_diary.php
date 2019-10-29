@@ -15,7 +15,7 @@ class CreateTblDiary extends Migration
     {
         Schema::create('tbl_diary', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('id_user')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->string('title', 200);
             $table->text('body');
             $table->date('tgl');

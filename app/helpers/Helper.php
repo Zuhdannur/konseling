@@ -72,7 +72,7 @@ class Helper
 
         $message = new Message();
         $message->setPriority('normal');
-        $pattern = "guru".Auth::user()->detail->id_sekolah."pengajuan";
+        $pattern = "guru".Auth::user()->detail->sekolah_id."pengajuan";
 
         $title = 'Kamu mendapatkan pengajuan baru';
         $body = "Pengajuan dari siswa bernama ".Auth::user()->name;
@@ -86,7 +86,7 @@ class Helper
             'updated_at' => Carbon::now()->toDateTimeString(),
             'type' => $type
         ]);
-        
+
         $response = $client->send($message);
         return \response()->json($response);
     }
