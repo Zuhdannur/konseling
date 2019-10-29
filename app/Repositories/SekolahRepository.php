@@ -46,14 +46,14 @@ class SekolahRepository
     {
         $per_page = $request->per_page;
 
-        $data = $this->sekolah->orderBy('created_at','desc')->paginate($per_page);
+        $data = $this->sekolah->with('user')->orderBy('created_at','desc')->paginate($per_page);
 
         return Response::json($data, 200);
     }
 
     public function getSekolahThenCheckAdmin(Request $request) {
         $per_page = $request->per_page;
-        $data = $this->sekolah->with('user')->doesntHave('user')->orderBy('nama_sekolah','desc')->paginate($per_page);
+        $data = $this->sekolah->doesntHave('user')->get();
 
         return Response::json($data, 200);
     }
