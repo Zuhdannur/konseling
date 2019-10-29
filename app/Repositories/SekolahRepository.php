@@ -79,7 +79,7 @@ class SekolahRepository
         if ($delete) {
             return Response::json(["message" => 'Sekolah berhasil dihapus.'], 200);
         } else {
-            return Response::json(["message" => '.'], 201);
+            return Response::json(["message" => 'Sekolah gagal dihapus'], 201);
         }
     }
 
