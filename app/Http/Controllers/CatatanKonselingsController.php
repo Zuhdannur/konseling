@@ -14,7 +14,7 @@ class CatatanKonselingsController extends Controller
         $riwayat = \App\CatatanKonseling::whereHas('schedule', function ($q) use ($user) {
             $q->whereHas('request', function ($query) use ($user) {
                 $query->whereHas('detail', function ($q) use ($user) {
-                    $q->where('id_sekolah', $user->id_sekolah);
+                    $q->where('sekolah_id', $user->sekolah_id);
                 });
             });
         })->with('schedule.consultant')->with('schedule.request')->orderBy('created_at', 'desc');

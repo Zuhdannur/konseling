@@ -4,7 +4,6 @@
 namespace App\Repositories;
 
 
-use App\DetailUser;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,17 +13,16 @@ use Illuminate\Support\Facades\Response;
 class UsersRepository
 {
 
-    private $user, $detailUser;
+    private $user;
 
     /**
      * UsersRepository constructor.
      * @param $user
      * @param $detailUser
      */
-    public function __construct(User $user, DetailUser $detailUser)
+    public function __construct(User $user)
     {
         $this->user = $user;
-        $this->detailUser = $detailUser;
     }
 
 
@@ -42,33 +40,29 @@ class UsersRepository
         $insert->password = Hash::make($request->password);
         $insert->role = $request->role;
         $insert->avatar = $request->avatar;
+
+        $insert->id_user = $this->user->id;
+        $insert->jenkel = $request->jenkel;
+        $insert->alamat = $request->alamat;
+        $insert->nomor_hp = $request->nomor_hp;
+        $insert->kelas = $request->kelas;
+        $insert->sekolah_id = $request->sekolah_id;
+        $insert->kota = $request->kota;
+        $insert->tanggal_lahir = $request->tanggal_lahir;
+        $insert->kota_lahir = $request->kota_lahir;
         $insert->save();
 
-        if ($request->id_sekolah != null) {
-            $insertDetail = $this->detailUser;
-            $insertDetail->id_user = $this->user->id;
-            $insertDetail->jenkel = $request->jenkel;
-            $insertDetail->alamat = $request->alamat;
-            $insertDetail->nomor_hp = $request->nomor_hp;
-            $insertDetail->kelas = $request->kelas;
-            $insertDetail->id_sekolah = $request->id_sekolah;
-            $insertDetail->kota = $request->kota;
-            $insertDetail->tanggal_lahir = $request->tanggal_lahir;
-            $insertDetail->kota_lahir = $request->kota_lahir;
-            $insertDetail->save();
-        }
-
         return Response::json([
-            'message' => 'register successfully'
+            'message' => 'Berhasil daftar.'
         ], 200);
     }
 
     public function getTotalAccountBySchool(Request $request) {
-        $idSekolah = $request->id_sekolah;
+        $idSekolah = $request->sekolah_id;
 
         $data = $this->user->where('role', '!=','admin')
             ->withAndWhereHas('detail', function($data) use ($idSekolah) {
-                $data->where('id_sekolah', $idSekolah);
+                $data->where('sekolah_id', $idSekolah);
             });
 
         if($request->has('role')) {
@@ -78,7 +72,7 @@ class UsersRepository
         $data = $data->count();
 
 //        $query = \App\User::where('role', 'guru')->withAndWhereHas('detail', function ($query) {
-//            //     $query->where('id_sekolah', Auth::user()->detail->id_sekolah);
+//            //     $query->where('sekolah_id', Auth::user()->detail->sekolah_id);
 //            // })->get();
 
 
@@ -182,13 +176,13 @@ class UsersRepository
         // $client->injectGuzzleHttpClient(new \GuzzleHttp\Client());
 
         // $query = \App\User::where('role', 'guru')->withAndWhereHas('detail', function ($query) {
-        //     $query->where('id_sekolah', Auth::user()->detail->id_sekolah);
+        //     $query->where('sekolah_id', Auth::user()->detail->sekolah_id);
         // })->get();
 
         // $pattern = "guru";
 
         // foreach ($query as $value) {
-        //     $client->addTopicSubscription($pattern.$value['detail']['id_sekolah']."pengajuan", $value['firebase_token']);
+        //     $client->addTopicSubscription($pattern.$value['detail']['sekolah_id']."pengajuan", $value['firebase_token']);
         // }
     }
 
@@ -231,7 +225,6 @@ class UsersRepository
     public function remove($id)
     {
         $data = $this->user->find($id)->delete();
-        $detail = $this->detailUser->find($id)->delete();
         return Response::json([
             "message" => "success",
         ], 200);
@@ -241,55 +234,14 @@ class UsersRepository
     {
 
         $update = $this->user->where('id', Auth::user()->id)->first();
-        $updateDetailUser = $this->detailUser->where('id_user', Auth::user()->id)->first();
 
         $update = $update->fill($request->input())->save();
-        $updateDetailUser = $updateDetailUser->fill($request->input())->save();
 
-        if (!$update && !$updateDetailUser) {
+        if (!$update) {
             return Response::json(['message' => 'Gagal menyunting profils.']);
         }
 
         return Response::json(["message" => 'Profil berhasil disunting.'], 200);
-
-//        $update = $this->user->find(Auth::user()->id)->update([
-//            'name' => $request->name
-//        ]);
-//
-//        if (Auth::user()->role == 'siswa') {
-//            if(!$update) {
-//                return Response::json([
-//                    "message" => 'nama siswa atau nama kelas tidak ditemukan'
-//                ], 201);
-//            }
-//
-//            $update_detail = $this->detailUser->where('id_user', Auth::user()->id)->update([
-//                'alamat' => $request->alamat,
-//                'nomor_hp' => $request->nomor_hp,
-//                'kelas' => $request->kelas,
-//                'jenkel' => $request->jenkel
-//            ]);
-//
-//            if (!$update_detail) {
-//                return Response::json(['message' => 'Gagal menyunting profil.']);
-//            }
-//
-//            return Response::json(["message" => 'Profil berhasil disunting.'], 200);
-//        } else {
-//            //Nama, Jenkel, Alamat, No HP
-//            $update = $this->detailUser->where('id_user', Auth::user()->id)->update([
-//                'jenkel' => $request->jenkel,
-//                'alamat' => $request->alamat,
-//                'nomor_hp' => $request->nomor_hp
-//            ]);
-//
-//            if (!$update) {
-//                return Response::json(['message' => 'Gagal menyunting profil.']);
-//            }
-//            return Response::json(["message" => 'Profil berhasil disunting.'], 200);
-//        }
-//
-//        return $request;
     }
 
     public function getStudentInfo($id)

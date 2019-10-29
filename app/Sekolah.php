@@ -20,10 +20,6 @@ class Sekolah extends Model
         // Validation rules
     ];
 
-    public function detailUser()
-    {
-        return $this->belongsTo('\App\DetailUser', 'id', 'id_sekolah');
-    }
 
     public function scopeWithAndWhereHas($query, $relation, $constraint){
         return $query->whereHas($relation, $constraint)
@@ -31,7 +27,8 @@ class Sekolah extends Model
     }
 
     // Relationships
-    // public function kelas(){
-    //     return $this->hasMany('\App\Class','id_Sekolah','id');
-    // }
+    public function user() {
+        return $this->hasMany('\App\User');
+    }
+
 }

@@ -15,17 +15,24 @@ class CreateTblUser extends Migration
     {
         Schema::create('tbl_user', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('avatar')->nullable();
-            $table->string('name',50)->nullable();
-
-            /*Username dapat berupa NIS ataupun NIP*/
             $table->string('username',30)->unique();
-
             $table->string('password',255);
             $table->string('role',10);
             $table->string('api_token',255)->nullable();
             $table->string('firebase_token',255)->nullable();
             $table->integer('hasEverChangePassword')->default(0);
+
+            $table->string('avatar')->nullable();
+            $table->string('name',50)->nullable();
+            $table->string('jenkel', 25)->nullable();
+            $table->string('nomor_hp', 12)->nullable();
+            $table->string('kelas', 25)->nullable();
+            $table->integer('sekolah_id')->length(11)->unsigned();
+            $table->text('alamat')->nullable();
+            $table->string('kota', 50)->nullable();
+            $table->date('tanggal_lahir')->nullable();
+            $table->string('kota_lahir', 50)->nullable();
+
             $table->timestamps();
         });
     }

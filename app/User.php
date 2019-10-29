@@ -34,14 +34,17 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password'
     ];
 
-    public function detail()
-    {
-        return $this->hasOne('\App\DetailUser', 'id_user', 'id');
-    }
-
     public function favorite()
     {
-        return $this->belongsTo('\App\Favorite', 'id', 'id_user');
+        return $this->hasMany('\App\Favorite');
+    }
+
+    public function sekolah() {
+        return $this->belongsTo('\App\Sekolah');
+    }
+
+    public function diary() {
+        return $this->hasMany('\App\Diary');
     }
 
     public function scopeWithAndWhereHas($query, $relation, $constraint)

@@ -16,7 +16,7 @@ class CreateTblFavArtikel extends Migration
         Schema::create('tbl_fav_artikel', function (Blueprint $table) {
             $table->bigIncrements('id_favorit');
             $table->integer('id_artikel')->unsigned();
-            $table->integer('id_user')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->timestamps();
         });
     }

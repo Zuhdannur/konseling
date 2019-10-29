@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class Diary extends Model
 {
     protected $fillable = [
-        'id_user','body','title','tgl'
+        'user_id','body','title','tgl'
     ];
 
     public $timestamps = true;
@@ -21,6 +21,6 @@ class Diary extends Model
     // Relationships
     public function user()
     {
-       return $this->belongsTo('\App\User','id_user','id');
+       return $this->belongsTo('\App\User');
     }
 }

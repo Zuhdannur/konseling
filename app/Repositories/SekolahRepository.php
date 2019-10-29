@@ -48,13 +48,12 @@ class SekolahRepository
 
         $data = $this->sekolah->orderBy('created_at','desc')->paginate($per_page);
 
-
         return Response::json($data, 200);
     }
 
     public function getSekolahThenCheckAdmin() {
-//        $data = $this->sekolah->withAndWhereHas('detailUser.user')->orderBy('created_at','desc')->get();
-//        return Response::json($data, 200);
+        $data = $this->sekolah->withAndWhereHas('user')->orderBy('created_at','desc')->get();
+        return Response::json($data, 200);
     }
 
     public function get($id)

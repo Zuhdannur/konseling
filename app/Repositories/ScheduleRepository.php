@@ -366,7 +366,7 @@ class ScheduleRepository
         $schedule = $this->schedule->where(function ($query) use ($user, $filters) {
             $query->whereHas('request', function ($q) use ($user) {
                 $q->whereHas('detail', function ($sql) use ($user) {
-                    $sql->where('id_sekolah', $user->detail->id_sekolah);
+                    $sql->where('sekolah_id', $user->detail->sekolah_id);
                 });
             });
         })->with('request')->with('consultant')->orderBy('id', 'desc');

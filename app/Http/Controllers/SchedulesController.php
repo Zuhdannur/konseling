@@ -268,7 +268,7 @@ class SchedulesController extends Controller
 
         $message = new Message();
         $message->setPriority('normal');
-        $pattern = "guru" . Auth::user()->detail->id_sekolah . "pengajuan";
+        $pattern = "guru" . Auth::user()->detail->sekolah_id . "pengajuan";
 
         $message->addRecipient(new Topic($pattern));
         $message->setData([
