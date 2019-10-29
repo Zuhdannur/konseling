@@ -55,7 +55,7 @@ class SekolahRepository
         $data = $this->sekolah->with('user')->doesntHave('user')->get();
 
         return Response::json([
-            $data,
+            'data' => $data,
             'causeFull' => true
         ], 200);
     }
