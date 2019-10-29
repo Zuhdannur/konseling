@@ -41,7 +41,6 @@ class UsersRepository
         $insert->role = $request->role;
         $insert->avatar = $request->avatar;
 
-        $insert->id_user = $this->user->id;
         $insert->jenkel = $request->jenkel;
         $insert->alamat = $request->alamat;
         $insert->nomor_hp = $request->nomor_hp;
