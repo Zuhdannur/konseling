@@ -35,9 +35,9 @@ class SekolahsController extends Controller
         return $this->sekolahRepository->all($request);
     }
 
-    public function getSekolahThenCheckAdmin()
+    public function getSekolahThenCheckAdmin(Request $request)
     {
-        return $this->sekolahRepository->getSekolahThenCheckAdmin();
+        return $this->sekolahRepository->getSekolahThenCheckAdmin($request);
     }
 
     public function get($id)
