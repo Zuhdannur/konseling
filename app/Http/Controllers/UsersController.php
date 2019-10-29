@@ -19,6 +19,10 @@ class UsersController extends Controller
         $this->userRepository = $userRepository;
     }
 
+    public function getTotalAccountBySchool(Request $request) {
+        return $this->userRepository->getTotalAccountBySchool($request);
+    }
+
     public function login(Request $request)
     {
         return $this->userRepository->login($request);

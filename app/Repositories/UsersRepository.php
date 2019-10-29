@@ -63,6 +63,31 @@ class UsersRepository
         ], 200);
     }
 
+    public function getTotalAccountBySchool(Request $request) {
+        $idSekolah = $request->id_sekolah;
+
+        $data = $this->user
+            ->withAndWhereHas('detail', function($data) use ($idSekolah) {
+                $data->where('id_sekolah', $idSekolah);
+            });
+
+        if($request->has('role')) {
+            $data = $data->where('role', $request->role);
+        }
+
+        $data = $data->count();
+
+//        $query = \App\User::where('role', 'guru')->withAndWhereHas('detail', function ($query) {
+//            //     $query->where('id_sekolah', Auth::user()->detail->id_sekolah);
+//            // })->get();
+
+
+
+        return Response::json([
+            'total' => $data
+        ], 200);
+    }
+
     private function getLastID()
     {
         return $this->user->orderBy('id', 'desc')->first();
