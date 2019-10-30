@@ -8,7 +8,6 @@ use App\Sekolah;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Validator;
 
 class SekolahRepository
 {
@@ -23,7 +22,8 @@ class SekolahRepository
         $this->sekolah = $sekolah;
     }
 
-    public function getDataThisMonth() {
+    public function getDataThisMonth()
+    {
         $data = $this->sekolah
             ->whereYear('created_at', Carbon::now()->year)
             ->whereMonth('created_at', Carbon::now()->month)
@@ -34,7 +34,8 @@ class SekolahRepository
         ], 200);
     }
 
-    public function getSekolahCount() {
+    public function getSekolahCount()
+    {
         $data = $this->sekolah->count();
 
         return Response::json([
@@ -46,51 +47,41 @@ class SekolahRepository
     {
         $per_page = $request->per_page;
 
-        $data = $this->sekolah->with('user');
+        $data = $this->sekolah;
 
-        $data = $data->orderBy('created_at', 'desc');
-        $data = $data->paginate($per_page);
+        if ($request->has('admin')) {
+            $data = $this->sekolah->withAndWhereHas('user', function ($query) {
+                $query->where('role', 'admin');
+            })->get();
+        } else {
+            $data = $data->paginate($per_page);
+        }
+
+        if ($request->has('orderBy')) {
+            $data = $data->orderBy($request->orderBy, 'desc');
+        }
 
         return Response::json($data, 200);
     }
 
-    public function getSekolahThenCheckAdmin(Request $request) {
+    public function getSekolahThenCheckAdmin(Request $request)
+    {
 
         /*Tampilkan sekolah yang belum dikelola oleh admin*/
         $data = $this->sekolah->whereHas('user', function ($query) {
-           $query->whereNotIn('role',['admin']);
+            $query->whereNotIn('role', ['admin']);
+//            $query->where('role', 'admin');
         });
 
-        $notManagingByAdmin = $data->count() == 0;
+        $notManagingByAdmin = !$data->exists();
 
-//        $data = $this->sekolah->with('user')->get();
-
-        $isEmpty = !$this->sekolah->exists();
-
-        if($notManagingByAdmin) {
+        if ($notManagingByAdmin) {
             $data = $this->sekolah->doesntHave('user')->get();
         } else {
             $data = $data->with('user')->get();
         }
 
-        /*Cek apabila ada sekolah yang sudah dikelola oleh admin*/
-        $checkIsAnyManagingByAdmin = $this->sekolah->whereHas('user', function($query) {
-            $query->where('role', 'admin');
-        })->exists();
-
-//        $condition = '';
-//        if($isEmpty) {
-//            //Data sekolah masih kosong
-//            $condition = 'empty';
-//        } else if($checkIsAnyManagingByAdmin && $data->count == 0) {
-//            $condition = 'full';
-//        } else {
-//            $condition = 'fillable';
-//        }
-
-        return Response::json([
-            'data' => $data
-        ], 200);
+        return Response::json($data, 200);
     }
 
     public function get($id)
@@ -108,9 +99,10 @@ class SekolahRepository
         return $check;
     }
 
-    public function checkSekolahName($namaSekolah) {
+    public function checkSekolahName($namaSekolah)
+    {
         $check = $this->sekolah->where('nama_sekolah', $namaSekolah)->first();
-        if($check) {
+        if ($check) {
             return Response::json(['message' => 'Sekolah telah terdaftar.'], 201);
         }
         return Response::json(['message' => 'Sekolah dapat digunakan.'], 200);
@@ -118,7 +110,7 @@ class SekolahRepository
 
     public function add(Request $request)
     {
-        if($this->isSekolahExists($request->nama_sekolah)) {
+        if ($this->isSekolahExists($request->nama_sekolah)) {
             return Response::json([
                 'message' => 'Gagal, sekolah telah terdaftar di server.'
             ], 201);
@@ -140,9 +132,9 @@ class SekolahRepository
             "alamat" => $request->alamat
         ]);
         if ($update) {
-            return Response::json([ "message" => "berhasil menyunting." ], 200);
+            return Response::json(["message" => "berhasil menyunting."], 200);
         } else {
-            return Response::json([ "message" => "gagal menyunting." ], 201);
+            return Response::json(["message" => "gagal menyunting."], 201);
         }
     }
 
