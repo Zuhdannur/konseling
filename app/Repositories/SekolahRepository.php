@@ -38,8 +38,24 @@ class SekolahRepository
     {
         $data = $this->sekolah->count();
 
+        $doesntHaveAdmin = $this->sekolah->whereHas('user', function ($query) {
+            $query->whereNotIn('role', ['admin']);
+        });
+
+        if (!$doesntHaveAdmin->exists()) {
+            $doesntHaveAdmin = $this->sekolah->doesntHave('user')->count();
+        } else {
+            $doesntHaveAdmin = $data->count();
+        }
+
+        $hasAdmin = $this->sekolah->whereHas('user', function ($query) {
+            $query->where('role', 'admin');
+        })->count();
+
         return Response::json([
-            'total' => $data
+            'total' => $data,
+            'has_admin' => $hasAdmin,
+            'doesnt_have_admin' => $doesntHaveAdmin
         ], 200);
     }
 
