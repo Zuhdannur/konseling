@@ -61,34 +61,36 @@ class SekolahRepository
            $query->whereNotIn('role',['admin']);
         });
 
-        $isExist = $data->exists();
+        $notManagingByAdmin = !$data->exists();
 
-//        $data = $data->with('user')->get();
+//        $data = $this->sekolah->with('user')->get();
 
+        $isEmpty = !$this->sekolah->exists();
 
-        if(!$data->exists()) {
+        if($notManagingByAdmin) {
             $data = $this->sekolah->doesntHave('user')->get();
         } else {
             $data = $data->with('user')->get();
         }
 
-//        /*Cel apabila ada sekolah yang sudah dikelola oleh admin*/
+        /*Cek apabila ada sekolah yang sudah dikelola oleh admin*/
         $checkIsAnyManagingByAdmin = $this->sekolah->whereHas('user', function($query) {
             $query->where('role', 'admin');
         })->exists();
 
-        $anySlot = false;
-        if(!$isExist && $checkIsAnyManagingByAdmin) {
-            $anySlot = false;
+        $condition = '';
+        if($isEmpty) {
+            //Data sekolah masih kosong
+            $condition = 'empty';
+        } else if($checkIsAnyManagingByAdmin && $notManagingByAdmin) {
+            $condition = 'full';
         } else {
-            $anySlot = true;
+            $condition = 'fillable';
         }
-//
-//        $data = $data->get();
 
         return Response::json([
             'data' => $data,
-            'anyslot' => $anySlot
+            'condition' => $condition
         ], 200);
     }
 
