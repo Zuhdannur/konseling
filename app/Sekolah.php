@@ -28,7 +28,7 @@ class Sekolah extends Model
 
     // Relationships
     public function user() {
-        return $this->hasMany('\App\User');
+        return $this->hasMany('\App\User')->orderBy('id','desc');
     }
 
 }

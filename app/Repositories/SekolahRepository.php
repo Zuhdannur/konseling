@@ -46,18 +46,32 @@ class SekolahRepository
     {
         $per_page = $request->per_page;
 
-        $data = $this->sekolah->with('user')->orderBy('created_at','desc')->paginate($per_page);
+        $data = $this->sekolah;
+        if($request->has('with')) {
+            $data = $data->with('user');
+        }
+
+        $data = $data->orderBy('created_at', 'desc');
+        $data = $data->paginate($per_page);
 
         return Response::json($data, 200);
     }
 
     public function getSekolahThenCheckAdmin(Request $request) {
-        $data = $this->sekolah->doesntHave('user')->get();
-        $checkFull = $this->sekolah->user()->exists();
+
+        /*For showing items*/
+        $data = $this->sekolah->whereHas('user', function ($query) {
+           $query->whereNotIn('role',['admin']);
+        })->get();
+
+        /*For checking is sekolah full of admin*/
+        $checkIsFull = $this->sekolah->whereHas('user', function($query) {
+            $query->where('role', 'admin');
+        })->exists();
 
         return Response::json([
             'data' => $data,
-            'checkFull' => $checkFull
+            'full' => $checkIsFull
         ], 200);
     }
 

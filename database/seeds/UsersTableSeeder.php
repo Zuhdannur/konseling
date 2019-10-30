@@ -13,14 +13,14 @@ class UsersTableSeeder extends Seeder
     {
         $faker = Faker\Factory::create('id_ID');
 
-        for($i = 1; $i <= 50; $i++){
+        for($i = 1; $i <= 10; $i++){
 
             // insert data ke table pegawai menggunakan Faker
             DB::table('tbl_user')->insert([
                 'username' => $faker->userName,
                 'password' => $faker->password,
-                'role' => $faker->randomElement(['admin', 'master']),
-                'sekolah_id' => $faker->numberBetween(1, 3)
+                'role' => 'admin',
+                'sekolah_id' => $faker->numberBetween(1, 20)
             ]);
         }
 //        factory(App\User::class, 50)->create([

@@ -13,7 +13,7 @@ class SekolahTableSeeder extends Seeder
     {
         $faker = Faker\Factory::create('id_ID');
 
-        for($i = 1; $i <= 50; $i++){
+        for($i = 1; $i <= 10; $i++){
 
             // insert data ke table pegawai menggunakan Faker
             DB::table('tbl_sekolah')->insert([
