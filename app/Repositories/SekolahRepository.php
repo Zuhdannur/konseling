@@ -82,7 +82,7 @@ class SekolahRepository
         if($isEmpty) {
             //Data sekolah masih kosong
             $condition = 'empty';
-        } else if($checkIsAnyManagingByAdmin && $notManagingByAdmin) {
+        } else if($checkIsAnyManagingByAdmin && $data->count == 0) {
             $condition = 'full';
         } else {
             $condition = 'fillable';
