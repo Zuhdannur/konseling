@@ -46,10 +46,7 @@ class SekolahRepository
     {
         $per_page = $request->per_page;
 
-        $data = $this->sekolah;
-        if($request->has('with')) {
-            $data = $data->with('user');
-        }
+        $data = $this->sekolah->with('user');
 
         $data = $data->orderBy('created_at', 'desc');
         $data = $data->paginate($per_page);
@@ -64,21 +61,30 @@ class SekolahRepository
            $query->whereNotIn('role',['admin']);
         });
 
-        /*Cel apabila ada sekolah yang sudah dikelola oleh admin*/
+        $isExist = $data->exists();
+
+//        $data = $data->with('user')->get();
+
+
+        if(!$data->exists()) {
+            $data = $this->sekolah->doesntHave('user')->get();
+        } else {
+            $data = $data->with('user')->get();
+        }
+
+//        /*Cel apabila ada sekolah yang sudah dikelola oleh admin*/
         $checkIsAnyManagingByAdmin = $this->sekolah->whereHas('user', function($query) {
             $query->where('role', 'admin');
         })->exists();
 
-        $isFull = !$checkIsAnyManagingByAdmin && $data->exists();
-
         $anySlot = false;
-        if(!$data->exists() && $checkIsAnyManagingByAdmin) {
+        if(!$isExist && $checkIsAnyManagingByAdmin) {
             $anySlot = false;
         } else {
             $anySlot = true;
         }
-
-        $data = $data->get();
+//
+//        $data = $data->get();
 
         return Response::json([
             'data' => $data,
