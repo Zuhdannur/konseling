@@ -61,7 +61,7 @@ class SekolahRepository
            $query->whereNotIn('role',['admin']);
         });
 
-        $notManagingByAdmin = !$data->exists();
+        $notManagingByAdmin = $data->count() == 0;
 
 //        $data = $this->sekolah->with('user')->get();
 
