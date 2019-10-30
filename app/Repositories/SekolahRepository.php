@@ -59,23 +59,30 @@ class SekolahRepository
 
     public function getSekolahThenCheckAdmin(Request $request) {
 
-        /*For showing items*/
+        /*Tampilkan sekolah yang belum dikelola oleh admin*/
         $data = $this->sekolah->whereHas('user', function ($query) {
            $query->whereNotIn('role',['admin']);
         });
 
-        /*For checking is sekolah full of admin*/
-        $checkIsFull = $this->sekolah->whereHas('user', function($query) {
+        /*Cel apabila ada sekolah yang sudah dikelola oleh admin*/
+        $checkIsAnyManagingByAdmin = $this->sekolah->whereHas('user', function($query) {
             $query->where('role', 'admin');
         })->exists();
 
-        $isFull = !$checkIsFull && $data->exists();
+        $isFull = !$checkIsAnyManagingByAdmin && $data->exists();
+
+        $anySlot = false;
+        if(!$data->exists() && $checkIsAnyManagingByAdmin) {
+            $anySlot = false;
+        } else {
+            $anySlot = true;
+        }
 
         $data = $data->get();
 
         return Response::json([
             'data' => $data,
-            'anyslot' => $isFull
+            'anyslot' => $anySlot
         ], 200);
     }
 
