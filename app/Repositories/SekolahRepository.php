@@ -62,16 +62,20 @@ class SekolahRepository
         /*For showing items*/
         $data = $this->sekolah->whereHas('user', function ($query) {
            $query->whereNotIn('role',['admin']);
-        })->get();
+        });
 
         /*For checking is sekolah full of admin*/
         $checkIsFull = $this->sekolah->whereHas('user', function($query) {
             $query->where('role', 'admin');
         })->exists();
 
+        $isFull = !$checkIsFull && $data->exists();
+
+        $data = $data->get();
+
         return Response::json([
             'data' => $data,
-            'full' => $checkIsFull
+            'anyslot' => $isFull
         ], 200);
     }
 
