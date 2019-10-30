@@ -28,7 +28,11 @@ class Sekolah extends Model
 
     // Relationships
     public function user() {
-        return $this->hasMany('\App\User')->orderBy('id','desc');
+        return $this->hasMany('\App\User');
+    }
+
+    public function firstAdmin() {
+        return $this->hasOne('\App\User')->where('role','admin');
     }
 
 }

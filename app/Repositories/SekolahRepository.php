@@ -49,17 +49,19 @@ class SekolahRepository
 
         $data = $this->sekolah;
 
+//        $data = $this->sekolah->withAndWhereHas('firstAdmin', function ($query) {
+//            $query->where('role', 'admin');
+//        })->get();
+
         if ($request->has('admin')) {
-            $data = $this->sekolah->withAndWhereHas('user', function ($query) {
-                $query->where('role', 'admin');
-            })->get();
-        } else {
-            $data = $data->paginate($per_page);
+            $data = $this->sekolah->with('firstAdmin');
         }
 
         if ($request->has('orderBy')) {
             $data = $data->orderBy($request->orderBy, 'desc');
         }
+
+        $data = $data->paginate($per_page);
 
         return Response::json($data, 200);
     }
@@ -78,7 +80,7 @@ class SekolahRepository
         if ($notManagingByAdmin) {
             $data = $this->sekolah->doesntHave('user')->get();
         } else {
-            $data = $data->with('user')->get();
+            $data = $data->get();
         }
 
         return Response::json($data, 200);
