@@ -32,7 +32,7 @@ class Sekolah extends Model
     }
 
     public function firstAdmin() {
-        return $this->hasOne('\App\User')->where('role','admin');
+        return $this->hasOne('\App\User')->where('role','admin')->select(array('id','username'));
     }
 
 }
