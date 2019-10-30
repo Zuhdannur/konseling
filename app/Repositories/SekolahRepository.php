@@ -78,19 +78,18 @@ class SekolahRepository
             $query->where('role', 'admin');
         })->exists();
 
-        $condition = '';
-        if($isEmpty) {
-            //Data sekolah masih kosong
-            $condition = 'empty';
-        } else if($checkIsAnyManagingByAdmin && $data->count == 0) {
-            $condition = 'full';
-        } else {
-            $condition = 'fillable';
-        }
+//        $condition = '';
+//        if($isEmpty) {
+//            //Data sekolah masih kosong
+//            $condition = 'empty';
+//        } else if($checkIsAnyManagingByAdmin && $data->count == 0) {
+//            $condition = 'full';
+//        } else {
+//            $condition = 'fillable';
+//        }
 
         return Response::json([
-            'data' => $data,
-            'condition' => $condition
+            'data' => $data
         ], 200);
     }
 
