@@ -10,7 +10,7 @@ class Riwayat extends Model
 
     protected $dates = [];
 
-    protected $table = "tbl_riwayat";
+    protected $table = "riwayat";
 
     public static $rules = [
         // Validation rules

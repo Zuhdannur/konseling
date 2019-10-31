@@ -10,7 +10,7 @@ class Sekolah extends Model
 
     protected $dates = [];
 
-    protected $table = "tbl_sekolah";
+    protected $table = "sekolah";
 
     protected $hidden = [
         'created_at','updated_at'
