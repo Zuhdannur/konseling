@@ -24,11 +24,6 @@ class Sekolah extends Model
         // Validation rules
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-    }
-
     public function scopeWithAndWhereHas($query, $relation, $constraint){
         return $query->whereHas($relation, $constraint)
             ->with([$relation => $constraint]);
