@@ -24,7 +24,7 @@ class UserController extends Controller {
 
 
     public function adminCount() {
-        $total = $this->user->get();
+        $total = $this->user->count();
 
         $doesntHaveSchool = $this->user->where('role', 'admin')->whereNull('sekolah_id')->count();
 
