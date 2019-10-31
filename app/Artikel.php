@@ -8,7 +8,7 @@ class Artikel extends Model
         'id','img','title','desc'
     ];
 
-    protected $table = "artikel";
+    protected $table = "tbl_artikel";
 
     protected $dates = [];
 

@@ -12,7 +12,7 @@ class Diary extends Model
 
     protected $dates = [];
 
-    protected $table = "diary";
+    protected $table = "tbl_diary";
 
     public static $rules = [
         // Validation rules

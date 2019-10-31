@@ -12,7 +12,7 @@ class Schedule extends Model
         'time'
     ];
 
-    protected $table = "schedule";
+    protected $table = "tbl_schedule";
 
     public static $rules = [
         // Validation rules

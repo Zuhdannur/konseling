@@ -10,7 +10,7 @@ class Kelas extends Model
 
     protected $dates = [];
 
-    protected $table = "kelas";
+    protected $table = "tbl_kelas";
 
     public static $rules = [
         // Validation rule

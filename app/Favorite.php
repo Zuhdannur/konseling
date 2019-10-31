@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Favorite extends Model {
 
-    protected $table = "fav_artikel";
+    protected $table = "tbl_fav_artikel";
 
     protected $primaryKey = "id_favorit";
 
