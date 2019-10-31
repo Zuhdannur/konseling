@@ -48,7 +48,7 @@ class SekolahController extends Controller {
     }
 
     public function count() {
-        $total = $this->sekolah->count();
+        $total = $this->sekolah->get();
 
         $doesntHaveAdmin = $this->sekolah->doesntHave('user')->orWhereHas('user', function ($query) {
             $query->whereNotIn('role', ['admin']);
