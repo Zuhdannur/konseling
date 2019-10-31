@@ -40,7 +40,6 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     $router->get('sekolah/master/month', 'SekolahsController@getDataThisMonth');
     $router->get('sekolah/master/sekolah', 'SekolahsController@getSekolahCount');
     $router->post('sekolah/check', 'SekolahsController@checkSekolahName');
-    $router->get('sekolah/master/choose', 'SekolahsController@getSekolahThenCheckAdmin');
 
     /**
     * Routes for resource kelas
@@ -52,6 +51,50 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
     $router->delete('kelas/{id}', 'KelasController@remove');
 
     $router->group(['middleware' => 'auth'], function () use ($router) {
+
+        $router->group(['namespace' => 'Master'], function () use ($router) {
+
+            $router->group(['prefix' => 'master'], function () use ($router) {
+                $router->get('sekolah', 'SekolahController@all');
+                $router->post('sekolah', 'SekolahController@post');
+                $router->put('sekolah', 'SekolahController@put');
+                $router->get('sekolah/count', 'SekolahController@count');
+                $router->get('user/admin/count', 'UserController@adminCount');
+            });
+
+        });
+
+        $router->group(['namespace' => 'Admin'], function () use ($router) {
+
+            $router->group(['prefix' => 'admin'], function () use ($router) {
+
+            });
+
+        });
+
+        $router->group(['namespace' => 'Supervisor'], function () use ($router) {
+
+            $router->group(['prefix' => 'supervisor'], function () use ($router) {
+
+            });
+
+        });
+
+        $router->group(['namespace' => 'Guru'], function () use ($router) {
+
+            $router->group(['prefix' => 'guru'], function () use ($router) {
+
+            });
+
+        });
+
+        $router->group(['namespace' => 'Siswa'], function () use ($router) {
+
+            $router->group(['prefix' => 'siswa'], function () use ($router) {
+
+            });
+
+        });
 
         //profile
         $router->put('user', 'UsersController@put');

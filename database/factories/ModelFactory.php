@@ -11,9 +11,11 @@
 |
 */
 
-$factory->define(App\User::class, function (Faker\Generator $faker) {
+/**
+ * Factory definition for model User.
+ */
+$factory->define(\App\User::class, function ($faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->email,
+        // Fields here
     ];
 });

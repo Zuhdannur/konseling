@@ -10,7 +10,7 @@ class Sekolah extends Model
 
     protected $dates = [];
 
-    protected $table = "tbl_sekolah";
+    protected $table = "sekolah";
 
     protected $hidden = [
         'created_at','updated_at'
@@ -29,6 +29,10 @@ class Sekolah extends Model
     // Relationships
     public function user() {
         return $this->hasMany('\App\User');
+    }
+
+    public function firstAdmin() {
+        return $this->hasOne('\App\User')->where('role','admin');
     }
 
 }

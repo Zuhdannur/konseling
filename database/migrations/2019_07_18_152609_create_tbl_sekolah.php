@@ -13,7 +13,7 @@ class CreateTblSekolah extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_sekolah', function (Blueprint $table) {
+        Schema::create('sekolah', function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->string('nama_sekolah')->nullable();

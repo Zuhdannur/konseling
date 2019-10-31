@@ -13,7 +13,7 @@ class CreateTblRiwayat extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_riwayat', function (Blueprint $table) {
+        Schema::create('riwayat', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('user_id')->unsigned();
             $table->integer('schedule_id')->references('id')->on('tbl_schedule')->onDelete('cascade');

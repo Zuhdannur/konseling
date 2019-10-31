@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
@@ -21,12 +21,12 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
- $app->withFacades();
+$app->withFacades();
 
- $app->withEloquent();
+$app->withEloquent();
 
 
- $app->configure('cors');
+$app->configure('cors');
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -58,15 +58,15 @@ $app->singleton(
 | route or middleware that'll be assigned to some specific routes.
 |
 */
- $app->middleware([
-     App\Http\Middleware\ExampleMiddleware::class,
-     \Barryvdh\Cors\HandleCors::class,
- ]);
+$app->middleware([
+    App\Http\Middleware\ExampleMiddleware::class,
+    \Barryvdh\Cors\HandleCors::class,
+]);
 
- $app->routeMiddleware([
-     'auth' => App\Http\Middleware\Authenticate::class,
-     'paging' => App\Http\Middleware\LinkHeaderPagination::class
- ]);
+$app->routeMiddleware([
+    'auth' => App\Http\Middleware\Authenticate::class,
+    'paging' => App\Http\Middleware\LinkHeaderPagination::class
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -79,14 +79,14 @@ $app->singleton(
 |
 */
 
- $app->register(App\Providers\AppServiceProvider::class);
- $app->register(App\Providers\AuthServiceProvider::class);
- $app->register(App\Providers\EventServiceProvider::class);
+$app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\AuthServiceProvider::class);
+$app->register(App\Providers\EventServiceProvider::class);
 $app->register(\Thedevsaddam\LumenRouteList\LumenRouteListServiceProvider::class);
 $app->register(Barryvdh\Cors\ServiceProvider::class);
 //App\Providers\BroadcastServiceProvider::class,
- $app->register(\Illuminate\Broadcasting\BroadcastServiceProvider::class);
- $app->configure('broadcasting');
+$app->register(\Illuminate\Broadcasting\BroadcastServiceProvider::class);
+$app->configure('broadcasting');
 // $app->register('broadcasting');
 /*|--------------------------------------------------------------------------
 | Load The Application Routes
@@ -101,7 +101,7 @@ $app->register(Barryvdh\Cors\ServiceProvider::class);
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../routes/web.php';
+    require __DIR__ . '/../routes/web.php';
 });
 
 return $app;

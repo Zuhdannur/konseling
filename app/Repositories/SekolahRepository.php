@@ -8,7 +8,6 @@ use App\Sekolah;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Validator;
 
 class SekolahRepository
 {
@@ -23,7 +22,8 @@ class SekolahRepository
         $this->sekolah = $sekolah;
     }
 
-    public function getDataThisMonth() {
+    public function getDataThisMonth()
+    {
         $data = $this->sekolah
             ->whereYear('created_at', Carbon::now()->year)
             ->whereMonth('created_at', Carbon::now()->month)
@@ -34,11 +34,22 @@ class SekolahRepository
         ], 200);
     }
 
-    public function getSekolahCount() {
-        $data = $this->sekolah->count();
+    public function getSekolahCount()
+    {
+        $total = $this->sekolah->count();
+
+        $doesntHaveAdmin = $this->sekolah->doesntHave('user')->orWhereHas('user', function ($query) {
+            $query->whereNotIn('role', ['admin']);
+        })->count();
+
+        $hasAdmin = $this->sekolah->whereHas('user', function ($query) {
+            $query->where('role', 'admin');
+        })->count();
 
         return Response::json([
-            'total' => $data
+            'total' => $total,
+            'has_admin' => $hasAdmin,
+            'doesnt_have_admin' => $doesntHaveAdmin
         ], 200);
     }
 
@@ -46,28 +57,22 @@ class SekolahRepository
     {
         $per_page = $request->per_page;
 
-        $data = $this->sekolah->with('user')->orderBy('created_at','desc')->paginate($per_page);
+        $data = $this->sekolah;
 
-        return Response::json($data, 200);
+//        $data = $this->sekolah->withAndWhereHas('firstAdmin', function ($query) {
+//            $query->where('role', 'admin');
+//        })->get();
     }
 
-    public function getSekolahThenCheckAdmin(Request $request) {
-        $checkFull = $this->sekolah->has('user')->count();
-        $data = $this->sekolah->doesntHave('user')->get();
-
-        return Response::json([
-            'data' => $data,
-            'checkFull' => $checkFull
-        ], 200);
-    }
-
-    public function get($id)
+    public
+    function get($id)
     {
         $data = $this->sekolah->find($id);
         return Response::json($data, 200);
     }
 
-    private function isSekolahExists($namaSekolah)
+    private
+    function isSekolahExists($namaSekolah)
     {
         $check = $this->sekolah->where('nama_sekolah', $namaSekolah)->first();
         if (!$check) {
@@ -76,17 +81,20 @@ class SekolahRepository
         return $check;
     }
 
-    public function checkSekolahName($namaSekolah) {
+    public
+    function checkSekolahName($namaSekolah)
+    {
         $check = $this->sekolah->where('nama_sekolah', $namaSekolah)->first();
-        if($check) {
+        if ($check) {
             return Response::json(['message' => 'Sekolah telah terdaftar.'], 201);
         }
         return Response::json(['message' => 'Sekolah dapat digunakan.'], 200);
     }
 
-    public function add(Request $request)
+    public
+    function add(Request $request)
     {
-        if($this->isSekolahExists($request->nama_sekolah)) {
+        if ($this->isSekolahExists($request->nama_sekolah)) {
             return Response::json([
                 'message' => 'Gagal, sekolah telah terdaftar di server.'
             ], 201);
@@ -101,20 +109,22 @@ class SekolahRepository
         ], 200);
     }
 
-    public function put($id, Request $request)
+    public
+    function put($id, Request $request)
     {
         $update = $this->sekolah->find($id)->update([
             "nama_sekolah" => $request->nama_sekolah,
             "alamat" => $request->alamat
         ]);
         if ($update) {
-            return Response::json([ "message" => "berhasil menyunting." ], 200);
+            return Response::json(["message" => "berhasil menyunting."], 200);
         } else {
-            return Response::json([ "message" => "gagal menyunting." ], 201);
+            return Response::json(["message" => "gagal menyunting."], 201);
         }
     }
 
-    public function remove($id)
+    public
+    function remove($id)
     {
         $delete = $this->sekolah->find($id)->delete();
         if ($delete) {

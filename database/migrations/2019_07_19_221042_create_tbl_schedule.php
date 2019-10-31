@@ -13,7 +13,7 @@ class CreateTblSchedule extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_schedule', function (Blueprint $table) {
+        Schema::create('schedule', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('requester_id')->unsigned();
             $table->integer('consultant_id')->unsigned()->default(0);

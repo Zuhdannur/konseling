@@ -13,7 +13,7 @@ class CreateTblArtikel extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_artikel', function (Blueprint $table) {
+        Schema::create('artikel', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
             $table->text('desc');
