@@ -67,31 +67,17 @@ class SekolahRepository
             $data = $this->sekolah->with('firstAdmin');
         }
 
+        if($request->has('not_manage_by_admin')) {
+            $data = $this->sekolah->doesntHave('user')->orWhereHas('user', function ($query) {
+                $query->whereNotIn('role', ['admin']);
+            })->get();
+        }
+
         if ($request->has('orderBy')) {
             $data = $data->orderBy($request->orderBy, 'desc');
         }
 
         $data = $data->paginate($per_page);
-
-        return Response::json($data, 200);
-    }
-
-    public function getSekolahThenCheckAdmin(Request $request)
-    {
-
-        /*Tampilkan sekolah yang belum dikelola oleh admin*/
-        $data = $this->sekolah->doesntHave('user')->orWhereHas('user', function ($query) {
-            $query->whereNotIn('role', ['admin']);
-        })->get();
-
-//
-//        $notManagingByAdmin = !$data->exists();
-//
-//        if ($notManagingByAdmin) {
-//            $data = $this->sekolah->doesntHave('user')->get();
-//        } else {
-//            $data = $data->get();
-//        }
 
         return Response::json($data, 200);
     }
