@@ -28,7 +28,7 @@ class CreateTblUser extends Migration
             $table->string('nomor_hp', 12)->nullable();
             $table->string('kelas', 25)->nullable();
 
-            $table->foreign('sekolah_id')->references('id')->on('users')
+            $table->foreign('sekolah_id')->references('id')->on('sekolah')
                 ->onDelete('cascade')->nullable()->unsigned();
 
             $table->text('alamat')->nullable();
