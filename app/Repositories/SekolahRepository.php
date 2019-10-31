@@ -52,8 +52,8 @@ class SekolahRepository
     }
 
     public function getSekolahThenCheckAdmin(Request $request) {
+        $checkFull = $this->sekolah->has('user')->count();
         $data = $this->sekolah->doesntHave('user')->get();
-        $checkFull = $this->sekolah->user()->exists();
 
         return Response::json([
             'data' => $data,
