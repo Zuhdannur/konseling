@@ -36,15 +36,9 @@ class SekolahRepository
 
     public function getSekolahCount()
     {
-        $doesntHaveAdmin = $this->sekolah->whereHas('user', function ($query) {
+        $doesntHaveAdmin = $this->sekolah->doesntHave('user')->orWhereHas('user', function ($query) {
             $query->whereNotIn('role', ['admin']);
-        });
-
-        if (!$doesntHaveAdmin->exists()) {
-            $doesntHaveAdmin = $this->sekolah->doesntHave('user')->count();
-        } else {
-            $doesntHaveAdmin = $this->sekolah->count();
-        }
+        })->get();
 
         $hasAdmin = $this->sekolah->whereHas('user', function ($query) {
             $query->where('role', 'admin');
