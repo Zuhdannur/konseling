@@ -13,7 +13,7 @@ class CreateTblUser extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_user', function (Blueprint $table) {
+        Schema::create('user', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('username',30)->unique();
             $table->string('password',255);
@@ -28,8 +28,8 @@ class CreateTblUser extends Migration
             $table->string('nomor_hp', 12)->nullable();
             $table->string('kelas', 25)->nullable();
 
-            $table->foreign('sekolah_id')->references('id')->on('tbl_sekolah')
-                ->onDelete('cascade')->nullable()->unsigned();
+            $table->integer('sekolah_id')->unsigned()->nullable();
+            $table->foreign('sekolah_id')->references('id')->on('sekolah');
 
             $table->text('alamat')->nullable();
             $table->string('kota', 50)->nullable();

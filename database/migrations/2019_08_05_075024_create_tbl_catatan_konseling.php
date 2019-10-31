@@ -13,7 +13,7 @@ class CreateTblCatatanKonseling extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_catatan_konseling', function (Blueprint $table) {
+        Schema::create('catatan_konseling', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('schedule_id')->unsigned();
             $table->timestamps();

@@ -10,7 +10,7 @@ class CatatanKonseling extends Model
 
     protected $dates = [];
 
-    protected $table = "tbl_catatan_konseling";
+    protected $table = "catatan_konseling";
 
     public static $rules = [
         // Validation rules
