@@ -19,8 +19,7 @@ class UsersTableSeeder extends Seeder
             DB::table('tbl_user')->insert([
                 'username' => $faker->userName,
                 'password' => $faker->password,
-                'role' => 'admin',
-                'sekolah_id' => $faker->numberBetween(1, 20)
+                'role' => 'master'
             ]);
         }
 //        factory(App\User::class, 50)->create([

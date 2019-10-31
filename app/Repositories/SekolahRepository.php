@@ -84,18 +84,18 @@ class SekolahRepository
     {
 
         /*Tampilkan sekolah yang belum dikelola oleh admin*/
-        $data = $this->sekolah->whereHas('user', function ($query) {
+        $data = $this->sekolah->doesntHave('user')->orWhereHas('user', function ($query) {
             $query->whereNotIn('role', ['admin']);
-//            $query->where('role', 'admin');
-        });
+        })->get();
 
-        $notManagingByAdmin = !$data->exists();
-
-        if ($notManagingByAdmin) {
-            $data = $this->sekolah->doesntHave('user')->get();
-        } else {
-            $data = $data->get();
-        }
+//
+//        $notManagingByAdmin = !$data->exists();
+//
+//        if ($notManagingByAdmin) {
+//            $data = $this->sekolah->doesntHave('user')->get();
+//        } else {
+//            $data = $data->get();
+//        }
 
         return Response::json($data, 200);
     }
