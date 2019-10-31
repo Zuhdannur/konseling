@@ -6,6 +6,10 @@ class Feed extends Model {
 
     protected $guarded = [];
 
+    public function feedable() {
+        return $this->morphTo();
+    }
+
 //    protected $fillable = [];
 
 //    protected $dates = [];

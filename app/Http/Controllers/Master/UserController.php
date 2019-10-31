@@ -36,5 +36,11 @@ class UserController extends Controller {
             'doesnt_have_school' => $doesntHaveSchool
         ], 200);
     }
+
+    public function recentActivity() {
+        $data = $this->user->with('feeds');
+        return \response()->json($data, 200);
+    }
+
 }
 

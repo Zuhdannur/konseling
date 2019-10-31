@@ -47,6 +47,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasMany('\App\Diary');
     }
 
+    public function feeds() {
+        return $this->hasMany(Feed::class);
+    }
+
     public function scopeWithAndWhereHas($query, $relation, $constraint)
     {
         return $query->whereHas($relation, $constraint)
