@@ -6,6 +6,8 @@ class Feed extends Model {
 
     protected $guarded = [];
 
+    protected $table = "feeds";
+
     public function feedable() {
         return $this->morphTo();
     }
