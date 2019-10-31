@@ -36,6 +36,8 @@ class SekolahRepository
 
     public function getSekolahCount()
     {
+        $total = $this->sekolah->count();
+
         $doesntHaveAdmin = $this->sekolah->doesntHave('user')->orWhereHas('user', function ($query) {
             $query->whereNotIn('role', ['admin']);
         })->count();
@@ -45,7 +47,7 @@ class SekolahRepository
         })->count();
 
         return Response::json([
-            'total' => $doesntHaveAdmin,
+            'total' => $total,
             'has_admin' => $hasAdmin,
             'doesnt_have_admin' => $doesntHaveAdmin
         ], 200);
