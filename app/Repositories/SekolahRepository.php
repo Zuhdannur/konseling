@@ -38,7 +38,7 @@ class SekolahRepository
     {
         $doesntHaveAdmin = $this->sekolah->doesntHave('user')->orWhereHas('user', function ($query) {
             $query->whereNotIn('role', ['admin']);
-        })->get();
+        })->count();
 
         $hasAdmin = $this->sekolah->whereHas('user', function ($query) {
             $query->where('role', 'admin');
