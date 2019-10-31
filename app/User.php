@@ -47,13 +47,34 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasMany('\App\Diary');
     }
 
-    public function feeds() {
-        return $this->hasMany('\App\Feed');
-    }
-
     public function scopeWithAndWhereHas($query, $relation, $constraint)
     {
         return $query->whereHas($relation, $constraint)
                      ->with([$relation => $constraint]);
     }
+
+    public function feed()
+    {
+        return $this->hasMany('App\Feed')
+            ->with('user')
+            ->latest();
+    }
+
+    /**
+     * Record new activity for the user.
+     *
+     * @param  string $name
+     * @param  mixed  $related
+     * @throws \Exception
+     * @return void
+     */
+    public function recordActivity($name, $related)
+    {
+        if (! method_exists($related, 'recordActivity')) {
+            throw new \Exception('..');
+        }
+
+        return $related->recordActivity($name);
+    }
+
 }
