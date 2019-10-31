@@ -20,7 +20,7 @@ class CreateTblUser extends Migration
             $table->string('role',10);
             $table->string('api_token',255)->nullable();
             $table->string('firebase_token',255)->nullable();
-            $table->integer('hasEverChangePassword')->default(0);
+            $table->integer('ever_change_password')->default(0);
 
             $table->string('avatar')->nullable();
             $table->string('name',50)->nullable();
