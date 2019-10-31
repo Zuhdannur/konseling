@@ -27,7 +27,10 @@ class CreateTblUser extends Migration
             $table->string('jenkel', 25)->nullable();
             $table->string('nomor_hp', 12)->nullable();
             $table->string('kelas', 25)->nullable();
-            $table->integer('sekolah_id')->nullable()->unsigned();
+
+            $table->foreign('sekolah_id')->references('id')->on('users')
+                ->onDelete('cascade')->nullable()->unsigned();
+
             $table->text('alamat')->nullable();
             $table->string('kota', 50)->nullable();
             $table->date('tanggal_lahir')->nullable();
