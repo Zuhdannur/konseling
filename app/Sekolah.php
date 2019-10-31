@@ -1,6 +1,7 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Sekolah extends Model
 {
@@ -19,6 +20,25 @@ class Sekolah extends Model
     public static $rules = [
         // Validation rules
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::created(function ($sekolah) {
+            $sekolah->recordFeed('created');
+        });
+    }
+
+    protected function recordFeed($event) {
+        $this->feeds()->create([
+            'user_id' => Auth::user()->id(),
+            'type' => $event.'_'.strtolower(class_basename($this))
+        ]);
+    }
+
+    public function feeds() {
+        return $this->morphMany(Feed::class, 'feedable');
+    }
 
 
     public function scopeWithAndWhereHas($query, $relation, $constraint){
