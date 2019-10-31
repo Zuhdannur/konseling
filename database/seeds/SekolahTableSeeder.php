@@ -16,7 +16,7 @@ class SekolahTableSeeder extends Seeder
         for($i = 1; $i <= 10; $i++){
 
             // insert data ke table pegawai menggunakan Faker
-            DB::table('tbl_sekolah')->insert([
+            DB::table('sekolah')->insert([
                 'nama_sekolah' => $faker->company,
                 'alamat' => $faker->address
             ]);

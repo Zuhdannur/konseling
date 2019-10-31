@@ -16,10 +16,11 @@ class UsersTableSeeder extends Seeder
         for($i = 1; $i <= 10; $i++){
 
             // insert data ke table pegawai menggunakan Faker
-            DB::table('tbl_user')->insert([
+            DB::table('user')->insert([
                 'username' => $faker->userName,
                 'password' => $faker->password,
-                'role' => 'master'
+                'role' => 'admin',
+                'sekolah_id' => $faker->numberBetween(1, 10)
             ]);
         }
 //        factory(App\User::class, 50)->create([
