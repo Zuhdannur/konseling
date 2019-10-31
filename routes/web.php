@@ -60,7 +60,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
                 $router->put('sekolah', 'SekolahController@put');
                 $router->get('sekolah/count', 'SekolahController@count');
                 $router->get('user/admin/count', 'UserController@adminCount');
-                $router->get('user/recent-activity', 'UserController@recentActivity');
+                $router->get('user/recent', 'UserController@recentActivity');
             });
 
         });
