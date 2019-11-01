@@ -85,6 +85,8 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
 
             $router->group(['prefix' => 'guru'], function () use ($router) {
                 $router->get('diary', 'DiaryController@all');
+                $router->get('schedule', 'ScheduleController@all');
+                $router->post('schedule/{id}', 'ScheduleController@accept');
             });
 
         });
