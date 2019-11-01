@@ -43,6 +43,9 @@ class ScheduleController extends Controller
         });
 
         if($request->has('type_schedule')) {
+            if($request->type_schedule == 'online') {
+                $data = $data->where('type_schedule', 'daring')->where('type_schedule', 'realtime');
+            }
             $data = $data->where('type_schedule', $request->type_schedule);
         }
 
