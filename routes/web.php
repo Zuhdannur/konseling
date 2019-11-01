@@ -94,6 +94,11 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
             $router->group(['prefix' => 'siswa'], function () use ($router) {
                 $router->post('schedule', 'ScheduleController@post');
                 $router->get('schedule', 'ScheduleController@all');
+
+                $router->put('diary', 'DiaryController@put');
+                $router->get('diary', 'DiaryController@all');
+                $router->post('diary', 'DiaryController@post');
+                $router->delete('diary/{id}', 'DiaryController@remove');
             });
 
         });
