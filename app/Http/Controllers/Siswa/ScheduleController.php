@@ -42,8 +42,8 @@ class ScheduleController extends Controller
             $query->where('sekolah_id', Auth::user()->sekolah_id);
         });
 
-        if($request->has('schedule_type')) {
-            $data = $data->where('schedule_type', $request->schedule_type);
+        if($request->has('type_schedule')) {
+            $data = $data->where('type_schedule', $request->type_schedule);
         }
 
         $data = $data->paginate($request->per_page);
