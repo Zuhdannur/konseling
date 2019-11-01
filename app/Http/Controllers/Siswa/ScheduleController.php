@@ -54,10 +54,4 @@ class ScheduleController extends Controller
         return Response::json($data, 200);
     }
 
-//        $query = \App\User::where('role', 'guru')->withAndWhereHas('detail', function ($query) {
-//            //     $query->where('sekolah_id', Auth::user()->detail->sekolah_id);
-//            // })->get();
-//    }
-
-
 }
