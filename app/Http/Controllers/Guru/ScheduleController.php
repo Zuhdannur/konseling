@@ -76,7 +76,6 @@ class ScheduleController extends Controller
             ], 201);
         }
 
-
         $schedule = $this->schedule->find($id)->with('consultant')->first();
 
         // if($schedule->type_schedule == 'direct') {
