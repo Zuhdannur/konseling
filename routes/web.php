@@ -92,7 +92,8 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->group(['namespace' => 'Siswa'], function () use ($router) {
 
             $router->group(['prefix' => 'siswa'], function () use ($router) {
-
+                $router->post('schedule', 'ScheduleController@post');
+                $router->get('schedule', 'ScheduleController@all');
             });
 
         });

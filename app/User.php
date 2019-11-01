@@ -22,7 +22,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $primaryKey = "id";
 
     protected $fillable = [
-        'username','hasEverChangePassword'
+        'username','ever_change_password'
     ];
 
     /**

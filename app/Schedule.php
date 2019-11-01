@@ -5,7 +5,22 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     protected $fillable = [
-        'id','requester_id','consultant_id','type_schedule','time','exp','ended','canceled','status','outdated','channel_url'
+        'requester_id',
+        'consultant_id',
+        'title',
+        'desc',
+        'tgl_pengajuan',
+        'type_schedule',
+        'channel_url',
+        'time',
+        'location',
+
+        'expired',
+        'canceled',
+        'pending',
+        'finish',
+        'active',
+        'start'
     ];
 
     protected $dates = [
@@ -19,9 +34,15 @@ class Schedule extends Model
     ];
 
     // Relationships
-    public function request()
+    public function requester()
     {
         return $this->hasOne('\App\User', 'id', 'requester_id');
+    }
+
+    public function scopeWithAndWhereHas($query, $relation, $constraint)
+    {
+        return $query->whereHas($relation, $constraint)
+            ->with([$relation => $constraint]);
     }
 
     public function consultant()
