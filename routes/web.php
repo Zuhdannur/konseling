@@ -84,7 +84,7 @@ $router->group(['prefix'=>'v1/api'], function () use ($router) {
         $router->group(['namespace' => 'Guru'], function () use ($router) {
 
             $router->group(['prefix' => 'guru'], function () use ($router) {
-
+                $router->get('diary', 'DiaryController@all');
             });
 
         });
