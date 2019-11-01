@@ -14,9 +14,9 @@ class CreateTblDiary extends Migration
     public function up()
     {
         Schema::create('diary', function (Blueprint $table) {
-            $table->unsignedBigInteger('id');
+            $table->bigIncrements('id');
             $table->integer('user_id')->unsigned()->nullable();
-            $table->foreign('user_id')->references('id')->on('user');
+            $table->foreign('user_id')->references('id')->on('user')->onDelete('set null');
             $table->string('title', 200);
             $table->text('body');
             $table->date('tgl');
