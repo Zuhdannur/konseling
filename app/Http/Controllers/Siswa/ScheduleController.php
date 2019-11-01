@@ -39,9 +39,7 @@ class ScheduleController extends Controller
     public function all(Request $request)
     {
         $data = $this->schedule->withAndWhereHas('requester', function($query) {
-            $query->where('role', 'siswa');
-        })->withAndWhereHas('requester', function ($query) {
-            $query->where('sekolah_id', Auth::user()->sekolah_id);
+            $query->where('role', 'siswa')->where('sekolah_id', Auth::user()->sekolah_id);
         });
 
         if($request->has('type_schedule')) {
